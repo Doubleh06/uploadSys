@@ -34,7 +34,7 @@
             <div class="image-list">
                 <#list imgUrls as imgUrl>
                 <#--<a href="/picture/${imgUrl}" target="_blank"><img src="/picture/${imgUrl}" style="width: 150px;height: 150px" ></a>-->
-                <div class="cover"><img src="/picture/${imgUrl}"" alt=""></div>
+                <div class="cover"><img src="/picture/${imgUrl}" alt=""></div>
                 </#list>
 
             </div>

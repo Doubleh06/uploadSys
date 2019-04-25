@@ -28,7 +28,7 @@
         <div class="row">
 
             <div class="col-md-12">
-                <h2 class="font-bold titleBox">大茂EHS管理系统</h2>
+                <h2 class="font-bold titleBox">申达经编管理系统</h2>
                 <div class="ibox-content">
                     <form class="m-t" role="form" action="/j_spring_security_check" method="post">
                         <div class="form-group">
