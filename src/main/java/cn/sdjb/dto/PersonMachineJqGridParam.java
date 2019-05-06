@@ -9,8 +9,9 @@ import lombok.Data;
  * @date 2018/4/24
  */
 @Data
-public class AccidentTypeJqGridParam extends JqGridParam {
+public class PersonMachineJqGridParam extends JqGridParam {
 
+    private Integer machineNo;
     private String name;
 
 }

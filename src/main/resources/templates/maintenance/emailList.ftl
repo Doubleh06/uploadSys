@@ -58,8 +58,8 @@
                                     <button class="btn btn-success" type="button" onclick="Email.resetSearch()">重置</button>&nbsp
                                     <button class="btn btn-primary" type="button" onclick="Email.create()">新增</button>
                                     &nbsp&nbsp&nbsp
-                                    <#--<button class="btn btn-primary" type="button" onclick="Email.chooseEmail('CZ')">选择常州发件邮箱</button>-->
-                                    <#--<button class="btn btn-primary" type="button" onclick="Email.chooseEmail('CQ')">选择重庆发件邮箱</button>-->
+                                    <#--<button class="btn btn-primary" type="button" onclick="EmployeeMachine.chooseEmail('CZ')">选择常州发件邮箱</button>-->
+                                    <#--<button class="btn btn-primary" type="button" onclick="EmployeeMachine.chooseEmail('CQ')">选择重庆发件邮箱</button>-->
 
                                 </div>
                             </div>
@@ -129,7 +129,7 @@
 
             <#--</div>-->
             <#--<div class="modal-footer">-->
-                <#--<button type="button" class="btn btn-sm btn-primary" onclick="Email.insert()">确定</button>-->
+                <#--<button type="button" class="btn btn-sm btn-primary" onclick="EmployeeMachine.insert()">确定</button>-->
                 <#--<button type="button" class="btn btn-sm btn-default" data-dismiss="modal">关闭</button>-->
             <#--</div>-->
         <#--</div><!-- /.modal-content &ndash;&gt;-->

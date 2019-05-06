@@ -7,6 +7,7 @@ package cn.sdjb.core;
 public class JSONResult extends Result {
 
     private Object obj;
+    private Object obj2;
 
     public JSONResult() {
         super();
@@ -31,12 +32,24 @@ public class JSONResult extends Result {
         super(ErrorCode.OK);
         this.obj = obj;
     }
-
+    public JSONResult(Object obj,Object obj2) {
+        super(ErrorCode.OK);
+        this.obj = obj;
+        this.obj2 = obj2;
+    }
     public Object getObj() {
         return obj;
     }
 
     public void setObj(Object obj) {
         this.obj = obj;
+    }
+
+    public Object getObj2() {
+        return obj2;
+    }
+
+    public void setObj2(Object obj2) {
+        this.obj2 = obj2;
     }
 }

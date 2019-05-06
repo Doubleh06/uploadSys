@@ -100,7 +100,7 @@ function input(title,text,fn){
     swal({
             title: title,
             text: text,
-            type: "input",
+            type: "select",
             showCancelButton: true,
             closeOnConfirm: false,
             cancelButtonText: "取消",
