@@ -1,7 +1,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>申达经编</title>
+<title>脑立方</title>
 
 <!--common css-->
 <link href="/static/css/bootstrap.min.css" rel="stylesheet">
