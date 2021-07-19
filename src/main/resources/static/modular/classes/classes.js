@@ -12,16 +12,15 @@ Classes.initOptions = function () {
     var options = {
         url : "/classes/grid",
         autowidth:true,
-        colNames: ['id','课程名称','讲师','开始时间','结束时间','时长','课时','上课周期','费用','操作'],
+        colNames: ['id','课程名称','开始时间','结束时间','时长','课时','上课周期','费用','操作'],
         colModel: [
             {name: 'id', index: 'id', width: 20},
             {name: 'name', index: 'name', width: 120},
-            {name: 'teacher', index: 'teacher', width: 80},
             {name: 'startTime', index: 'startTime', width: 80},
             {name: 'endTime', index: 'endTime', width: 80},
             {name: 'duration', index: 'duration', width: 60},
             {name: 'total', index: 'total', width: 60},
-            {name: 'week', index: 'week', width: 150,formatter(cellValue, options, rowObject){
+            {name: 'week', index: 'week', width: 80,formatter(cellValue, options, rowObject){
                 switch (cellValue) {
                     case 1:return "每周一";break;
                     case 2:return "每周二";break;
@@ -32,14 +31,14 @@ Classes.initOptions = function () {
                     case 7:return "每周日";break;
                 }
                 }},
-            {name: 'fee', index: 'fee', width: 150},
-            {name: 'operations', index: 'operations', width: 150, sortable: false, formatter: function (cellValue, options, rowObject) {
+            {name: 'fee', index: 'fee', width: 80},
+            {name: 'operations', index: 'operations', width: 200, sortable: false, formatter: function (cellValue, options, rowObject) {
                 var id = "'"+rowObject["id"]+"'";
                 var str = "";
                 str += '<input type="button" class=" btn btn-sm btn-info"  value="编  辑" onclick="Classes.modify(' + id + ')"/>&nbsp;';
                 str += '<input type="button" class=" btn btn-sm btn-warning"  value="删  除" onclick="Classes.delete(' + id + ')"/>&nbsp;';
                 str += '<input type="button" class=" btn btn-sm btn-primary"  value="安排学员" onclick="Classes.arrangeStudents(' + id + ')"/>&nbsp;';
-                str += '<input type="button" class=" btn btn-sm btn-primary"  value="查看学员" onclick="Classes.searchStudents(' + id + ')"/>&nbsp;';
+                // str += '<input type="button" class=" btn btn-sm btn-success"  value="查看学员" onclick="Classes.searchStudents(' + id + ')"/>&nbsp;';
                 // str += '<input type="button" class=" btn btn-sm btn-danger"  value="删除" onclick="SignUp.delete(' + id + ')"/>';
                 return str;
             }}
@@ -174,9 +173,9 @@ Classes.arrangeStudents = function(id){
  * @param date
  * @returns {void | string | *}
  */
-Classes.arrangeStudents = function(id){
-    window.location.href = '/classes/searchStudents/list?id='+id;
-}
+// Classes.searchStudents = function(id){
+//     window.location.href = '/classes/searchStudents/list?id='+id;
+// }
 
     function dateFtt(fmt,date)
     { //author: meizz

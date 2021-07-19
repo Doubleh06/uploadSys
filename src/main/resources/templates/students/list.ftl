@@ -22,6 +22,9 @@
                     <li>
                         <a href="/main">Home</a>
                     </li>
+                    <li>
+                        <a href="/students/studentsInClasses/list">课程列表</a>
+                    </li>
                     <li class="active">
                         <strong>列表</strong>
                     </li>
@@ -39,6 +42,7 @@
                         <div class="ibox-content">
                             <div class="bar search-bar">
                                 <div class="form-inline">
+                                    <input id="id" value="${cid}" hidden>
                                     <div class="form-group">
                                         <label>姓名</label>
                                         <input type="text" class="form-control" id="name" style="width: 150px;">
@@ -203,7 +207,6 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-
     });
 </script>
 </body>

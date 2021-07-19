@@ -9,11 +9,9 @@ import lombok.Data;
  * @date 2018/4/24
  */
 @Data
-public class StudentsJqGridParam extends JqGridParam {
+public class StudentsInClassesJqGridParam extends JqGridParam {
 
-
-    private Integer cid;
-    private String name;
-    private String phone;
+    private String className;
+    
 
 }

@@ -41,15 +41,23 @@ public class StudentsService extends AbstractService<Students> {
 
     public PageInfo<Students> selectByJqGridParam(StudentsJqGridParam param ){
         PageHelper.startPage(param.getPage(), param.getRows());
+
         StringBuilder sql = new StringBuilder();
         sql.append(" where 1 = 1 ");
+        if (-1==param.getCid()){
+            return new PageInfo<>(studentsDao.getStudentsList(sql.toString()));
+        }
+        if(null != param.getCid()) {
+            sql.append(" and  c.id = ").append(param.getCid());
+        }
         if(StringUtils.isNotEmpty(param.getName())) {
-            sql.append(" and  name like  '%").append(param.getName()).append("%'");
+            sql.append(" and  s.name like  '%").append(param.getName()).append("%'");
         }
         if (StringUtils.isNotEmpty(param.getPhone())) {
-            sql.append(" and phone like '%").append(param.getPhone()).append("%'");
+            sql.append(" and s.phone like '%").append(param.getPhone()).append("%'");
         }
-        return new PageInfo<>(studentsDao.getStudentsList(sql.toString()));
+//
+        return new PageInfo<>(studentsDao.getStudentsByCid(sql.toString()));
     }
 
     public void delete(Integer id){

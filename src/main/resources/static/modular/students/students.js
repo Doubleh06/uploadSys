@@ -12,6 +12,9 @@ Students.initOptions = function () {
     var options = {
         url : "/students/grid",
         autowidth:true,
+        postData : {
+            cid : $("#id").val()
+        },
         colNames: ['id','姓名','联系电话','学校','父母姓名','学费','操作'],
         colModel: [
             {name: 'id', index: 'id', width: 20},
@@ -39,9 +42,11 @@ Students.initOptions = function () {
  * 根据关键词搜索
  */
 Students.search = function () {
+    // alert($("#id").val());
     var searchParam = {};
     searchParam.name = $("#name").val();
     searchParam.phone = $("#phone").val();
+    searchParam.cid = $("#id").val();
     Students.table.reload(searchParam);
 };
 
