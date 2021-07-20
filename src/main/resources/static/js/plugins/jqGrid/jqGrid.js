@@ -2,7 +2,7 @@
  * 初始化 jqGrid 的封装
  */
 (function () {
-
+    var totalFee = 0;
     var JqGrid = function (tableId, pagerId, options) {
         this.jqGridInstance = null;
         this.tableId = tableId;
@@ -57,6 +57,7 @@
                         return data.obj.total
                     },
                     records: function (data) {
+                        totalFee = data.obj2;
                         return data.obj.records
                     },
                     repeatitems: false,
@@ -106,6 +107,9 @@
 
         getRowById: function (rowId) {
             return this.jqGridInstance.jqGrid('getRowData',rowId);
+        },
+        getTotalFee:function(){
+          return totalFee;
         }
     };
 

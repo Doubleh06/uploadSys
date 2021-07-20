@@ -50,9 +50,9 @@
                                     </div>
                                     &nbsp&nbsp&nbsp
 
-                                    <button class="btn btn-success"  id="search" type="button" onclick="PersonMachine.search()">搜索</button>&nbsp
-                                    <button class="btn btn-success" type="button" onclick="PersonMachine.resetSearch()">重置</button>&nbsp
-                                    <button class="btn btn-primary" type="button" onclick="PersonMachine.create()">新增</button>
+                                    <button class="btn btn-success"  id="search" type="button" onclick="Students.search()">搜索</button>&nbsp
+                                    <button class="btn btn-success" type="button" onclick="Students.resetSearch()">重置</button>&nbsp
+                                    <button class="btn btn-primary" type="button" onclick="Students.create()">新增</button>
                                     &nbsp&nbsp&nbsp
                                     <#--<button class="btn btn-primary" type="button" onclick="EmployeeMachine.chooseEmail('CZ')">选择常州发件邮箱</button>-->
                                     <#--<button class="btn btn-primary" type="button" onclick="EmployeeMachine.chooseEmail('CQ')">选择重庆发件邮箱</button>-->
@@ -100,7 +100,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-primary" onclick="PersonMachine.insert()">确定</button>
+                <button type="button" class="btn btn-sm btn-primary" onclick="Students.insert()">确定</button>
                 <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">关闭</button>
             </div>
         </div><!-- /.modal-content -->
@@ -134,7 +134,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-primary" onclick="PersonMachine.update()">确定</button>
+                <button type="button" class="btn btn-sm btn-primary" onclick="Students.update()">确定</button>
                 <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">关闭</button>
             </div>
         </div><!-- /.modal-content -->
@@ -142,7 +142,7 @@
 </div>
 <#--分配角色弹框-->
 <#include "/templates/layout/commonjs.ftl">
-<script src="/static/modular/employeeMachine/personMachine.js"></script>
+<script src="/static/modular/students/students.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function(){
