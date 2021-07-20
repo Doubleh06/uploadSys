@@ -10,7 +10,13 @@ import cn.nlf.dao.StudentsDao;
 import cn.nlf.dao.StudentsDetailDao;
 import cn.nlf.dto.ClassesShowDto;
 import cn.nlf.dto.DeleteClassJqGridParam;
+<<<<<<< HEAD
 import cn.nlf.dto.StudentsJqGridParam;
+=======
+import cn.nlf.dto.StudentsInClassesJqGridParam;
+import cn.nlf.dto.StudentsJqGridParam;
+import cn.nlf.entity.Classes;
+>>>>>>> origin/master
 import cn.nlf.entity.ClassesStudents;
 import cn.nlf.entity.Students;
 import cn.nlf.entity.StudentsDetail;
@@ -24,6 +30,10 @@ import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+<<<<<<< HEAD
+=======
+import java.util.Map;
+>>>>>>> origin/master
 
 @Service
 public class StudentsDetailService extends AbstractService<StudentsDetail> {
@@ -84,6 +94,30 @@ public class StudentsDetailService extends AbstractService<StudentsDetail> {
 
         return new PageInfo<>(studentsDetails);
     }
+
+
+
+    public PageInfo<Classes> selectByJqGridParam(StudentsInClassesJqGridParam param ){
+        PageHelper.startPage(param.getPage(), param.getRows());
+        StringBuilder sql = new StringBuilder();
+        sql.append(" where 1 = 1 ");
+        if (StringUtils.isNotEmpty(param.getClassName())) {
+            sql.append( " and name like '%").append(param.getClassName()).append("%'");
+        }
+        //如果该课程没有学生，则不显示
+        List<Classes> classes = classesDao.getStudentsList(sql.toString());
+        for (int i=0;i<classes.size();i++){
+            Integer count = classesStudentsDao.getTotalByCid(classes.get(i).getId());
+            if (count==0){
+                classes.remove(i);
+            }
+        }
+        return new PageInfo<>(classes);
+    }
+
+
+
+
 
     private String getWeek(Integer week){
         String result = "";

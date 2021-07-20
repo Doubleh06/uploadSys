@@ -20,4 +20,7 @@ public interface ClassesStudentsDao extends BaseDao<ClassesStudents> {
 
     @Select("select * from classes_students where cid = #{cid} and sid = #{sid}")
     List<ClassesStudents> isSignUp(@Param("cid") Integer cid,@Param("sid") Integer sid);
+
+    @Select("SELECT COUNT(*) from classes_students WHERE cid = #{cid}")
+    Integer getTotalByCid(@Param("cid")Integer cid);
 }

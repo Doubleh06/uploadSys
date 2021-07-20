@@ -12,20 +12,23 @@ Students.initOptions = function () {
     var options = {
         url : "/students/grid",
         autowidth:true,
-        colNames: ['id','姓名','联系电话','学校','操作'],
+        postData : {
+            cid : $("#id").val()
+        },
+        colNames: ['id','姓名','联系电话','学校','父母姓名','学费','操作'],
         colModel: [
             {name: 'id', index: 'id', width: 20},
             {name: 'name', index: 'name', width: 80},
             {name: 'phone', index: 'phone', width: 150},
             {name: 'school', index: 'school', width: 150},
-            // {name: 'parentsName', index: 'parentsName', width: 100},
-            // {name: 'fee', index: 'fee', width: 100},
+            {name: 'parentsName', index: 'parentsName', width: 100},
+            {name: 'fee', index: 'fee', width: 100},
             {name: 'operations', index: 'operations', width: 150, sortable: false, formatter: function (cellValue, options, rowObject) {
                 var id = "'"+rowObject["id"]+"'";
                 var str = "";
                 str += '<input type="button" class=" btn btn-sm btn-info"  value="编  辑" onclick="Students.modify(' + id + ')"/>&nbsp;';
                 str += '<input type="button" class=" btn btn-sm btn-warning"  value="删  除" onclick="Students.delete(' + id + ')"/>&nbsp;';
-                str += '<input type="button" class=" btn btn-sm btn-primary"  value="消  课" onclick="Students.classes(' + id + ')"/>&nbsp;';
+                str += '<input type="button" class=" btn btn-sm btn-primary"  value="课  程" onclick="Students.classes(' + id + ')"/>&nbsp;';
                 str += '<input type="button" class=" btn btn-sm btn-success"  value="课程查询" onclick="Students.show(' + id + ')"/>&nbsp;';
                 // str += '<input type="button" class=" btn btn-sm btn-danger"  value="删除" onclick="SignUp.delete(' + id + ')"/>';
                 return str;
@@ -39,9 +42,11 @@ Students.initOptions = function () {
  * 根据关键词搜索
  */
 Students.search = function () {
+    // alert($("#id").val());
     var searchParam = {};
     searchParam.name = $("#name").val();
     searchParam.phone = $("#phone").val();
+    searchParam.cid = $("#id").val();
     Students.table.reload(searchParam);
 };
 

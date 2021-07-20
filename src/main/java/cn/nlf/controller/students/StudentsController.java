@@ -9,7 +9,9 @@ import cn.nlf.core.jqGrid.JqGridParam;
 import cn.nlf.core.jqGrid.JqGridResult;
 import cn.nlf.dto.DeleteClassJqGridParam;
 import cn.nlf.dto.StudentsDto;
+import cn.nlf.dto.StudentsInClassesJqGridParam;
 import cn.nlf.dto.StudentsJqGridParam;
+import cn.nlf.entity.Classes;
 import cn.nlf.entity.Role;
 import cn.nlf.entity.Students;
 import cn.nlf.entity.StudentsDetail;
@@ -31,6 +33,7 @@ import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/students")
@@ -43,8 +46,9 @@ public class StudentsController extends BaseController {
    private StudentsDetailService studentsDetailService;
 
     @RequestMapping(value = "/list")
-    public String studentsList(Model model){
+    public String studentsList(Model model,@RequestParam Integer cid){
         model.addAttribute("menus", getMenus("students"));
+        model.addAttribute("cid", cid);
         return "/students/list";
     }
 
@@ -160,5 +164,26 @@ public class StudentsController extends BaseController {
     }
 
 
+    @RequestMapping(value = "/studentsInClasses/list")
+    public String studentsInClasses(Model model){
+        model.addAttribute("menus", getMenus("students"));
+        return "/students/classesList";
+    }
+
+    @RequestMapping(value = "/studentsInClasses/grid")
+    @ResponseBody
+    public Result studentsInClassesGrid(StudentsInClassesJqGridParam param) {
+        PageInfo<Classes> pageInfo = studentsDetailService.selectByJqGridParam(param);
+        JqGridResult<Classes> result = new JqGridResult<>();
+        //当前页
+        result.setPage(pageInfo.getPageNum());
+        //数据总数
+        result.setRecords(pageInfo.getTotal());
+        //总页数
+        result.setTotal(pageInfo.getPages());
+        //当前页数据
+        result.setRows(pageInfo.getList());
+        return new JSONResult(result);
+    }
 
 }
