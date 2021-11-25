@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>脑立方</title>
+    <title>上传管理</title>
 
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -28,7 +28,7 @@
         <div class="row">
 
             <div class="col-md-12">
-                <h2 class="font-bold titleBox">脑立方管理系统</h2>
+                <h2 class="font-bold titleBox">上传管理系统</h2>
                 <div class="ibox-content">
                     <form class="m-t" role="form" action="/j_spring_security_check" method="post">
                         <div class="form-group">

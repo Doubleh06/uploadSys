@@ -5,7 +5,7 @@
         </div>
         <ul class="nav navbar-top-links navbar-right">
             <li>
-                <span class="m-r-sm text-muted welcome-message">Welcome to 脑立方管理系统!</span>
+                <span class="m-r-sm text-muted welcome-message">Welcome to 上传管理系统!</span>
             </li>
 
             <li>

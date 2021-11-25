@@ -1,7 +1,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>脑立方</title>
+<title>上传管理</title>
 
 <!--common css-->
 <link href="/static/css/bootstrap.min.css" rel="stylesheet">
