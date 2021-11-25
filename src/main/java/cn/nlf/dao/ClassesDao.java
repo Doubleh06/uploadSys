@@ -23,7 +23,7 @@ public interface ClassesDao extends BaseDao<Classes> {
     @Select("select name from classes where id = #{id}")
     String getClassNameById(@Param("id")Integer id);
 
-    @Select("select c.name className,c.total,c.fee,c.teacher,cs.cid,cs.sid,cs.create_time createTime,s.`name` studentName " +
+    @Select("select c.name className,c.total,c.teacher,cs.cid,cs.sid,cs.create_time createTime,s.`name` studentName,s.fee " +
             "from classes c RIGHT JOIN classes_students cs on c.id = cs.cid LEFT JOIN students s on cs.sid = s.id ${sql}")
     List<Map> getSignUpList(@Param("sql") String sql);
 }

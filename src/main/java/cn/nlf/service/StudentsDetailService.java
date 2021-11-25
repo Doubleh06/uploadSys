@@ -10,13 +10,10 @@ import cn.nlf.dao.StudentsDao;
 import cn.nlf.dao.StudentsDetailDao;
 import cn.nlf.dto.ClassesShowDto;
 import cn.nlf.dto.DeleteClassJqGridParam;
-<<<<<<< HEAD
 import cn.nlf.dto.StudentsJqGridParam;
-=======
 import cn.nlf.dto.StudentsInClassesJqGridParam;
 import cn.nlf.dto.StudentsJqGridParam;
 import cn.nlf.entity.Classes;
->>>>>>> origin/master
 import cn.nlf.entity.ClassesStudents;
 import cn.nlf.entity.Students;
 import cn.nlf.entity.StudentsDetail;
@@ -30,10 +27,8 @@ import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-<<<<<<< HEAD
-=======
 import java.util.Map;
->>>>>>> origin/master
+
 
 @Service
 public class StudentsDetailService extends AbstractService<StudentsDetail> {

@@ -3,13 +3,13 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>cn.nlf</groupId>
-	<artifactId>nlf</artifactId>
+	<groupId>cn.uploadSys</groupId>
+	<artifactId>uploadSys</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
-	<name>nlf</name>
-	<description>nlf</description>
+	<name>uploadSys</name>
+	<description>uploadSys</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
