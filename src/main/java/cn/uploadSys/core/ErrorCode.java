@@ -32,6 +32,7 @@ public enum ErrorCode {
     NOT_FOUND(404, "找不到资源"),
 
     INTERNAL_SERVER_TIMEOUT(-2, "请求超时"),
+    OPERATION_EXCEL_ERROR(7, "上传文件异常"),
 
     INTERNAL_SERVER_ERROR(-1, "服务器内部错误");
 
