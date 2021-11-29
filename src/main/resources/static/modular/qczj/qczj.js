@@ -65,16 +65,45 @@ Qczj.resetSearch = function () {
 };
 
 
-Qczj.submit = function () {
-    console.log("submit");
-    $("#formx").ajaxForm(function (data) {
-        console.log(data);
-    })
-};
 
 
+var uploadForm = document.querySelector("#uploadForm");
+var uploadInput = document.querySelector("#uploadInput");
+console.log(uploadForm);
+console.log(uploadInput);
+uploadForm.addEventListener('submit', function(event){
+    var l = $(btn).ladda();
+    l.ladda('start');
+    var files = uploadInput.files;
+    console.log(files);
+    if(files.length === 0) {
+        // singleFileUploadError.innerHTML = "Please select a file";
+        // singleFileUploadError.style.display = "block";
+    }
+    uploadSubmit(files[0],l);
+    event.preventDefault();
+}, true);
 
+function uploadSubmit(file,l) {
+    var formData = new FormData();
+    formData.append("file", file);
 
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/upload/qczj/import");
+
+    xhr.onload = function() {
+        var response = JSON.parse(xhr.responseText);
+        if(response.code == 0) {
+            l.ladda('stop');
+            success("倒入成功");
+        } else {
+            l.ladda('stop');
+            error("倒入失败");
+        }
+    }
+
+    xhr.send(formData);
+}
 
 /**
  * 课程所报名学生

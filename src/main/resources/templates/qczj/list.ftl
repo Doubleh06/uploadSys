@@ -7,6 +7,7 @@
     <link href="/static/css/plugins/switchery/switchery.css" rel="stylesheet">
     <link href="/static/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
     <link href="/static/css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/plugins/ladda/ladda-themeless.min.css" rel="stylesheet">
 
 </head>
 
@@ -50,13 +51,15 @@
                                         </div>
 
                                         <div class="form-group col-lg-4">
-                                            <form action="/upload/qczj/import" enctype="multipart/form-data" method="post" id="formx">
+<#--                                            action="/upload/qczj/import"-->
+                                            <form  enctype="multipart/form-data" id="uploadForm">
                                                 <div class="fileinput fileinput-new" data-provides="fileinput">
-                                                    <span class="btn btn-default btn-file"><span class="fileinput-new">选择文件</span><span class="fileinput-exists">更改文件</span><input type="file" name="file"></span>
+                                                    <span class="btn btn-default btn-file"><span class="fileinput-new">选择文件</span><span class="fileinput-exists">更改文件</span><input id="uploadInput" type="file" name="file"></span>
                                                     <span class="fileinput-filename"></span>
                                                     <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">&times;</a>
                                                 </div>
-                                                <button class="btn btn-primary" type="button" value="提交" onclick="Qczj.submit()">提交</button>
+                                                <button id="btn" class="btn btn-primary ladda-button" type="submit" >提交</button>
+<#--                                                <button class="btn btn-primary" type="button" value="提交" onclick="uploadSubmit()">提交</button>-->
                                             </form>
                                         </div>
                                     </div>
@@ -80,140 +83,24 @@
     </div>
 </div>
 
-<#--新增弹框-->
-<#--<div class="modal fade" id="createModal" tabindex="-1"  role="dialog" aria-labelledby="modalTitle" aria-hidden="true">-->
-<#--    <div class="modal-dialog">-->
-<#--        <div class="modal-content">-->
-<#--            <div class="modal-header">-->
-<#--                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
-<#--                <h4 class="modal-title" id="modalTitle">新增</h4>-->
-<#--            </div>-->
-<#--            <div class="modal-body">-->
-<#--                <form class="form-horizontal" id="create-form">-->
-<#--                    <div class="form-group">-->
-<#--                        <label class="col-sm-2 control-label">课程名</label>-->
-<#--                        <div class="col-sm-10">-->
-<#--                            <input type="text" class="form-control" name="name">-->
-<#--                        </div>-->
-<#--                    </div>-->
 
-<#--                    <div class="form-group">-->
-<#--                        <label class="col-sm-2 control-label">开始时间</label>-->
-<#--                        <div class="col-sm-4">-->
-<#--                            <input type="text" class="form-control" name="startTimeH">-->
-<#--                        </div>-->
-<#--                        <div class="col-sm-1">-->
-<#--                            <label class="col-sm-1 control-label">:</label>-->
-<#--                        </div>-->
-<#--                        <div class="col-sm-5">-->
-<#--                            <input type="text" class="form-control" name="startTimeM">-->
-<#--                        </div>-->
-<#--                    </div>-->
-
-<#--                    <div class="form-group">-->
-<#--                        <label class="col-sm-2 control-label">结束时间</label>-->
-<#--                        <div class="col-sm-4">-->
-<#--                            <input type="text" class="form-control" name="endTimeH">-->
-<#--                        </div>-->
-<#--                        <div class="col-sm-1">-->
-<#--                            <label class="col-sm-1 control-label">:</label>-->
-<#--                        </div>-->
-<#--                        <div class="col-sm-5">-->
-<#--                            <input type="text" class="form-control" name="endTimeM">-->
-<#--                        </div>-->
-
-<#--                    </div>-->
-<#--                    <div class="form-group">-->
-<#--                        <label class="col-sm-2 control-label">讲师</label>-->
-<#--                        <div class="col-sm-10">-->
-<#--                            <input type="text" class="form-control" name="teacher">-->
-<#--                        </div>-->
-<#--                    </div>-->
-<#--                    <div class="form-group">-->
-<#--                        <label class="col-sm-2 control-label">上课周期</label>-->
-<#--                        <div class="col-sm-10">-->
-<#--                            <select class="form-control" name="week">-->
-<#--                                <option value="1">周一</option>-->
-<#--                                <option value="2">周二</option>-->
-<#--                                <option value="3">周三</option>-->
-<#--                                <option value="4">周四</option>-->
-<#--                                <option value="5">周五</option>-->
-<#--                                <option value="6">周六</option>-->
-<#--                                <option value="7">周日</option>-->
-<#--                            </select>-->
-<#--                        </div>-->
-<#--                    </div>-->
-<#--                </form>-->
-
-<#--            </div>-->
-<#--            <div class="modal-footer">-->
-<#--                <button type="button" class="btn btn-sm btn-primary" onclick="SignUp.insert()">确定</button>-->
-<#--                <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">关闭</button>-->
-<#--            </div>-->
-<#--        </div><!-- /.modal-content &ndash;&gt;-->
-<#--    </div><!-- /.modal &ndash;&gt;-->
-<#--</div>-->
-<#--编辑弹框-->
-<#--<div class="modal fade" id="modifyModal" tabindex="-1"  role="dialog" aria-labelledby="modalTitle" aria-hidden="true">-->
-<#--    <div class="modal-dialog">-->
-<#--        <div class="modal-content">-->
-<#--            <div class="modal-header">-->
-<#--                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
-<#--                <h4 class="modal-title" id="modalTitle">编辑</h4>-->
-<#--            </div>-->
-<#--            <div class="modal-body">-->
-<#--                <form class="form-horizontal" id="modify-form">-->
-<#--                    <div class="form-group">-->
-<#--                        <label class="col-sm-2 control-label">课程名</label>-->
-<#--                        <div class="col-sm-10">-->
-<#--                            <input type="text" class="form-control" name="name">-->
-<#--                        </div>-->
-<#--                    </div>-->
-<#--                    <div class="form-group">-->
-<#--                        <label class="col-sm-2 control-label">开始时间</label>-->
-<#--                        <div class="col-sm-10">-->
-<#--                            <input type="text" class="form-control" name="startTime">-->
-<#--                        </div>-->
-<#--                    </div>-->
-<#--                    <div class="form-group">-->
-<#--                        <label class="col-sm-2 control-label">结束时间</label>-->
-<#--                        <div class="col-sm-10">-->
-<#--                            <input type="text" class="form-control" name="endTime">-->
-<#--                        </div>-->
-<#--                    </div>-->
-<#--                    <div class="form-group">-->
-<#--                        <label class="col-sm-2 control-label">讲师</label>-->
-<#--                        <div class="col-sm-10">-->
-<#--                            <input type="text" class="form-control" name="teacher">-->
-<#--                        </div>-->
-<#--                    </div>-->
-<#--                    <div class="form-group">-->
-<#--                        <label class="col-sm-2 control-label">上课周期</label>-->
-<#--                        <div class="col-sm-10">-->
-<#--                            <input type="text" class="form-control" name="week">-->
-<#--                        </div>-->
-<#--                    </div>-->
-
-<#--                </form>-->
-
-<#--            </div>-->
-<#--            <div class="modal-footer">-->
-<#--                <button type="button" class="btn btn-sm btn-primary" onclick="SignUp.update()">确定</button>-->
-<#--                <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">关闭</button>-->
-<#--            </div>-->
-<#--        </div><!-- /.modal-content &ndash;&gt;-->
-<#--    </div><!-- /.modal &ndash;&gt;-->
-<#--</div>-->
 <#--分配角色弹框-->
 <#include "/templates/layout/commonjs.ftl">
+<script src="/static/js/plugins/ladda/spin.min.js"></script>
+<script src="/static/js/plugins/ladda/ladda.min.js"></script>
+<script src="/static/js/plugins/ladda/ladda.jquery.min.js"></script>
 <script src="/static/js/plugins/jasny/jasny-bootstrap.min.js"></script>
 <script src="/static/modular/qczj/qczj.js"></script>
+
 
 
 <script type="text/javascript">
     $(document).ready(function() {
 
     });
+
+
+
 
 </script>
 </body>

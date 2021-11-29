@@ -134,13 +134,6 @@ INSERT INTO `user_role` VALUES (5, 16, 2);
 COMMIT;
 
 
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
-
--- ----------------------------
--- Table structure for qczj
--- ----------------------------
-DROP TABLE IF EXISTS `qczj`;
 CREATE TABLE `qczj` (
   `id` varchar(50) COLLATE utf8_bin NOT NULL,
   `city_code` varchar(20) COLLATE utf8_bin DEFAULT NULL,

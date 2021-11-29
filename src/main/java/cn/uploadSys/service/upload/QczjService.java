@@ -64,6 +64,10 @@ public class QczjService extends AbstractService<Qczj> {
         return new PageInfo<>(qczjDao.getStudentsByClassesId(param.getId()));
     }
 
+    public int insert(Qczj qczj){
+        return qczjDao.insert(qczj);
+    }
+
 
 
     

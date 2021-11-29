@@ -24,10 +24,15 @@ public class BusinessException extends RuntimeException {
         this.httpCode = httpCode;
     }
 
+
     public BusinessException(ErrorCode httpCode, String message) {
         super(message);
         this.httpCode = httpCode;
     }
+    public BusinessException( String message) {
+        super(message);
+    }
+
     public BusinessException(ErrorCode httpCode, String message, Throwable cause) {
         super(message,cause);
         this.httpCode = httpCode;
