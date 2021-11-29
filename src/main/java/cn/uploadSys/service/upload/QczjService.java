@@ -13,6 +13,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -42,16 +45,16 @@ public class QczjService extends AbstractService<Qczj> {
     }
 
 
-    public PageInfo<Qczj> selectByJqGridParam(AllJqGridParam param ){
+    public PageInfo<Qczj> selectByJqGridParam(AllJqGridParam param ) throws ParseException {
         PageHelper.startPage(param.getPage(), param.getRows());
         StringBuilder sql = new StringBuilder();
         sql.append(" where 1 = 1 ");
         if(StringUtils.isNotEmpty(param.getPhone())) {
             sql.append(" and  phone like  '%").append(param.getPhone()).append("%'");
         }
-//        if (StringUtils.isNotEmpty(param.getTeacher())) {
-//            sql.append(" and teacher like '%").append(param.getTeacher()).append("%'");
-//        }
+        if (StringUtils.isNotEmpty(param.getStartDate()) && StringUtils.isNotEmpty(param.getEndDate())) {
+            sql.append(" and create_time between ").append(param.getStartDate()).append(" and ").append(param.getEndDate());
+        }
 //        if (null != param.getWeek()) {
 //            sql.append(" and week = ").append(param.getWeek());
 //        }

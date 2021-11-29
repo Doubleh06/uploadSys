@@ -8,6 +8,8 @@
     <link href="/static/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
     <link href="/static/css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet">
     <link href="/static/css/plugins/ladda/ladda-themeless.min.css" rel="stylesheet">
+    <link href="/static/css/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet">
+    <link href="/static/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
 
 </head>
 
@@ -19,7 +21,7 @@
 
         <div class="row wrapper border-bottom white-bg page-heading">
             <div class="col-lg-10">
-                <h2>学生信息列表</h2>
+                <h2>汽车之家数据列表</h2>
                 <ol class="breadcrumb">
                     <li>
                         <a href="/main">Home</a>
@@ -45,6 +47,14 @@
                                         <div class="form-group col-lg-8">
                                             <label>手机号：</label>
                                             <input type="text" class="form-control" id="phone" style="width: 150px;">
+                                            <div class="form-group" id="data_5">
+                                                <label class="font-normal">选择日期：</label>
+                                                <div class="input-daterange input-group" id="datepicker">
+                                                    <input type="text" class="input-sm form-control" id="startDate" name="start" />
+                                                    <span class="input-group-addon">to</span>
+                                                    <input type="text" class="input-sm form-control" id="endDate" name="end" />
+                                                </div>
+                                            </div>
                                             <button class="btn btn-success"  id="search" type="button" onclick="Qczj.search()">搜索</button>&nbsp
                                             <button class="btn btn-success" type="button" onclick="Qczj.resetSearch()">重置</button>&nbsp
                                             <button class="btn btn-primary" type="button" onclick="Qczj.download()">下载</button>
@@ -91,12 +101,22 @@
 <script src="/static/js/plugins/ladda/ladda.jquery.min.js"></script>
 <script src="/static/js/plugins/jasny/jasny-bootstrap.min.js"></script>
 <script src="/static/modular/qczj/qczj.js"></script>
+<script src="/static/js/plugins/daterangepicker/daterangepicker.js"></script>
+<script src="/static/js/plugins/datapicker/bootstrap-datepicker.js"></script>
 
 
 
 <script type="text/javascript">
     $(document).ready(function() {
-
+        $('#data_5 .input-daterange').datepicker({
+            keyboardNavigation: false,
+            forceParse: false,
+            autoclose: true,
+            format:"yyyy-mm-dd",
+            // todayBtn : true,
+            todayHighlight : true,
+            language : "zh-CN"
+        });
     });
 
 

@@ -212,7 +212,10 @@
 			<artifactId>poi-ooxml</artifactId>
 			<version>5.0.0</version>
 		</dependency>
-<!--		<dependency>-->
+		<!--这个依赖直接包含了 logback-core 以及 slf4j-api的依赖-->
+
+
+		<!--		<dependency>-->
 <!--			<groupId>org.apache.poi</groupId>-->
 <!--			<artifactId>poi-ooxml-schemas</artifactId>-->
 <!--			<version>5.0.0</version>-->

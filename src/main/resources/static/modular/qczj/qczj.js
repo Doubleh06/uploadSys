@@ -48,8 +48,8 @@ Qczj.initOptions = function () {
 Qczj.search = function () {
     var searchParam = {};
     searchParam.phone = $("#phone").val();
-    // searchParam.teacher = $("#teacher").val();
-    // searchParam.week = $("#week").val();
+    searchParam.startDate = $("#startDate").val();
+    searchParam.endDate = $("#endDate").val();
     Qczj.table.reload(searchParam);
 };
 
@@ -58,10 +58,9 @@ Qczj.search = function () {
  */
 Qczj.resetSearch = function () {
     $("#phone").val("");
-    // $("#teacher").val("");
-    // $(".option_1").attr("selected",true);
+    $("#startDate").val("");
+    $("#endDate").val("");
     Qczj.search();
-    // $(".option_1").attr("selected",false);
 };
 
 
@@ -92,10 +91,10 @@ function uploadSubmit(file,l) {
         var response = JSON.parse(xhr.responseText);
         if(response.code == 0) {
             l.ladda('stop');
-            success("倒入成功");
+            success("导入成功");
         } else {
             l.ladda('stop');
-            error("倒入失败");
+            error("导入失败");
         }
     }
 
