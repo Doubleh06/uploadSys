@@ -1,46 +1,42 @@
-var Upload = {
+var Qczj = {
     tableId: "#grid-table",
     pagerId: "#grid-pager",
     table: null,
-    domain: "upload"
+    domain: "qczj"
 };
 
 /**
  * jqGrid初始化参数
  */
-Upload.initOptions = function () {
+Qczj.initOptions = function () {
     var options = {
-        url : "/upload/grid",
+        url : "/upload/qczj/grid",
         autowidth:true,
-        colNames: ['id','课程名称','开始时间','结束时间','时长','课时','上课周期','费用','操作'],
+        colNames: ['手机号','城市ID','城市名称','省份名称','品牌ID','品牌名称','创建时间'],
         colModel: [
-            {name: 'id', index: 'id', width: 20},
-            {name: 'name', index: 'name', width: 120},
-            {name: 'startTime', index: 'startTime', width: 80},
-            {name: 'endTime', index: 'endTime', width: 80},
-            {name: 'duration', index: 'duration', width: 60},
-            {name: 'total', index: 'total', width: 60},
-            {name: 'week', index: 'week', width: 80,formatter(cellValue, options, rowObject){
-                switch (cellValue) {
-                    case 1:return "每周一";break;
-                    case 2:return "每周二";break;
-                    case 3:return "每周三";break;
-                    case 4:return "每周四";break;
-                    case 5:return "每周五";break;
-                    case 6:return "每周六";break;
-                    case 7:return "每周日";break;
-                }
-                }},
-            {name: 'fee', index: 'fee', width: 80},
-            {name: 'operations', index: 'operations', width: 200, sortable: false, formatter: function (cellValue, options, rowObject) {
-                var id = "'"+rowObject["id"]+"'";
-                var str = "";
-                str += '<input type="button" class=" btn btn-sm btn-info"  value="编  辑" onclick="Qczj.modify(' + id + ')"/>&nbsp;';
-                str += '<input type="button" class=" btn btn-sm btn-warning"  value="删  除" onclick="Qczj.delete(' + id + ')"/>&nbsp;';
-                str += '<input type="button" class=" btn btn-sm btn-primary"  value="安排学员" onclick="Qczj.arrangeStudents(' + id + ')"/>&nbsp;';
-
-                return str;
-            }}
+            {name: 'phone', index: 'phone', width: 40},
+            {name: 'cityCode', index: 'cityCode', width: 30},
+            {name: 'cityName', index: 'cityName', width: 60},
+            {name: 'province', index: 'province', width: 60},
+            {name: 'brandId', index: 'brandId', width: 60},
+            {name: 'brandName', index: 'brandName', width: 60},
+            {name: 'createTime', index: 'createTime', width: 80,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
+                    if (cellvar == "" || cellvar == undefined) {
+                        return "";
+                    }
+                    var da = new Date(cellvar);
+                    return dateFtt("yyyy-MM-dd hh:mm:ss", da);
+                }}
+        //     {name: 'operations', index: 'operations', width: 200, sortable: false, formatter: function (cellValue, options, rowObject) {
+        //         var id = "'"+rowObject["id"]+"'";
+        //         var str = "";
+        //         str += '<input type="button" class=" btn btn-sm btn-info"  value="编  辑" onclick="Qczj.modify(' + id + ')"/>&nbsp;';
+        //         str += '<input type="button" class=" btn btn-sm btn-warning"  value="删  除" onclick="Qczj.delete(' + id + ')"/>&nbsp;';
+        //         str += '<input type="button" class=" btn btn-sm btn-primary"  value="安排学员" onclick="Qczj.arrangeStudents(' + id + ')"/>&nbsp;';
+        //
+        //         return str;
+        //     }
+        //     }
         ]
     };
     return options;
@@ -49,32 +45,32 @@ Upload.initOptions = function () {
 /**
  * 根据关键词搜索
  */
-Upload.search = function () {
+Qczj.search = function () {
     var searchParam = {};
-    searchParam.name = $("#name").val();
-    searchParam.teacher = $("#teacher").val();
-    searchParam.week = $("#week").val();
-    Upload.table.reload(searchParam);
+    searchParam.phone = $("#phone").val();
+    // searchParam.teacher = $("#teacher").val();
+    // searchParam.week = $("#week").val();
+    Qczj.table.reload(searchParam);
 };
 
 /**
  * 重置搜索
  */
-Upload.resetSearch = function () {
-    $("#name").val("");
-    $("#teacher").val("");
-    $(".option_1").attr("selected",true);
-    Upload.search();
-    $(".option_1").attr("selected",false);
+Qczj.resetSearch = function () {
+    $("#phone").val("");
+    // $("#teacher").val("");
+    // $(".option_1").attr("selected",true);
+    Qczj.search();
+    // $(".option_1").attr("selected",false);
 };
 
 /**
  *新增
  */
-Upload.create = function () {
-   window.location.href = "/upload/modify?id=";
+Qczj.create = function () {
+   window.location.href = "/upload/qczj/modify?id=";
 }
-Upload.insert = function (btn) {
+Qczj.insert = function (btn) {
     var name = $("#name").val();
     if(null==name||""==name){
         error("课程名不能为空");
@@ -109,9 +105,9 @@ Upload.insert = function (btn) {
     var id = $("#id").val();
     console.log(id);
     if(null == id||"" == id){
-        url = "/upload/insert";
+        url = "/upload/qczj/insert";
     }else{
-        url = "/upload/update"
+        url = "/upload/qczj/update"
     }
     console.log(url);
     var upload = getFormJson($("#create-form"));
@@ -121,13 +117,13 @@ Upload.insert = function (btn) {
     $.ajax({
         url: url,
         type: 'POST',
-        data: JSON.stringify(upload),
+        data: JSON.stringify(qczj),
         contentType: "application/json;charset=utf-8",
         dataType: "json",
         success: function (r) {
             if (r.code === 0) {
                 l.ladda('stop');
-                successthen("保存成功",null,"/upload/list");
+                successthen("保存成功",null,"/upload/qczj/list");
             }
         }
     })
@@ -136,8 +132,8 @@ Upload.insert = function (btn) {
 /**
  *编辑
  */
-Upload.modify = function (id) {
-    window.location.href = "/upload/modify?id="+id;
+Qczj.modify = function (id) {
+    window.location.href = "/upload/qczj/modify?id="+id;
 }
 
 
@@ -147,11 +143,11 @@ Upload.modify = function (id) {
  *
  * @param id    userId
  */
-Upload.delete = function del(id) {
+Qczj.delete = function del(id) {
     warning("确定删除吗", "", function () {
-        $.get("/upload/delete?id=" + id, function () {
+        $.get("/upload/qczj/delete?id=" + id, function () {
             success("成功删除");
-            Upload.search();
+            Qczj.search();
         });
     })
 };
@@ -162,8 +158,8 @@ Upload.delete = function del(id) {
  * @param date
  * @returns {void | string | *}
  */
-Upload.arrangeStudents = function(id){
-    window.location.href = '/upload/arrangeStudents/list?id='+id;
+Qczj.arrangeStudents = function(id){
+    window.location.href = '/upload/qczj/arrangeStudents/list?id='+id;
 }
 
 /**
@@ -216,7 +212,7 @@ Upload.arrangeStudents = function(id){
 $(function() {
     // $('.chosen-select').chosen({width: "100%"});
 
-    var jqGrid = new JqGrid("#grid-table", "#grid-pager", Upload.initOptions());
-    Upload.table = jqGrid.init();
+    var jqGrid = new JqGrid("#grid-table", "#grid-pager", Qczj.initOptions());
+    Qczj.table = jqGrid.init();
 
 });

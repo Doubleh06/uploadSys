@@ -377,7 +377,7 @@
             },
             successmultiple: noop,
             canceled: function(file) {
-                return this.emit("error", file, "Upload canceled.");
+                return this.emit("error", file, "Qczj canceled.");
             },
             canceledmultiple: noop,
             complete: function(file) {
@@ -737,7 +737,7 @@
             if (this.options.dictFallbackText) {
                 fieldsString += "<p>" + this.options.dictFallbackText + "</p>";
             }
-            fieldsString += "<input type=\"file\" name=\"" + (this._getParamName(0)) + "\" " + (this.options.uploadMultiple ? 'multiple="multiple"' : void 0) + " /><input type=\"submit\" value=\"Upload!\"></div>";
+            fieldsString += "<input type=\"file\" name=\"" + (this._getParamName(0)) + "\" " + (this.options.uploadMultiple ? 'multiple="multiple"' : void 0) + " /><input type=\"submit\" value=\"Qczj!\"></div>";
             fields = Dropzone.createElement(fieldsString);
             if (this.element.tagName !== "FORM") {
                 form = Dropzone.createElement("<form action=\"" + this.options.url + "\" enctype=\"multipart/form-data\" method=\"" + this.options.method + "\"></form>");
