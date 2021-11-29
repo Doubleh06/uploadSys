@@ -24,7 +24,7 @@ public class Qczj extends BaseEntity {
     private String carSeriesId;
     private String carSeriesName;
     private String km;
-    private Date firstregtime;
+    private String firstregtime;
     private String uid;
     private Date createTime;
     private Date modifyTime;

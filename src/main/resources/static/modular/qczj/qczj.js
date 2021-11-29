@@ -69,13 +69,10 @@ Qczj.resetSearch = function () {
 
 var uploadForm = document.querySelector("#uploadForm");
 var uploadInput = document.querySelector("#uploadInput");
-console.log(uploadForm);
-console.log(uploadInput);
 uploadForm.addEventListener('submit', function(event){
     var l = $(btn).ladda();
     l.ladda('start');
     var files = uploadInput.files;
-    console.log(files);
     if(files.length === 0) {
         // singleFileUploadError.innerHTML = "Please select a file";
         // singleFileUploadError.style.display = "block";

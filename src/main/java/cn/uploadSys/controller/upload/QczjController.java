@@ -39,10 +39,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.SimpleFormatter;
 
 @Slf4j
@@ -91,49 +88,49 @@ public class QczjController extends BaseController {
         InputStream inputStream = file.getInputStream();
         ExcelReader reader = ExcelUtil.getReader(inputStream);
 
-        //hutool读取excel 1：表示表格头所在行，2：从第几行开始读取，2147483647：行的最大值
-        //因为自定义了表格头别名，所以只能使用map接收，如果没有设置别名，可以使用实体接收
 
         //获取token_access
-        String host = "https://openapi.autohome.com.cn";
-        String path = "/api/oauth2/authorize";
-
-        HashMap<String,String> accessBody = new HashMap();
-        accessBody.put("client_id","");
-        accessBody.put("client_secret","");
-        accessBody.put("response_type","");
-        HashMap<String,Object> header = new HashMap();
-        header.put("Content-Type","application/json;charset=utf-8");
-
-        String accessResult = AjaxUtil.doPost(null,host,path,accessBody.toString(),header);
-
-        String path2 = "/api/oauth2/authorize?access_token="+"";
+//        String host = "https://openapi.autohome.com.cn";
+//        String path = "/api/oauth2/authorize";
+//
+//        HashMap<String,String> accessBody = new HashMap();
+//        accessBody.put("client_id","");
+//        accessBody.put("client_secret","");
+//        accessBody.put("response_type","");
+//        HashMap<String,Object> header = new HashMap();
+//        header.put("Content-Type","application/json;charset=utf-8");
+//
+//        String accessResult = AjaxUtil.doPost(null,host,path,accessBody.toString(),header);
+//
+//        String path2 = "/api/oauth2/authorize?access_token="+"";
         //轮训每条数据，进行对接
-        List<Qczj> qczjs = reader.readAll(Qczj.class);
+        List<Qczj> qczjs = reader.read(0,2,Qczj.class);
         qczjs.forEach(qczj -> {
-            try {
-                HashMap<String,String> body = new HashMap();
-                body.put("cid",qczj.getCityCode());
-                body.put("cityname", URLEncoder.encode(qczj.getCityName(),"UTF-8"));
-                body.put("mobile",qczj.getPhone());
-                body.put("brandname",URLEncoder.encode(qczj.getBrandName(),"UTF-8"));
-                body.put("specname",URLEncoder.encode(qczj.getCarSeriesName(),"UTF-8"));
-                body.put("seriesname",URLEncoder.encode(qczj.getCarName(),"UTF-8"));
-                body.put("mileage",qczj.getKm());
-                body.put("firstregtime",new SimpleDateFormat("yyyy/MM/dd").format(qczj.getFirstregtime()));
-                body.put("appid",qczj.getUid());
-                String result = AjaxUtil.doPost(null,host,path,body.toString(),header);
-                JSONObject jsonObject = JSONObject.parseObject(result);
-                String returnCode = jsonObject.getString("returncode");
-                if (StringUtils.isNotEmpty(returnCode)) {
-    //                qczj.setId();
-                    qczjService.insert(qczj);
-                }else{
-                    throw new BusinessException("电话："+qczj.getPhone()+"数据录入异常");
-                }
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+            System.out.println(qczj.toString());
+//            try {
+//                HashMap<String,String> body = new HashMap();
+//                body.put("cid",qczj.getCityCode());
+//                body.put("cityname", URLEncoder.encode(qczj.getCityName(),"UTF-8"));
+//                body.put("mobile",qczj.getPhone());
+//                body.put("brandname",URLEncoder.encode(qczj.getBrandName(),"UTF-8"));
+//                body.put("specname",URLEncoder.encode(qczj.getCarSeriesName(),"UTF-8"));
+//                body.put("seriesname",URLEncoder.encode(qczj.getCarName(),"UTF-8"));
+//                body.put("mileage",qczj.getKm());
+//                body.put("firstregtime",qczj.getFirstregtime());
+//                body.put("appid",qczj.getUid());
+//                String result = AjaxUtil.doPost(null,host,path,body.toString(),header);
+//                JSONObject jsonObject = JSONObject.parseObject(result);
+//                String returnCode = jsonObject.getString("returncode");
+//                if (StringUtils.isNotEmpty(returnCode)) {
+//    //                qczj.setId();
+//                    qczj.setCreateTime(new Date());
+//                    qczjService.insert(qczj);
+//                }else{
+//                    throw new BusinessException("电话："+qczj.getPhone()+"数据录入异常");
+//                }
+//            } catch (UnsupportedEncodingException e) {
+//                e.printStackTrace();
+//            }
         });
 
         return OK;
