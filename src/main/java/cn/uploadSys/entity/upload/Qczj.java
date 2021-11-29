@@ -23,8 +23,6 @@ public class Qczj extends BaseEntity {
     private String carName;
     private String carSeriesId;
     private String carSeriesName;
-    private String carModelId;
-    private String carModelName;
     private String km;
     private String firstYear;
     private String firstMonth;

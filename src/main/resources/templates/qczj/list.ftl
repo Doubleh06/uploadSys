@@ -6,6 +6,7 @@
     <link href="/static/css/style.css" rel="stylesheet">
     <link href="/static/css/plugins/switchery/switchery.css" rel="stylesheet">
     <link href="/static/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+    <link href="/static/css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet">
 
 </head>
 
@@ -39,49 +40,38 @@
                         <div class="ibox-content">
                             <div class="bar search-bar">
                                 <div class="form-inline">
-                                    <div class="form-group">
-                                        <label>手机号：</label>
-                                        <input type="text" class="form-control" id="phone" style="width: 150px;">
+
+                                        <div class="form-group col-lg-8">
+                                            <label>手机号：</label>
+                                            <input type="text" class="form-control" id="phone" style="width: 150px;">
+                                            <button class="btn btn-success"  id="search" type="button" onclick="Qczj.search()">搜索</button>&nbsp
+                                            <button class="btn btn-success" type="button" onclick="Qczj.resetSearch()">重置</button>&nbsp
+                                            <button class="btn btn-primary" type="button" onclick="Qczj.download()">下载</button>
+                                        </div>
+
+                                        <div class="form-group col-lg-4">
+                                            <form action="/upload/qczj/import" enctype="multipart/form-data" method="post" id="formx">
+                                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                    <span class="btn btn-default btn-file"><span class="fileinput-new">选择文件</span><span class="fileinput-exists">更改文件</span><input type="file" name="file"></span>
+                                                    <span class="fileinput-filename"></span>
+                                                    <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">&times;</a>
+                                                </div>
+                                                <button class="btn btn-primary" type="button" value="提交" onclick="Qczj.submit()">提交</button>
+                                            </form>
+                                        </div>
                                     </div>
-                                    &nbsp&nbsp&nbsp
-<#--                                    <div class="form-group">-->
-<#--                                        <label>讲师</label>-->
-<#--                                        <input type="text" class="form-control" id="teacher" style="width: 150px;">-->
-<#--                                    </div>-->
-<#--                                    &nbsp&nbsp&nbsp-->
-<#--                                    <div class="form-group">-->
-<#--                                        <label>上课周期</label>-->
-<#--                                        <select class="form-control" id="week">-->
-<#--                                            <option class="option_1" value="" >全部</option>-->
-<#--                                            <option value="1">周一</option>-->
-<#--                                            <option value="2">周二</option>-->
-<#--                                            <option value="3">周三</option>-->
-<#--                                            <option value="4">周四</option>-->
-<#--                                            <option value="5">周五</option>-->
-<#--                                            <option value="6">周六</option>-->
-<#--                                            <option value="7">周日</option>-->
-<#--                                        </select>-->
-<#--                                    </div>-->
-                                    &nbsp&nbsp&nbsp
 
-
-
-                                    <button class="btn btn-success"  id="search" type="button" onclick="Qczj.search()">搜索</button>&nbsp
-                                    <button class="btn btn-success" type="button" onclick="Qczj.resetSearch()">重置</button>&nbsp
-                                    <button class="btn btn-primary" type="button" onclick="Qczj.create()">新增</button>
-                                    &nbsp&nbsp&nbsp
-                                    <#--<button class="btn btn-primary" type="button" onclick="EmployeeMachine.chooseEmail('CZ')">选择常州发件邮箱</button>-->
-                                    <#--<button class="btn btn-primary" type="button" onclick="EmployeeMachine.chooseEmail('CQ')">选择重庆发件邮箱</button>-->
-
-                                </div>
                             </div>
-                            </div>
-                            <div class="jqGrid_wrapper">
-                            <#--jqgrid 表格栏-->
-                                <table id="grid-table"></table>
-                            <#--jqgrid 分页栏-->
-                                <div id="grid-pager"></div>
-                            </div>
+                            <br>
+                            <br>
+
+                        </div>
+                        <div class="jqGrid_wrapper">
+                        <#--jqgrid 表格栏-->
+                            <table id="grid-table"></table>
+                        <#--jqgrid 分页栏-->
+                            <div id="grid-pager"></div>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -216,7 +206,9 @@
 <#--</div>-->
 <#--分配角色弹框-->
 <#include "/templates/layout/commonjs.ftl">
+<script src="/static/js/plugins/jasny/jasny-bootstrap.min.js"></script>
 <script src="/static/modular/qczj/qczj.js"></script>
+
 
 <script type="text/javascript">
     $(document).ready(function() {

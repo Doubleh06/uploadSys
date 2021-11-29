@@ -133,4 +133,39 @@ INSERT INTO `user_role` VALUES (4, 15, 1);
 INSERT INTO `user_role` VALUES (5, 16, 2);
 COMMIT;
 
-SET FOREIGN_KEY_CHECKS = 1;
+
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for qczj
+-- ----------------------------
+DROP TABLE IF EXISTS `qczj`;
+CREATE TABLE `qczj` (
+  `id` varchar(50) COLLATE utf8_bin NOT NULL,
+  `city_code` varchar(20) COLLATE utf8_bin DEFAULT NULL,
+  `city_name` varchar(50) COLLATE utf8_bin DEFAULT NULL,
+  `province` varchar(20) COLLATE utf8_bin DEFAULT NULL,
+  `phone` varchar(11) COLLATE utf8_bin DEFAULT NULL,
+  `brand_id` varchar(50) COLLATE utf8_bin DEFAULT NULL,
+  `brand_name` varchar(50) COLLATE utf8_bin DEFAULT NULL,
+  `car_id` varchar(50) COLLATE utf8_bin DEFAULT NULL,
+  `car_name` varchar(50) COLLATE utf8_bin DEFAULT NULL,
+  `car_series_id` varchar(50) COLLATE utf8_bin DEFAULT NULL,
+  `car_series_name` varchar(50) COLLATE utf8_bin DEFAULT NULL,
+  `km` varchar(10) COLLATE utf8_bin DEFAULT NULL,
+  `first_year` varchar(4) COLLATE utf8_bin DEFAULT NULL,
+  `first_month` varchar(2) COLLATE utf8_bin DEFAULT NULL,
+  `uid` varchar(50) COLLATE utf8_bin DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `modify_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of qczj
+-- ----------------------------
+BEGIN;
+INSERT INTO `qczj` VALUES ('1', '370100', '日照', '山东', '13000000000', '0', '现代', '0', '伊兰特', '0', NULL, '0', NULL, NULL, NULL, NULL, '0', '2021-11-29 13:07:29', NULL);
+INSERT INTO `qczj` VALUES ('2', '370101', '德州', '山东', '15000000000', '0', '大众', '1', 'cc', '0', NULL, '0', NULL, NULL, NULL, NULL, NULL, '2021-11-29 13:12:07', NULL);
+COMMIT;

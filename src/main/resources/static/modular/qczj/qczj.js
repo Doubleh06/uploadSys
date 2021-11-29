@@ -64,103 +64,17 @@ Qczj.resetSearch = function () {
     // $(".option_1").attr("selected",false);
 };
 
-/**
- *新增
- */
-Qczj.create = function () {
-   window.location.href = "/upload/qczj/modify?id=";
-}
-Qczj.insert = function (btn) {
-    var name = $("#name").val();
-    if(null==name||""==name){
-        error("课程名不能为空");
-        return;
-    }
-    var startTime = $("#startTime").val();
-    if(null==startTime||""==startTime){
-        error("开始时间不能为空");
-        return;
-    }
-    var endTime = $("#endTime").val();
-    if(null==endTime||""==endTime){
-        error("结束时间不能为空");
-        return;
-    }
-    if(!compareTime(startTime,endTime)){
-        error("结束时间不能小于开始时间");
-        return;
-    }
-    var total = $("#total").val();
-    if(null==total||""==total){
-        error("总课程数不能为空");
-        return;
-    }
-    var fee = $("#fee").val();
-    if(null==fee||""==fee){
-        error("金额不能为空");
-        return;
-    }
-    var url = "";
 
-    var id = $("#id").val();
-    console.log(id);
-    if(null == id||"" == id){
-        url = "/upload/qczj/insert";
-    }else{
-        url = "/upload/qczj/update"
-    }
-    console.log(url);
-    var upload = getFormJson($("#create-form"));
-    var l = $(btn).ladda();
-    l.ladda('start');
-
-    $.ajax({
-        url: url,
-        type: 'POST',
-        data: JSON.stringify(qczj),
-        contentType: "application/json;charset=utf-8",
-        dataType: "json",
-        success: function (r) {
-            if (r.code === 0) {
-                l.ladda('stop');
-                successthen("保存成功",null,"/upload/qczj/list");
-            }
-        }
-    })
-}
-
-/**
- *编辑
- */
-Qczj.modify = function (id) {
-    window.location.href = "/upload/qczj/modify?id="+id;
-}
-
-
-
-/**
- * 删除
- *
- * @param id    userId
- */
-Qczj.delete = function del(id) {
-    warning("确定删除吗", "", function () {
-        $.get("/upload/qczj/delete?id=" + id, function () {
-            success("成功删除");
-            Qczj.search();
-        });
+Qczj.submit = function () {
+    console.log("submit");
+    $("#formx").ajaxForm(function (data) {
+        console.log(data);
     })
 };
 
-/**
- * 课程跳转
- * @param fmt
- * @param date
- * @returns {void | string | *}
- */
-Qczj.arrangeStudents = function(id){
-    window.location.href = '/upload/qczj/arrangeStudents/list?id='+id;
-}
+
+
+
 
 /**
  * 课程所报名学生

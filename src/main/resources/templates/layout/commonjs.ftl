@@ -26,6 +26,7 @@
 <script type="text/javascript" src="/static/js/plugins/dateformat/dateformat-min.js"></script>
 <script type="text/javascript" src="/static/js/fileplugin.js"></script>
 <script type="text/javascript" src="/static/js/cti.js"></script>
+<script type="text/javascript" src="/static/js/jquery.form.js"></script>
 
 
 
