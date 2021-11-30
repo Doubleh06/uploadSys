@@ -12,12 +12,12 @@ Qczj.initOptions = function () {
     var options = {
         url : "/upload/qczj/grid",
         autowidth:true,
-        colNames: ['手机号','城市ID','城市名称','省份名称','品牌ID','品牌名称','上传状态','创建时间'],
+        colNames: ['手机号','城市ID','城市名称','省份名称','品牌ID','品牌名称','上传状态','信息','创建时间'],
         colModel: [
             {name: 'phone', index: 'phone', width: 40},
             {name: 'cityCode', index: 'cityCode', width: 30},
-            {name: 'cityName', index: 'cityName', width: 60},
-            {name: 'province', index: 'province', width: 60},
+            {name: 'cityName', index: 'cityName', width: 40},
+            {name: 'province', index: 'province', width: 40},
             {name: 'brandId', index: 'brandId', width: 60},
             {name: 'brandName', index: 'brandName', width: 60},
             {name: 'status', index: 'status', width: 60,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
@@ -30,6 +30,7 @@ Qczj.initOptions = function () {
                     }
                     return msg;
                 }},
+            {name: 'message', index: 'message',align: "center", width: 60},
             {name: 'createTime', index: 'createTime', width: 80,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     if (cellvar == "" || cellvar == undefined) {
                         return "";
