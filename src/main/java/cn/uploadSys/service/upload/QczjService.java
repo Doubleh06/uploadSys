@@ -55,9 +55,9 @@ public class QczjService extends AbstractService<Qczj> {
         if (StringUtils.isNotEmpty(param.getStartDate()) && StringUtils.isNotEmpty(param.getEndDate())) {
             sql.append(" and create_time between ").append(param.getStartDate()).append(" and ").append(param.getEndDate());
         }
-//        if (null != param.getWeek()) {
-//            sql.append(" and week = ").append(param.getWeek());
-//        }
+        if (null != param.getStatus()) {
+            sql.append(" and status = ").append(param.getStatus());
+        }
 //        sql.append(" ORDER BY week , start_time ASC ");
         return new PageInfo<>(qczjDao.getStudentsList(sql.toString()));
     }
@@ -71,6 +71,9 @@ public class QczjService extends AbstractService<Qczj> {
         }
         if (StringUtils.isNotEmpty(param.getStartDate()) && StringUtils.isNotEmpty(param.getEndDate())) {
             sql.append(" and create_time between ").append(param.getStartDate()).append(" and ").append(param.getEndDate());
+        }
+        if (null != param.getStatus()) {
+            sql.append(" and status = ").append(param.getStatus());
         }
         return qczjDao.getStudentsList(sql.toString());
     }

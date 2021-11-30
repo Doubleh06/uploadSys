@@ -18,6 +18,7 @@ import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,6 +43,8 @@ public class QczjController extends BaseController {
 
    @Autowired
    private QczjService qczjService;
+   @Autowired
+   private Environment env;
 
 
 
@@ -84,43 +87,58 @@ public class QczjController extends BaseController {
 
 
         //获取token_access
-        String host = "https://openapi.autohome.com.cn";
-        String path = "/api/oauth2/authorize";
+        String access_host = env.getProperty("qczj.access_host");
+        String access_path = env.getProperty("qczj.access_path");
 
-        HashMap<String,String> accessBody = new HashMap();
-        accessBody.put("client_id","");
-        accessBody.put("client_secret","");
-        accessBody.put("response_type","");
+        JSONObject accessBody = new JSONObject();
+        accessBody.put("client_id","2Xq0iG1RFwOuN3s7gxdtJMSApbss9Fga");
+        accessBody.put("client_secret","IbYEfY34kYXuBlUtFANj8EHnfXLwTZgU");
+        accessBody.put("response_type","token");
         HashMap<String,Object> header = new HashMap();
         header.put("Content-Type","application/json;charset=utf-8");
 
-        String accessResult = AjaxUtil.doPost(null,host,path,accessBody.toString(),header);
+        String accessResult = AjaxUtil.doPost("https",access_host,access_path,accessBody.toString(),header);
+        JSONObject json = JSONObject.parseObject(accessResult);
+        String accessToken = json.getJSONObject("data").getString("access_token");
 
-        String path2 = "/api/oauth2/authorize?access_token="+"";
+        String import_host = env.getProperty("qczj.import_host");
+        String import_path = env.getProperty("qczj.import_path")+accessToken;
         //轮训每条数据，进行对接
         List<Qczj> qczjs = reader.read(0,2,Qczj.class);
         qczjs.forEach(qczj -> {
-            System.out.println(qczj.toString());
             try {
-                HashMap<String,String> body = new HashMap();
-                body.put("cid",qczj.getCityCode());
-                body.put("mobile",qczj.getPhone());
-                body.put("appid",qczj.getUid());
+                JSONObject body = new JSONObject();
+
+                String phone = qczj.getPhone();
+                String uid = qczj.getUid();
                 String cityName = qczj.getCityName();
-                if (StringUtils.isNotEmpty(cityName)) {
-                    body.put("cityname", URLEncoder.encode(qczj.getCityName(),"UTF-8"));
+                if (StringUtils.isNotEmpty(phone) && StringUtils.isNotEmpty(uid) && StringUtils.isNotEmpty(cityName)) {
+                    body.put("mobile",phone);
+                    body.put("appid",uid);
+                    body.put("cityname", URLEncoder.encode(cityName,"UTF-8"));
+                }else{
+                    qczj.setStatus(1);
+                    qczj.setCreateTime(new Date());
+                    qczj.setMessage("缺少必要参数");
+                    qczjService.insert(qczj);
+                    return ;
+                }
+
+                String cid = qczj.getCityCode();
+                if (StringUtils.isNotEmpty(cid)) {
+                    body.put("cid",qczj.getCityCode());
                 }
                 String brandName = qczj.getBrandName();
                 if (StringUtils.isNotEmpty(brandName)) {
-                    body.put("brandname", URLEncoder.encode(qczj.getBrandName(),"UTF-8"));
+                    body.put("brandname", URLEncoder.encode(brandName,"UTF-8"));
                 }
                 String specName = qczj.getCarSeriesName();
                 if (StringUtils.isNotEmpty(specName)) {
-                    body.put("specname", URLEncoder.encode(qczj.getCarSeriesName(),"UTF-8"));
+                    body.put("specname", URLEncoder.encode(specName,"UTF-8"));
                 }
                 String seriesName = qczj.getCarName();
                 if (StringUtils.isNotEmpty(seriesName)) {
-                    body.put("seriesname", URLEncoder.encode(qczj.getCarName(),"UTF-8"));
+                    body.put("seriesname", URLEncoder.encode(seriesName,"UTF-8"));
                 }
                 String mileage = qczj.getKm();
                 if (StringUtils.isNotEmpty(mileage)) {
@@ -128,18 +146,21 @@ public class QczjController extends BaseController {
                 }
                 String firstregtime = qczj.getFirstregtime();
                 if (StringUtils.isNotEmpty(firstregtime)) {
-                    body.put("firstregtime", URLEncoder.encode(qczj.getFirstregtime(),"UTF-8"));
+                    body.put("firstregtime", URLEncoder.encode(firstregtime,"UTF-8"));
                 }
 
-                String result = AjaxUtil.doPost(null,host,path,body.toString(),header);
+                String result = AjaxUtil.doPost("https",import_host,import_path,body.toString(),header);
                 JSONObject jsonObject = JSONObject.parseObject(result);
                 String returnCode = jsonObject.getString("returncode");
-                if (StringUtils.isNotEmpty(returnCode)) {
-                    qczj.setCreateTime(new Date());
-                    qczjService.insert(qczj);
+                String message = jsonObject.getString("message");
+                if (StringUtils.isNotEmpty(returnCode) && returnCode.equals("0")) {
+                    qczj.setStatus(0);
                 }else{
-                    throw new BusinessException("电话："+qczj.getPhone()+"数据录入异常");
+                    qczj.setStatus(1);
+                    qczj.setMessage(message);
                 }
+                qczj.setCreateTime(new Date());
+                qczjService.insert(qczj);
             } catch (Exception e) {
                 log.error(e.getMessage());
             }

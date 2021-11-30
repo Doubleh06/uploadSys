@@ -12,7 +12,7 @@ Qczj.initOptions = function () {
     var options = {
         url : "/upload/qczj/grid",
         autowidth:true,
-        colNames: ['手机号','城市ID','城市名称','省份名称','品牌ID','品牌名称','创建时间'],
+        colNames: ['手机号','城市ID','城市名称','省份名称','品牌ID','品牌名称','上传状态','创建时间'],
         colModel: [
             {name: 'phone', index: 'phone', width: 40},
             {name: 'cityCode', index: 'cityCode', width: 30},
@@ -20,6 +20,16 @@ Qczj.initOptions = function () {
             {name: 'province', index: 'province', width: 60},
             {name: 'brandId', index: 'brandId', width: 60},
             {name: 'brandName', index: 'brandName', width: 60},
+            {name: 'status', index: 'status', width: 60,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
+                    var msg = "";
+                    if (cellvar == 0){
+                        msg = "上传成功";
+                    }
+                    if (cellvar == 1){
+                        msg = "上传失败";
+                    }
+                    return msg;
+                }},
             {name: 'createTime', index: 'createTime', width: 80,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     if (cellvar == "" || cellvar == undefined) {
                         return "";
@@ -50,6 +60,7 @@ Qczj.search = function () {
     searchParam.phone = $("#phone").val();
     searchParam.startDate = $("#startDate").val();
     searchParam.endDate = $("#endDate").val();
+    searchParam.status = $("#status").val();
     Qczj.table.reload(searchParam);
 };
 
@@ -60,7 +71,9 @@ Qczj.resetSearch = function () {
     $("#phone").val("");
     $("#startDate").val("");
     $("#endDate").val("");
+    $(".option_1").attr("selected",true);
     Qczj.search();
+    $(".option_1").attr("selected",false);
 };
 
 /**
@@ -96,10 +109,10 @@ function uploadSubmit(file,l) {
         var response = JSON.parse(xhr.responseText);
         if(response.code == 0) {
             l.ladda('stop');
-            success("导入成功");
+            successthen("导入成功",null,"/upload/qczj/list");
         } else {
             l.ladda('stop');
-            error("导入失败");
+            successthen("导入失败",null,"/upload/qczj/list");
         }
     }
 

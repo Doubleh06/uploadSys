@@ -47,6 +47,12 @@
                                         <div class="form-group col-lg-8">
                                             <label>手机号：</label>
                                             <input type="text" class="form-control" id="phone" style="width: 150px;">
+                                            <label>状态</label>
+                                            <select class="form-control" id="status">
+                                                <option class="option_1" value="" >全部</option>
+                                                <option value="0">成功</option>
+                                                <option value="1">失败</option>
+                                            </select>
                                             <div class="form-group" id="data_5">
                                                 <label class="font-normal">选择日期：</label>
                                                 <div class="input-daterange input-group" id="datepicker">
@@ -65,7 +71,7 @@
                                             <form  enctype="multipart/form-data" id="uploadForm">
                                                 <div class="fileinput fileinput-new" data-provides="fileinput">
                                                     <span class="btn btn-default btn-file"><span class="fileinput-new">选择文件</span><span class="fileinput-exists">更改文件</span><input id="uploadInput" type="file" name="file"></span>
-                                                    <span class="fileinput-filename"></span>
+                                                    <span class="fileinput-filename" id="fileinput-filename"></span>
                                                     <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">&times;</a>
                                                 </div>
                                                 <button id="btn" class="btn btn-primary ladda-button" type="submit" >提交</button>

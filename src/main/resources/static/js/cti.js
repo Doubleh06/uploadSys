@@ -96,6 +96,20 @@ function error(title,text) {
             closeOnConfirm: false
         });
 }
+function errorthen(title,text,url) {
+    swal({
+        title: title,
+        text: text,
+        type: "error",
+        showCancelButton: false,
+        confirmButtonColor: "#8CD4F5",
+        confirmButtonText: "确定",
+        closeOnConfirm: false
+    },function(){
+        window.location.href = url;
+    });
+
+}
 function input(title,text,fn){
     swal({
             title: title,
