@@ -1,27 +1,20 @@
 package cn.uploadSys.controller.upload;
 
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
+import cn.hutool.poi.excel.ExcelWriter;
 import cn.uploadSys.controller.BaseController;
 import cn.uploadSys.core.BusinessException;
 import cn.uploadSys.core.JSONResult;
 import cn.uploadSys.core.Result;
 import cn.uploadSys.core.jqGrid.JqGridResult;
-import cn.uploadSys.dao.ClassesStudentsDao;
 import cn.uploadSys.dto.AllJqGridParam;
-import cn.uploadSys.dto.ClassesJqGridParam;
-import cn.uploadSys.entity.Classes;
 import cn.uploadSys.entity.upload.Qczj;
-import cn.uploadSys.service.ClassesService;
-import cn.uploadSys.service.StudentsDetailService;
-import cn.uploadSys.service.StudentsService;
 import cn.uploadSys.service.upload.QczjService;
 import cn.uploadSys.util.AjaxUtil;
-import cn.uploadSys.util.ExcelUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
-import jdk.nashorn.internal.runtime.logging.Logger;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,15 +26,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.rmi.CORBA.Util;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.logging.SimpleFormatter;
 
 @Slf4j
 @Controller
@@ -143,7 +135,6 @@ public class QczjController extends BaseController {
                 JSONObject jsonObject = JSONObject.parseObject(result);
                 String returnCode = jsonObject.getString("returncode");
                 if (StringUtils.isNotEmpty(returnCode)) {
-    //                qczj.setId();
                     qczj.setCreateTime(new Date());
                     qczjService.insert(qczj);
                 }else{
@@ -156,6 +147,33 @@ public class QczjController extends BaseController {
 
         return OK;
 
+    }
+    @RequestMapping("export")
+    @ResponseBody
+    public Result exportFile(AllJqGridParam param, HttpServletResponse response) throws IOException, ParseException {
+        List<Qczj> rows = qczjService.selectByJqGridParamNoPage(param);
+
+        // 通过工具类创建writer，默认创建xls格式
+        ExcelWriter writer = ExcelUtil.getWriter();
+        // 一次性写出内容，使用默认样式，强制输出标题
+        writer.write(rows, true);
+        //out为OutputStream，需要写出到的目标流
+
+        //response为HttpServletResponse对象
+        response.setContentType("application/vnd.ms-excel;charset=utf-8");
+        //test.xls是弹出下载对话框的文件名，不能为中文，中文请自行编码
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        response.setHeader("Content-Disposition","attachment;filename="+sdf.format(new Date())+".xls");
+        ServletOutputStream out=response.getOutputStream();
+
+        writer.flush(out, true);
+        // 关闭writer，释放内存
+        writer.close();
+        //此处记得关闭输出Servlet流
+        IoUtil.close(out);
+
+
+        return OK;
     }
 
 

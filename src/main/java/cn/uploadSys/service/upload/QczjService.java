@@ -62,6 +62,19 @@ public class QczjService extends AbstractService<Qczj> {
         return new PageInfo<>(qczjDao.getStudentsList(sql.toString()));
     }
 
+
+    public List<Qczj> selectByJqGridParamNoPage(AllJqGridParam param ) throws ParseException {
+        StringBuilder sql = new StringBuilder();
+        sql.append(" where 1 = 1 ");
+        if(StringUtils.isNotEmpty(param.getPhone())) {
+            sql.append(" and  phone like  '%").append(param.getPhone()).append("%'");
+        }
+        if (StringUtils.isNotEmpty(param.getStartDate()) && StringUtils.isNotEmpty(param.getEndDate())) {
+            sql.append(" and create_time between ").append(param.getStartDate()).append(" and ").append(param.getEndDate());
+        }
+        return qczjDao.getStudentsList(sql.toString());
+    }
+
     public PageInfo<Map> selectByJqGridParam(ArrangeClassJqGridParam param){
         PageHelper.startPage(param.getPage(), param.getRows());
         return new PageInfo<>(qczjDao.getStudentsByClassesId(param.getId()));

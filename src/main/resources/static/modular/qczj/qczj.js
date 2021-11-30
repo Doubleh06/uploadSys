@@ -63,7 +63,12 @@ Qczj.resetSearch = function () {
     Qczj.search();
 };
 
-
+/**
+ * 重置搜索
+ */
+Qczj.download = function () {
+    window.location.href = "/upload/qczj/export?phone="+$("#phone").val()+"&startDate="+$("#startDate").val()+"&endDate="+$("#endDate").val();
+};
 
 
 var uploadForm = document.querySelector("#uploadForm");

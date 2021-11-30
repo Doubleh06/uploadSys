@@ -4,10 +4,8 @@ import com.google.common.base.Joiner;
 
 import java.beans.IntrospectionException;
 import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -52,4 +50,8 @@ public class MyUtil {
         return cal.getActualMaximum(Calendar.DATE);
     }
 
+    public static String makeTimeId(){
+        SimpleDateFormat sdf = new SimpleDateFormat("YYYYMMddHHmmssSSS");
+        return sdf.format(new Date())+((int)(Math.random()*900)+100);
+    }
 }
