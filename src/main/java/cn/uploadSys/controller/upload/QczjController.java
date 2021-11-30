@@ -104,8 +104,10 @@ public class QczjController extends BaseController {
         String import_host = env.getProperty("qczj.import_host");
         String import_path = env.getProperty("qczj.import_path")+accessToken;
         //轮训每条数据，进行对接
-        List<Qczj> qczjs = reader.read(0,2,Qczj.class);
+
+        List<Qczj> qczjs = reader.read(1,2,Qczj.class);
         qczjs.forEach(qczj -> {
+//            log.info(qczj.toString());
             try {
                 JSONObject body = new JSONObject();
 

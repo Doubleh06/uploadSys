@@ -25,7 +25,6 @@ public class AjaxUtil {
         try {
 
             HttpPost post = new HttpPost(builder.setScheme(scheme).setHost(host).setPath(path).build());
-            System.out.println(post.getURI());
             //设置请求头
             for (Map.Entry<String, Object> entry : headerMap.entrySet()) {
                 post.addHeader(entry.getKey(), entry.getValue().toString());
