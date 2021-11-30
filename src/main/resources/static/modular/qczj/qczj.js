@@ -81,7 +81,7 @@ Qczj.resetSearch = function () {
  * 重置搜索
  */
 Qczj.download = function () {
-    window.location.href = "/upload/qczj/export?phone="+$("#phone").val()+"&startDate="+$("#startDate").val()+"&endDate="+$("#endDate").val();
+    window.location.href = "/upload/qczj/export?phone="+$("#phone").val()+"&startDate="+$("#startDate").val()+"&endDate="+$("#endDate").val()+"&status="+$("#status").val();
 };
 
 
