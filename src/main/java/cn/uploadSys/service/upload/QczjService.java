@@ -53,7 +53,7 @@ public class QczjService extends AbstractService<Qczj> {
             sql.append(" and  phone like  '%").append(param.getPhone()).append("%'");
         }
         if (StringUtils.isNotEmpty(param.getStartDate()) && StringUtils.isNotEmpty(param.getEndDate())) {
-            sql.append(" and create_time between ").append(param.getStartDate()).append(" and ").append(param.getEndDate());
+            sql.append(" and create_time > '").append(param.getStartDate()).append(" 00:00:00' and create_time < '").append(param.getEndDate()).append(" 23:59:59'");
         }
         if (null != param.getStatus()) {
             sql.append(" and status = ").append(param.getStatus());
