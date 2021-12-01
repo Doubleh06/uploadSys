@@ -2,19 +2,28 @@ package cn.uploadSys.util;
 
 
 
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
+
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 public class AjaxUtil {
 
     public static String  doPost(String scheme ,String host,String path,String body,HashMap<String,Object> headerMap) {
@@ -25,11 +34,11 @@ public class AjaxUtil {
         try {
 
             HttpPost post = new HttpPost(builder.setScheme(scheme).setHost(host).setPath(path).build());
+            System.out.println(post.getURI());
             //设置请求头
             for (Map.Entry<String, Object> entry : headerMap.entrySet()) {
                 post.addHeader(entry.getKey(), entry.getValue().toString());
             }
-
             //设置请求体
             post.setEntity(new StringEntity(body,"utf-8"));
 
@@ -67,6 +76,7 @@ public class AjaxUtil {
         }
         return null;
     }
+
 
 
     public static void main(String[] args) {

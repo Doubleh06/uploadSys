@@ -212,6 +212,11 @@
 			<artifactId>poi-ooxml</artifactId>
 			<version>5.0.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.mashape.unirest</groupId>
+			<artifactId>unirest-java</artifactId>
+			<version>1.4.9</version>
+		</dependency>
 		<!--这个依赖直接包含了 logback-core 以及 slf4j-api的依赖-->
 
 

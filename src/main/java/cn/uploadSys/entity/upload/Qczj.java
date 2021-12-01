@@ -28,6 +28,7 @@ public class Qczj extends BaseEntity {
     private String uid;
     private Integer status;//0:成功 1：失败
     private String message;
+    private String cclid;
     private Date createTime;
     private Date modifyTime;
 }

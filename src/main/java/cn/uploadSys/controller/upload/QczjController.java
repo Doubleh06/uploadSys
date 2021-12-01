@@ -5,7 +5,6 @@ import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
 import cn.uploadSys.controller.BaseController;
-import cn.uploadSys.core.BusinessException;
 import cn.uploadSys.core.JSONResult;
 import cn.uploadSys.core.Result;
 import cn.uploadSys.core.jqGrid.JqGridResult;
@@ -13,8 +12,11 @@ import cn.uploadSys.dto.AllJqGridParam;
 import cn.uploadSys.entity.upload.Qczj;
 import cn.uploadSys.service.upload.QczjService;
 import cn.uploadSys.util.AjaxUtil;
+import cn.uploadSys.util.HttpClientUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.Unirest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,30 +93,31 @@ public class QczjController extends BaseController {
         String access_path = env.getProperty("qczj.access_path");
 
         JSONObject accessBody = new JSONObject();
-        accessBody.put("client_id","2Xq0iG1RFwOuN3s7gxdtJMSApbss9Fga");
-        accessBody.put("client_secret","IbYEfY34kYXuBlUtFANj8EHnfXLwTZgU");
+        accessBody.put("client_id",env.getProperty("qczj.client_id"));
+        accessBody.put("client_secret",env.getProperty("qczj.client_secret"));
         accessBody.put("response_type","token");
-        HashMap<String,Object> header = new HashMap();
-        header.put("Content-Type","application/json;charset=utf-8");
+        HashMap<String,Object> accessHeader = new HashMap();
+        accessHeader.put("Content-Type","application/json;charset=utf-8");
 
-        String accessResult = AjaxUtil.doPost("https",access_host,access_path,accessBody.toString(),header);
+        String accessResult = AjaxUtil.doPost("https",access_host,access_path,accessBody.toString(),accessHeader);
         JSONObject json = JSONObject.parseObject(accessResult);
         String accessToken = json.getJSONObject("data").getString("access_token");
 
-        String import_host = env.getProperty("qczj.import_host");
-        String import_path = env.getProperty("qczj.import_path")+accessToken;
+        String import_url = env.getProperty("qczj.url")+accessToken;
         //轮训每条数据，进行对接
 
         List<Qczj> qczjs = reader.read(1,2,Qczj.class);
+        HashMap<String,Object> importHeader = new HashMap();
+        importHeader.put("Content-Type", "application/x-www-form-urlencoded");
         qczjs.forEach(qczj -> {
-//            log.info(qczj.toString());
             try {
-                JSONObject body = new JSONObject();
+                Map<String, Object> body = new HashMap<>();
 
                 String phone = qczj.getPhone();
                 String uid = qczj.getUid();
                 String cityName = qczj.getCityName();
                 if (StringUtils.isNotEmpty(phone) && StringUtils.isNotEmpty(uid) && StringUtils.isNotEmpty(cityName)) {
+                    body.put("access_token",accessToken);
                     body.put("mobile",phone);
                     body.put("appid",uid);
                     body.put("cityname", URLEncoder.encode(cityName,"UTF-8"));
@@ -151,15 +154,31 @@ public class QczjController extends BaseController {
                     body.put("firstregtime", URLEncoder.encode(firstregtime,"UTF-8"));
                 }
 
-                String result = AjaxUtil.doPost("https",import_host,import_path,body.toString(),header);
-                JSONObject jsonObject = JSONObject.parseObject(result);
-                String returnCode = jsonObject.getString("returncode");
-                String message = jsonObject.getString("message");
-                if (StringUtils.isNotEmpty(returnCode) && returnCode.equals("0")) {
-                    qczj.setStatus(0);
-                }else{
+                HttpResponse<String> upload = Unirest.post(import_url)
+                        .header("Content-Type", "application/x-www-form-urlencoded")
+                        .header("accept", "application/json")
+                        .fields(body)
+                        .asString();
+
+                String result = upload.getBody().toString();
+
+                if (StringUtils.isNotEmpty(result) && result.contains("error_description")) {
+                    JSONObject jsonObject = JSONObject.parseObject(result);
+                    String errorDescription = jsonObject.getString("error_description");
                     qczj.setStatus(1);
-                    qczj.setMessage(message);
+                    qczj.setMessage(errorDescription);
+                }else{
+                    JSONObject jsonObject = JSONObject.parseObject(result);
+                    String returnCode = jsonObject.getString("returncode");
+                    String message = jsonObject.getString("message");
+                    if (StringUtils.isNotEmpty(returnCode) && returnCode.equals("0")) {
+                        String cclid = jsonObject.getString("cclid");
+                        qczj.setStatus(0);
+                        qczj.setCclid(cclid);
+                    }else{
+                        qczj.setStatus(1);
+                        qczj.setMessage(message);
+                    }
                 }
                 qczj.setCreateTime(new Date());
                 qczjService.insert(qczj);
