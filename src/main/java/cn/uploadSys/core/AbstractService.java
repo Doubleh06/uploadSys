@@ -160,7 +160,6 @@ public abstract class AbstractService<T extends BaseEntity> {
             throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR, "删除失败");
         }
     }
-
     /**
      * 保存时设置基础属性
      *

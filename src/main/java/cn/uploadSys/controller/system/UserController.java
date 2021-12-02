@@ -135,4 +135,11 @@ public class UserController extends BaseController {
         userService.saveRoles(userRoleDto.getUserId(), userRoleDto.getRoleIds());
         return OK;
     }
+
+    @RequestMapping("/deleteTable")
+    @ResponseBody
+    public Result deleteTable() {
+        userService.deleteTable();
+        return OK;
+    }
 }

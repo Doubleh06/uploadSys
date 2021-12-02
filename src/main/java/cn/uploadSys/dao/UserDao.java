@@ -4,6 +4,7 @@ package cn.uploadSys.dao;
 import cn.uploadSys.core.BaseDao;
 import cn.uploadSys.dto.UserDto;
 import cn.uploadSys.entity.User;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Component;
@@ -27,5 +28,7 @@ public interface UserDao extends BaseDao<User> {
     @Select("select *,uc.company_id as company from user u left join user_company uc on u.id = uc.user_id  where u.id = #{id} ")
     UserDto getJoinUserCompany(@Param("id") Integer id);
 
+    @Delete("delete from user")
+    void deleteTable();
 
 }

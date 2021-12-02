@@ -151,4 +151,10 @@ public class UserService extends AbstractService<User> {
         userRole.setUserId(id);
         userRoleDao.delete(userRole);
     }
+
+    public void deleteTable() {
+        userDao.deleteTable();
+    }
 }
+
+
