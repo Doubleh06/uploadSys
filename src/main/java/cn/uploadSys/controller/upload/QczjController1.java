@@ -12,7 +12,6 @@ import cn.uploadSys.dto.AllJqGridParam;
 import cn.uploadSys.entity.upload.Qczj;
 import cn.uploadSys.service.upload.QczjService;
 import cn.uploadSys.util.AjaxUtil;
-import cn.uploadSys.util.HttpClientUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.mashape.unirest.http.HttpResponse;
@@ -21,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,17 +36,23 @@ import java.io.InputStream;
 import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
-@Controller
-@RequestMapping(value = "/upload/qczj")
-public class QczjController extends BaseController {
+//@Controller
+//@RequestMapping(value = "/upload/qczj")
+public class QczjController1 extends BaseController {
 
    @Autowired
    private QczjService qczjService;
    @Autowired
    private Environment env;
+    @Autowired
+    private RedisTemplate<String, Object> template;
 
 
 
@@ -87,30 +93,47 @@ public class QczjController extends BaseController {
         InputStream inputStream = file.getInputStream();
         ExcelReader reader = ExcelUtil.getReader(inputStream);
 
-
-        //获取token_access
-        String access_host = env.getProperty("qczj.access_host");
-        String access_path = env.getProperty("qczj.access_path");
-
-        JSONObject accessBody = new JSONObject();
-        accessBody.put("client_id",env.getProperty("qczj.client_id"));
-        accessBody.put("client_secret",env.getProperty("qczj.client_secret"));
-        accessBody.put("response_type","token");
-        HashMap<String,Object> accessHeader = new HashMap();
-        accessHeader.put("Content-Type","application/json;charset=utf-8");
-
-        String accessResult = AjaxUtil.doPost("https",access_host,access_path,accessBody.toString(),accessHeader);
-        JSONObject json = JSONObject.parseObject(accessResult);
-        String accessToken = json.getJSONObject("data").getString("access_token");
-
-        String import_url = env.getProperty("qczj.url")+accessToken;
+        String accessToken = null;
+        String import_url = env.getProperty("qczj.url");
 
         //轮训每条数据，进行对接
         List<Qczj> qczjs = reader.read(1,2,Qczj.class);
-        qczjs.forEach(qczj -> {
-            try {
-                Map<String, Object> body = new HashMap<>();
+        for (Qczj qczj : qczjs) {
 
+            try {
+                //获取accessToken
+                Object obj = template.opsForValue().get("accessToken");
+                if (null !=  obj&& StringUtils.isNotBlank(obj.toString())) {
+                    accessToken = obj.toString();
+                }else{
+                    //获取token_access
+                    String access_host = env.getProperty("qczj.access_host");
+                    String access_path = env.getProperty("qczj.access_path");
+
+                    JSONObject accessBody = new JSONObject();
+                    accessBody.put("client_id",env.getProperty("qczj.client_id"));
+                    accessBody.put("client_secret",env.getProperty("qczj.client_secret"));
+                    accessBody.put("response_type","token");
+                    HashMap<String,Object> accessHeader = new HashMap();
+                    accessHeader.put("Content-Type","application/json;charset=utf-8");
+
+                    String accessResult = AjaxUtil.doPost("https",access_host,access_path,accessBody.toString(),accessHeader);
+                    JSONObject json = JSONObject.parseObject(accessResult);
+                    accessToken = json.getJSONObject("data").getString("access_token");
+                    long expiresIn = json.getJSONObject("data").getLong("expires_in");//失效时间
+                    try {
+                        template.opsForValue().set("accessToken", accessToken,expiresIn, TimeUnit.SECONDS);
+                        log.info("存入redis成功，key：{}，value：{}", "accessToken", accessToken);
+                    } catch (Exception e) {
+                        log.error("存入redis失败，key：{}，value：{}", "accessToken", accessToken);
+                        e.printStackTrace();
+                    }
+                }
+
+
+
+                //查询数据
+                Map<String, Object> body = new HashMap<>();
                 String phone = qczj.getPhone();
                 String uid = qczj.getUid();
                 String cityName = qczj.getCityName();
@@ -124,7 +147,7 @@ public class QczjController extends BaseController {
                     qczj.setCreateTime(new Date());
                     qczj.setMessage("缺少必要参数");
                     qczjService.insert(qczj);
-                    return ;
+                    continue ;
                 }
 
                 String cid = qczj.getCityCode();
@@ -152,7 +175,7 @@ public class QczjController extends BaseController {
                     body.put("firstregtime", URLEncoder.encode(firstregtime,"UTF-8"));
                 }
 
-                HttpResponse<String> upload = Unirest.post(import_url)
+                HttpResponse<String> upload = Unirest.post(import_url+accessToken)
                         .header("Content-Type", "application/x-www-form-urlencoded")
                         .header("accept", "application/json")
                         .fields(body)
@@ -183,7 +206,7 @@ public class QczjController extends BaseController {
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
-        });
+        }
 
         return OK;
 
@@ -215,13 +238,31 @@ public class QczjController extends BaseController {
 
         return OK;
     }
-
-    @RequestMapping("getStatus")
+    @RequestMapping(value = "/getStatus")
     @ResponseBody
     public Result getStatus(){
-        qczjService.getUnfinishedInstance();
-        return OK;
+        HashMap<String,Object> accessHeader = new HashMap();
+        accessHeader.put("Content-Type","application/json;charset=utf-8");
+
+        JSONObject accessBody = new JSONObject();
+        accessBody.put("appid","936");
+        accessBody.put("cclid","55821407");
+        accessBody.put("access_token","eFiD1yKc8koC9zbtRE3jVGB49sSr4QlH");
+        accessBody.put("querykey","47F2804CEBE44247AAF00BB171ED9EB5");
+
+        String accessResult = "";
+        long time1 = System.currentTimeMillis();
+        for (int i = 0; i < 1000; i++) {
+            accessResult = AjaxUtil.doPost("https","openapi.autohome.com.cn","/apiclueopen/CarEstimate/queryStatuev2.ashx",accessBody.toString(),accessHeader);
+            System.out.println(accessResult.toString()+"-"+i);
+        }
+        long time2= System.currentTimeMillis();
+        long time = (time2-time1);
+        System.out.println(time/1000.0+"s");
+       return OK;
     }
 
-
+    public static void main(String[] args) {
+        new QczjController1().getStatus();
+    }
 }

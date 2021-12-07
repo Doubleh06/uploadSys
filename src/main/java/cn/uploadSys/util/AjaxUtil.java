@@ -19,6 +19,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,6 @@ public class AjaxUtil {
         try {
 
             HttpPost post = new HttpPost(builder.setScheme(scheme).setHost(host).setPath(path).build());
-            System.out.println(post.getURI());
             //设置请求头
             for (Map.Entry<String, Object> entry : headerMap.entrySet()) {
                 post.addHeader(entry.getKey(), entry.getValue().toString());
@@ -61,7 +61,7 @@ public class AjaxUtil {
         URIBuilder builder = new URIBuilder();
         try {
 
-            HttpGet get = new HttpGet(builder.setScheme(scheme).setHost(host).setPath(path).build());
+            HttpGet get = new HttpGet(builder.setScheme(scheme).setHost(host).setPath(path).setParameters(parameters).build());
 //                    .setParameter("name", URLEncoder.encode(ttpcLeads.getName(),"utf-8"))
 
             //获取返回信息

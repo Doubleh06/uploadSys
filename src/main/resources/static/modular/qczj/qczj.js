@@ -23,10 +23,22 @@ Qczj.initOptions = function () {
             {name: 'status', index: 'status', width: 60,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     var msg = "";
                     if (cellvar == 0){
-                        msg = "上传成功";
+                        msg = "已接收";
                     }
                     if (cellvar == 1){
                         msg = "上传失败";
+                    }
+                    if (cellvar == 10){
+                        msg = "入库成功";
+                    }
+                    if (cellvar == 11){
+                        msg = "邀约成功";
+                    }
+                    if (cellvar == 15){
+                        msg = "上拍成功";
+                    }
+                    if (cellvar == 20){
+                        msg = "交易成功";
                     }
                     return msg;
                 }},
