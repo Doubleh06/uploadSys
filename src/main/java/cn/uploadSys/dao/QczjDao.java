@@ -31,6 +31,6 @@ public interface QczjDao extends BaseDao<Qczj> {
     @Update("update qczj set status = #{status},modify_time = NOW() where cclid = #{cclid}")
     void updateByCclid(@Param("status") Integer status,@Param("cclid")String cclid);
 
-    @Select("SELECT * FROM qczj q where TIMESTAMPDIFF(DAY,q.create_time,NOW())<=45 and q.status not in (11,15,20)")
+    @Select("SELECT * FROM qczj q where TIMESTAMPDIFF(DAY,q.create_time,NOW())<=45 and q.status not in (1,11,15,20)")
     List<Qczj> getUnfinishedInstance();
 }
