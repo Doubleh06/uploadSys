@@ -160,23 +160,7 @@
             <artifactId>httpmime</artifactId>
             <version>4.3.2</version>
         </dependency>
-		<!-- javax.mail begin-->
-		<dependency>
-			<groupId>com.sun.mail</groupId>
-			<artifactId>javax.mail</artifactId>
-			<version>1.6.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context-support</artifactId>
-			<version>4.3.8.RELEASE</version>
-		</dependency>
-		<!-- javax.mail end-->
-        <!--<dependency>-->
-			<!--<groupId>org.apache.poi</groupId>-->
-			<!--<artifactId>poi-ooxml</artifactId>-->
-			<!--<version>3.17</version>-->
-		<!--</dependency>-->
+
 		<!--test-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -216,11 +200,6 @@
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
 			<version>5.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.mashape.unirest</groupId>
-			<artifactId>unirest-java</artifactId>
-			<version>1.4.9</version>
 		</dependency>
 		<!--这个依赖直接包含了 logback-core 以及 slf4j-api的依赖-->
 

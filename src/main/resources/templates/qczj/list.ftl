@@ -46,12 +46,16 @@
 
                                         <div class="form-group col-lg-8">
                                             <label>手机号：</label>
-                                            <input type="text" class="form-control" id="phone" style="width: 150px;">
+                                            <input type="text" class="form-control" id="phone" style="width: 120px;">
                                             <label>状态</label>
                                             <select class="form-control" id="status">
                                                 <option class="option_1" value="" >全部</option>
                                                 <option value="0">成功</option>
                                                 <option value="1">失败</option>
+                                                <option value="10">入库成功</option>
+                                                <option value="11">邀约成功</option>
+                                                <option value="15">上拍成功</option>
+                                                <option value="20">交易成功</option>
                                             </select>
                                             <div class="form-group" id="data_5">
                                                 <label class="font-normal">选择日期：</label>
