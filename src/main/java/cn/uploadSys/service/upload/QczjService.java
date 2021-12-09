@@ -151,7 +151,7 @@ public class QczjService extends AbstractService<Qczj> {
         params.add(new BasicNameValuePair("querykey", env.getProperty("qczj.getStatus.queryKey")));
 
         String result = AjaxUtil.doGet("https",statusHost,statusPath,params);
-        System.out.println(result.toString());
+        log.info(result.toString());
         if (StringUtils.isNotEmpty(result) && result.contains("returncode")) {
             JSONObject jsonObject = JSONObject.parseObject(result);
             String returnCode = jsonObject.getString("returncode");
