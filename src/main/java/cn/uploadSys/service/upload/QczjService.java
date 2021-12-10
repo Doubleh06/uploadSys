@@ -71,7 +71,7 @@ public class QczjService extends AbstractService<Qczj> {
         if (null != param.getStatus()) {
             sql.append(" and status = ").append(param.getStatus());
         }
-//        sql.append(" ORDER BY week , start_time ASC ");
+        sql.append(" ORDER BY create_time  desc ");
         return new PageInfo<>(qczjDao.getStudentsList(sql.toString()));
     }
 
@@ -88,6 +88,7 @@ public class QczjService extends AbstractService<Qczj> {
         if (null != param.getStatus()) {
             sql.append(" and status = ").append(param.getStatus());
         }
+        sql.append(" ORDER BY create_time  desc ");
         return qczjDao.getStudentsList(sql.toString());
     }
 
@@ -132,9 +133,9 @@ public class QczjService extends AbstractService<Qczj> {
             long expiresIn = json.getJSONObject("data").getLong("expires_in");//失效时间
             try {
                 template.opsForValue().set("getStatusAccessToken", accessToken,expiresIn, TimeUnit.SECONDS);
-                log.info("存入redis成功，key：{}，value：{}", "accessToken", accessToken);
+                log.info("存入redis成功，key：{}，value：{}", "getStatusAccessToken", accessToken);
             } catch (Exception e) {
-                log.error("存入redis失败，key：{}，value：{}", "accessToken", accessToken);
+                log.error("存入redis失败，key：{}，value：{}", "getStatusAccessToken", accessToken);
                 e.printStackTrace();
             }
         }

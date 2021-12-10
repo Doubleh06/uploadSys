@@ -4,7 +4,7 @@
     <springProperty scope="context" name="logLevel" source="log.level"/>
 
     <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
-    <property name="LOG_PATH" value="/tomcat/Slf4jLogs"/>
+    <property name="LOG_PATH" value="/program/slf4jLogs"/>
 
     <!--格式化输出：%d:表示日期    %thread:表示线程名     %-5level:级别从左显示5个字符宽度  %msg:日志消息    %n:是换行符-->
     <property name="PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger Line:%-3L - %msg%n"/>
