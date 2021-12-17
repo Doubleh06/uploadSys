@@ -158,7 +158,11 @@ public class QczjService extends AbstractService<Qczj> {
             String returnCode = jsonObject.getString("returncode");
             String status = jsonObject.getString("status");
             if (StringUtils.isNotEmpty(returnCode) && returnCode.equals("0")&&StringUtils.isNotEmpty(status)) {
-                qczjDao.updateByCclid(Integer.parseInt(status),cclid);
+                qczjDao.updateByCclid(Integer.parseInt(status),cclid,null);
+            }
+            if (StringUtils.isNotEmpty(returnCode) && returnCode.equals("110")) {
+                String message = jsonObject.getString("message");
+                qczjDao.updateByCclid(Integer.parseInt("1"),cclid,message);
             }
 
         }
