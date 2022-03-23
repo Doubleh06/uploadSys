@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -169,7 +170,7 @@ public class QczjService extends AbstractService<Qczj> {
         }
     }
 
-    public void uploadRecord(String cclid,String appid) throws UnirestException {
+    public String getAccessToken() throws UnirestException {
         //获取token_access
         String accessToken = "";
         Object obj = template.opsForValue().get("getStatusAccessToken");
@@ -200,18 +201,7 @@ public class QczjService extends AbstractService<Qczj> {
             }
         }
 
-        String import_url = env.getProperty("qczj.uploadRecord.url")+accessToken;
-        Map<String, Object> body = new HashMap<>();
-        body.put("cclid",cclid);
-        body.put("appid",appid);
-
-        HttpResponse<String> upload = Unirest.post(import_url)
-                .header("Content-Type", "application/x-www-form-urlencoded")
-                .header("accept", "application/json")
-                .fields(body)
-                .asString();
-
-        String result = upload.getBody().toString();
+       return accessToken;
     }
 
 

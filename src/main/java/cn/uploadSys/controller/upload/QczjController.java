@@ -17,6 +17,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -223,10 +224,10 @@ public class QczjController extends BaseController {
         return OK;
     }
 
-    @RequestMapping("uploadRecord")
-    @ResponseBody
-    public Result uploadRecord(@RequestParam("file") MultipartFile file,@RequestParam("cclid")String cclid,@RequestParam("appid")String appid){
-        qczjService.uploadRecord(cclid,appid);
-        return OK;
-    }
+//    @RequestMapping("uploadRecord")
+//    @ResponseBody
+//    public Result uploadRecord(@RequestParam("file") MultipartFile file,@RequestParam("cclid")String cclid,@RequestParam("appid")String appid) throws UnirestException {
+//        qczjService.uploadRecord(file,cclid,appid);
+//        return OK;
+//    }
 }

@@ -1,25 +1,20 @@
-var Qczj = {
+var Vedio = {
     tableId: "#grid-table",
     pagerId: "#grid-pager",
     table: null,
-    domain: "qczj"
+    domain: "vedio"
 };
-
+var accessToken = null;
 /**
  * jqGrid初始化参数
  */
-Qczj.initOptions = function () {
+Vedio.initOptions = function () {
     var options = {
-        url : "/upload/qczj/grid",
+        url : "/upload/qczj/vedio/grid",
         autowidth:true,
-        colNames: ['手机号','城市ID','城市名称','省份名称','品牌ID','品牌名称','上传状态','信息','创建时间'],
+        colNames: ['手机号','上传状态','创建时间','操作'],
         colModel: [
             {name: 'phone', index: 'phone', width: 40},
-            {name: 'cityCode', index: 'cityCode', width: 30},
-            {name: 'cityName', index: 'cityName', width: 40},
-            {name: 'province', index: 'province', width: 40},
-            {name: 'brandId', index: 'brandId', width: 60},
-            {name: 'brandName', index: 'brandName', width: 60},
             {name: 'status', index: 'status', width: 60,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     var msg = "";
                     if (cellvar == 0){
@@ -42,24 +37,22 @@ Qczj.initOptions = function () {
                     }
                     return msg;
                 }},
-            {name: 'message', index: 'message',align: "center", width: 60},
-            {name: 'createTime', index: 'createTime', width: 80,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
+            {name: 'createTime', index: 'createTime', width: 60,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     if (cellvar == "" || cellvar == undefined) {
                         return "";
                     }
                     var da = new Date(cellvar);
                     return dateFtt("yyyy-MM-dd hh:mm:ss", da);
-                }}
-        //     {name: 'operations', index: 'operations', width: 200, sortable: false, formatter: function (cellValue, options, rowObject) {
-        //         var id = "'"+rowObject["id"]+"'";
-        //         var str = "";
-        //         str += '<input type="button" class=" btn btn-sm btn-info"  value="编  辑" onclick="Qczj.modify(' + id + ')"/>&nbsp;';
-        //         str += '<input type="button" class=" btn btn-sm btn-warning"  value="删  除" onclick="Qczj.delete(' + id + ')"/>&nbsp;';
-        //         str += '<input type="button" class=" btn btn-sm btn-primary"  value="安排学员" onclick="Qczj.arrangeStudents(' + id + ')"/>&nbsp;';
-        //
-        //         return str;
-        //     }
-        //     }
+                }},
+            {name: 'operations', index: 'operations', width: 200, sortable: false, formatter: function (cellValue, options, rowObject) {
+                var cclid = "'"+rowObject["cclid"]+"'";
+                var appid = "'"+rowObject["appid"]+"'";
+                var str = "";
+                    str += '<input type="button" class=" btn btn-sm btn-info"  value="录音上传" onclick="Vedio.uploadVedio()"/>&nbsp;';
+                    str += '<input type="button" class=" btn btn-sm btn-info"  value="提  交" onclick="Vedio.submitVedio('+cclid+','+appid+')"/>&nbsp;';
+                return str;
+            }
+            }
         ]
     };
     return options;
@@ -68,68 +61,63 @@ Qczj.initOptions = function () {
 /**
  * 根据关键词搜索
  */
-Qczj.search = function () {
+Vedio.search = function () {
     var searchParam = {};
     searchParam.phone = $("#phone").val();
     searchParam.startDate = $("#startDate").val();
     searchParam.endDate = $("#endDate").val();
     searchParam.status = $("#status").val();
-    Qczj.table.reload(searchParam);
+    Vedio.table.reload(searchParam);
 };
 
 /**
  * 重置搜索
  */
-Qczj.resetSearch = function () {
+Vedio.resetSearch = function () {
     $("#phone").val("");
     $("#startDate").val("");
     $("#endDate").val("");
     $(".option_1").attr("selected",true);
-    Qczj.search();
+    Vedio.search();
     $(".option_1").attr("selected",false);
 };
 
 /**
  * 重置搜索
  */
-Qczj.download = function () {
+Vedio.download = function () {
     window.location.href = "/upload/qczj/export?phone="+$("#phone").val()+"&startDate="+$("#startDate").val()+"&endDate="+$("#endDate").val()+"&status="+$("#status").val();
 };
 
-
-var uploadForm = document.querySelector("#uploadForm");
-var uploadInput = document.querySelector("#uploadInput");
-uploadForm.addEventListener('submit', function(event){
-    var l = $(btn).ladda();
-    l.ladda('start');
-    var files = uploadInput.files;
-    if(files.length === 0) {
-        // singleFileUploadError.innerHTML = "Please select a file";
-        // singleFileUploadError.style.display = "block";
-    }
-    uploadSubmit(files[0],l);
-    event.preventDefault();
-}, true);
-
-function uploadSubmit(file,l) {
-    var formData = new FormData();
-    formData.append("file", file);
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/upload/qczj/import");
-
-    xhr.onload = function() {
-        var response = JSON.parse(xhr.responseText);
-        if(response.code == 0) {
-            l.ladda('stop');
-            successthen("导入成功",null,"/upload/qczj/list");
-        } else {
-            l.ladda('stop');
-            successthen("导入失败",null,"/upload/qczj/list");
+Vedio.uploadVedio = function () {
+    $.ajax({
+        url: "/upload/qczj/vedio/getAccessToken",
+        type: 'GET',
+        dataType: "json",
+        success: function (r) {
+            if (r.code === 0) {
+                accessToken = r.obj;
+                //获取accessToken之后发起录音上传
+            }
         }
-    }
+    })
+}
+Vedio.submitVedio = function (cclid,appid) {
+    var formData = new FormData();
 
-    xhr.send(formData);
+    $.ajax({
+        url: "/upload/qczj/vedio/getAccessToken",
+        type: 'GET',
+        dataType: "json",
+        success: function (r) {
+            if (r.code === 0) {
+                accessToken = r.obj;
+                //获取accessToken之后发起录音上传
+
+
+            }
+        }
+    })
 }
 
 
@@ -141,7 +129,7 @@ function uploadSubmit(file,l) {
  * @param date
  * @returns {void | string | *}
  */
-// Qczj.searchStudents = function(id){
+// Vedio.searchStudents = function(id){
 //     window.location.href = '/upload/searchStudents/list?id='+id;
 // }
 
@@ -186,7 +174,7 @@ function uploadSubmit(file,l) {
 $(function() {
     // $('.chosen-select').chosen({width: "100%"});
 
-    var jqGrid = new JqGrid("#grid-table", "#grid-pager", Qczj.initOptions());
-    Qczj.table = jqGrid.init();
+    var jqGrid = new JqGrid("#grid-table", "#grid-pager", Vedio.initOptions());
+    Vedio.table = jqGrid.init();
 
 });
