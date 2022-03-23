@@ -223,5 +223,10 @@ public class QczjController extends BaseController {
         return OK;
     }
 
-
+    @RequestMapping("uploadRecord")
+    @ResponseBody
+    public Result uploadRecord(@RequestParam("file") MultipartFile file,@RequestParam("cclid")String cclid,@RequestParam("appid")String appid){
+        qczjService.uploadRecord(cclid,appid);
+        return OK;
+    }
 }
