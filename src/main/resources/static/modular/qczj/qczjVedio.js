@@ -118,9 +118,9 @@ uploadVedioForm.addEventListener('submit', function(event){
     l.ladda( 'start' );
     var formData = new FormData();
     formData.append("file", uploadVedioInput.files[0]);
-    formData.append("cclid", $("#cclid").val());
-    formData.append("appid", $("#appid").val());
-    formData.append("accessToken", $("#accessToken").val());
+    formData.append("cclid", uploadVedioForm["cclid"].value);
+    formData.append("appid", uploadVedioForm["appid"].value);
+    formData.append("accessToken", uploadVedioForm["accessToken"].value);
     $.ajax({
         url: '/upload/qczj/vedio/test',
         type: 'POST',
