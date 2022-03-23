@@ -12,9 +12,14 @@ Vedio.initOptions = function () {
     var options = {
         url : "/upload/qczj/vedio/grid",
         autowidth:true,
-        colNames: ['手机号','上传状态','创建时间','操作'],
+        colNames: ['手机号','城市ID','城市名称','省份名称','品牌ID','品牌名称','上传状态','信息','创建时间','操作'],
         colModel: [
             {name: 'phone', index: 'phone', width: 40},
+            {name: 'cityCode', index: 'cityCode', width: 30},
+            {name: 'cityName', index: 'cityName', width: 40},
+            {name: 'province', index: 'province', width: 40},
+            {name: 'brandId', index: 'brandId', width: 60},
+            {name: 'brandName', index: 'brandName', width: 60},
             {name: 'status', index: 'status', width: 60,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     var msg = "";
                     if (cellvar == 0){
@@ -37,19 +42,20 @@ Vedio.initOptions = function () {
                     }
                     return msg;
                 }},
-            {name: 'createTime', index: 'createTime', width: 60,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
+            {name: 'message', index: 'message',align: "center", width: 60},
+            {name: 'createTime', index: 'createTime', width: 80,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     if (cellvar == "" || cellvar == undefined) {
                         return "";
                     }
                     var da = new Date(cellvar);
                     return dateFtt("yyyy-MM-dd hh:mm:ss", da);
                 }},
-            {name: 'operations', index: 'operations', width: 200, sortable: false, formatter: function (cellValue, options, rowObject) {
+            {name: 'operations', index: 'operations', width: 100, sortable: false, formatter: function (cellValue, options, rowObject) {
                 var cclid = "'"+rowObject["cclid"]+"'";
-                var appid = "'"+rowObject["appid"]+"'";
+                var uid = "'"+rowObject["uid"]+"'";
                 var str = "";
-                    str += '<input type="button" class=" btn btn-sm btn-info"  value="录音上传" onclick="Vedio.uploadVedio()"/>&nbsp;';
-                    str += '<input type="button" class=" btn btn-sm btn-info"  value="提  交" onclick="Vedio.submitVedio('+cclid+','+appid+')"/>&nbsp;';
+                    str += '<input type="button" class=" btn btn-sm btn-info"  value="录音上传" onclick="Vedio.uploadVedio('+cclid+','+uid+')"/>&nbsp;';
+                    // str += '<input type="button" class=" btn btn-sm btn-info"  value="提  交" onclick="Vedio.submitVedio('+cclid+','+appid+')"/>&nbsp;';
                 return str;
             }
             }
@@ -89,7 +95,7 @@ Vedio.download = function () {
     window.location.href = "/upload/qczj/export?phone="+$("#phone").val()+"&startDate="+$("#startDate").val()+"&endDate="+$("#endDate").val()+"&status="+$("#status").val();
 };
 
-Vedio.uploadVedio = function () {
+Vedio.uploadVedio = function (cclid,appid) {
     $.ajax({
         url: "/upload/qczj/vedio/getAccessToken",
         type: 'GET',
@@ -97,28 +103,93 @@ Vedio.uploadVedio = function () {
         success: function (r) {
             if (r.code === 0) {
                 accessToken = r.obj;
-                //获取accessToken之后发起录音上传
+                $("#accessToken").val(accessToken);
+                $("#cclid").val(cclid);
+                $("#appid").val(appid);
+                $("#uploadModal").modal();
             }
         }
     })
 }
-Vedio.submitVedio = function (cclid,appid) {
+var uploadVedioForm = document.querySelector("#uploadVedioForm");
+var uploadVedioInput = document.querySelector("#uploadVedioInput");
+uploadVedioForm.addEventListener('submit', function(event){
+    var l = $(vedioSubmit).ladda();
+    l.ladda( 'start' );
     var formData = new FormData();
-
+    formData.append("file", uploadVedioInput.files[0]);
+    formData.append("cclid", $("#cclid").val());
+    formData.append("appid", $("#appid").val());
+    formData.append("accessToken", $("#accessToken").val());
     $.ajax({
-        url: "/upload/qczj/vedio/getAccessToken",
-        type: 'GET',
+        url: '/upload/qczj/vedio/test',
+        type: 'POST',
+        data: formData,
         dataType: "json",
+        async: true,
+        cache: false,
+        contentType: false,
+        processData: false,
         success: function (r) {
+            l.ladda('stop');
             if (r.code === 0) {
-                accessToken = r.obj;
-                //获取accessToken之后发起录音上传
-
-
+                $("#uploadModal").modal("hide");
+                success("上传状态","录音上传成功")
+                Vedio.search();
+            } else {
+                $("#uploadModal").modal("hide");
+                error("上传状态","录音上传失败");
             }
         }
-    })
-}
+    });
+    event.preventDefault();
+}, true);
+
+
+
+
+
+
+
+
+// var uploadVedioForm = document.querySelector("#uploadVedioForm");
+// var uploadVedioInput = document.querySelector("#uploadVedioInput");
+// uploadVedioForm.addEventListener('submit', function(event){
+//     var l = $(vedioSubmit).ladda();
+//     l.ladda('start');
+//     var files = uploadVedioInput.files;
+//     if(files.length === 0) {
+//         // singleFileUploadError.innerHTML = "Please select a file";
+//         // singleFileUploadError.style.display = "block";
+//     }
+//     uploadSubmit(files[0],l,);
+//     event.preventDefault();
+// }, true);
+//
+// function uploadSubmit(file,l,cclid,appid,accessToken) {
+//     var formData = new FormData();
+//     formData.append("file", file);
+//     formData.append("cclid", cclid);
+//     formData.append("appid", appid);
+//     formData.append("accessToken", accessToken);
+//     console.log(formData);
+//
+//     var xhr = new XMLHttpRequest();
+//     xhr.open("POST", "/upload/qczj/vedio/test");
+//
+//     xhr.onload = function() {
+//         var response = JSON.parse(xhr.responseText);
+//         if(response.code == 0) {
+//             l.ladda('stop');
+//             successthen("导入成功",null,"/upload/qczj/list");
+//         } else {
+//             l.ladda('stop');
+//             successthen("导入失败",null,"/upload/qczj/list");
+//         }
+//     }
+//
+//     xhr.send(formData);
+// }
 
 
 

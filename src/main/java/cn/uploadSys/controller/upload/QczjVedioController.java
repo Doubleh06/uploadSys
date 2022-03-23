@@ -14,9 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,8 +32,7 @@ public class QczjVedioController extends BaseController {
 
    @Autowired
    private QczjService qczjService;
-   @Autowired
-   private Environment env;
+
 
 
 
@@ -62,5 +65,15 @@ public class QczjVedioController extends BaseController {
         return new JSONResult(qczjService.getAccessToken());
     }
 
-
+    @PostMapping("/test")
+    @ResponseBody
+    public Result test(@RequestParam("file") MultipartFile file,@RequestParam("cclid")String cclid,
+                       @RequestParam("appid")String appid,@RequestParam("accessToken")String accessToken) throws IOException {
+        String fileName = file.getOriginalFilename();
+        System.out.println(fileName);
+        System.out.println(cclid);
+        System.out.println(appid);
+        System.out.println(accessToken);
+        return OK;
+    }
 }

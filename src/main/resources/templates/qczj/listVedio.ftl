@@ -81,7 +81,35 @@
     <#include "/templates/layout/footer.ftl">
     </div>
 </div>
+<div class="modal fade" id="uploadModal" tabindex="-1"  role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="modalTitle">上传录音</h4>
+            </div>
+            <div class="modal-body">
+                <form  enctype="multipart/form-data" id="uploadVedioForm" class="form-horizontal">
+                    <input type="text" class="form-control" id="accessToken" >
+                    <input type="text" class="form-control" id="cclid" >
+                    <input type="text" class="form-control" id="appid" >
+                    <label>文件上传：</label>
+                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                        <span class="btn btn-default btn-file"><span class="fileinput-new">选择文件</span><span class="fileinput-exists">更改文件</span><input id="uploadVedioInput" type="file" name="file"></span>
+                        <span class="fileinput-filename" id="fileinput-filename"></span>
+                        <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">&times;</a>
+                    </div>
+                    <button id="vedioSubmit" class="btn btn-primary ladda-button" type="submit" >提交</button>
+                </form>
 
+            </div>
+            <div class="modal-footer">
+<#--                <button type="button" class="btn btn-sm btn-primary" onclick="">确定</button>-->
+                <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
 
 <#--分配角色弹框-->
 <#include "/templates/layout/commonjs.ftl">
