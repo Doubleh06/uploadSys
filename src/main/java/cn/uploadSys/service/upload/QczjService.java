@@ -111,36 +111,9 @@ public class QczjService extends AbstractService<Qczj> {
         });
     }
 
-    public void getStatus(String cclid){
+    public void getStatus(String cclid) {
         //获取token_access
-        String accessToken = "";
-        Object obj = template.opsForValue().get("getStatusAccessToken");
-        if (null !=  obj&& StringUtils.isNotBlank(obj.toString())) {
-            accessToken = obj.toString();
-        }else{
-            String access_host = env.getProperty("qczj.access_host");
-            String access_path = env.getProperty("qczj.access_path");
-
-            HashMap<String,Object> accessHeader = new HashMap();
-            accessHeader.put("Content-Type","application/json;charset=utf-8");
-
-            JSONObject accessBody = new JSONObject();
-            accessBody.put("client_id",env.getProperty("qczj.getStatus.client_id"));
-            accessBody.put("client_secret",env.getProperty("qczj.getStatus.client_secret"));
-            accessBody.put("response_type","token");
-
-            String accessResult = AjaxUtil.doPost("https",access_host,access_path,accessBody.toString(),accessHeader);
-            JSONObject json = JSONObject.parseObject(accessResult);
-            accessToken = json.getJSONObject("data").getString("access_token");
-            long expiresIn = json.getJSONObject("data").getLong("expires_in");//失效时间
-            try {
-                template.opsForValue().set("getStatusAccessToken", accessToken,expiresIn, TimeUnit.SECONDS);
-                log.info("存入redis成功，key：{}，value：{}", "getStatusAccessToken", accessToken);
-            } catch (Exception e) {
-                log.error("存入redis失败，key：{}，value：{}", "getStatusAccessToken", accessToken);
-                e.printStackTrace();
-            }
-        }
+        String accessToken = getAccessToken();
 
 
 
@@ -170,7 +143,7 @@ public class QczjService extends AbstractService<Qczj> {
         }
     }
 
-    public String getAccessToken() throws UnirestException {
+    public String getAccessToken() {
         //获取token_access
         String accessToken = "";
         Object obj = template.opsForValue().get("getStatusAccessToken");
@@ -203,6 +176,7 @@ public class QczjService extends AbstractService<Qczj> {
 
        return accessToken;
     }
+
 
 
 

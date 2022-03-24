@@ -8,6 +8,8 @@ import cn.uploadSys.dto.AllJqGridParam;
 import cn.uploadSys.entity.upload.Qczj;
 import cn.uploadSys.service.upload.QczjService;
 import com.github.pagehelper.PageInfo;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,8 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -32,7 +36,8 @@ public class QczjVedioController extends BaseController {
 
    @Autowired
    private QczjService qczjService;
-
+    @Autowired
+    private Environment env;
 
 
 
@@ -65,15 +70,24 @@ public class QczjVedioController extends BaseController {
         return new JSONResult(qczjService.getAccessToken());
     }
 
-    @PostMapping("/test")
+    @PostMapping("/upload")
     @ResponseBody
     public Result test(@RequestParam("file") MultipartFile file,@RequestParam("cclid")String cclid,
-                       @RequestParam("appid")String appid,@RequestParam("accessToken")String accessToken) throws IOException {
-        String fileName = file.getOriginalFilename();
-        System.out.println(fileName);
-        System.out.println(cclid);
-        System.out.println(appid);
-        System.out.println(accessToken);
+                       @RequestParam("appid")String appid) throws IOException, UnirestException {
+        String accessToken = qczjService.getAccessToken();
+        String import_url = env.getProperty("qczj.uploadRecord.url")+accessToken;
+        Map<String, Object> body = new HashMap<>();
+        body.put("cclid",cclid);
+        body.put("appid",appid);
+        body.put("recordfile",file);
+        HttpResponse<String> upload = Unirest.post(import_url)
+                .header("Content-Type", "multipart/form-data; boundary=----WebKitFormBoundarygmk3KBUQwymfMc8A")
+                .header("Accept", "application/json")
+                .fields(body)
+                .asString();
+
+        String result = upload.getBody().toString();
+        System.out.println("result="+result);
         return OK;
     }
 }
