@@ -117,12 +117,12 @@ uploadVedioForm.addEventListener('submit', function(event){
     var l = $(vedioSubmit).ladda();
     l.ladda( 'start' );
     var formData = new FormData();
-    formData.append("recordfile", uploadVedioInput.files[0]);
+    formData.append("file", uploadVedioInput.files[0]);
     formData.append("cclid", uploadVedioForm["cclid"].value);
     formData.append("appid", uploadVedioForm["appid"].value);
     $.ajax({
-        url: 'https://openapi.autohome.com.cn/che168/apiclueopen/carestimate/record.ashx?access_token='+accessToken,
-        //  url: '/upload/qczj/vedio/upload',
+        // url: 'https://openapi.autohome.com.cn/che168/apiclueopen/carestimate/record.ashx?access_token='+accessToken,
+         url: '/upload/qczj/vedio/upload',
         type: 'POST',
         data: formData,
         dataType: "json",
