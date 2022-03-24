@@ -162,3 +162,6 @@ INSERT INTO `qczj` VALUES ('1', '370100', '日照', '山东', '13000000000', '0'
 INSERT INTO `qczj` VALUES ('2', '370101', '德州', '山东', '15000000000', '0', '大众', '1', 'cc', '0', NULL, '0', NULL, NULL, '2021-11-29 13:12:07', NULL);
 COMMIT;
 
+ UPDATE `upload_sys`.`menu` SET `name` = '汽车之家', `url` = '#', `code` = 'zj', `sequence` = 0, `icon` = NULL, `description` = NULL, `pcode` = NULL, `type` = 1, `enabled` = 1, `displayed` = 1 WHERE `id` = 111;
+ INSERT INTO `upload_sys`.`menu` (`id`, `name`, `url`, `code`, `sequence`, `icon`, `description`, `pcode`, `type`, `enabled`, `displayed`) VALUES (112, '之家-录音', '/upload/qczj/vedio/list', 'vedio', 1, NULL, NULL, 'zj', 1, 1, 1);
+ INSERT INTO `upload_sys`.`menu` (`id`, `name`, `url`, `code`, `sequence`, `icon`, `description`, `pcode`, `type`, `enabled`, `displayed`) VALUES (113, '之家-数据上传', '/upload/qczj/list', 'qczj', 0, NULL, NULL, 'zj', 1, 1, 1);
