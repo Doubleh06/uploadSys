@@ -99,10 +99,12 @@ public class QczjVedioController extends BaseController {
             if (StringUtils.isNotEmpty(returnCode) && returnCode.equals("0")) {
                 qczjService.updateVedioStatusByCclid(cclid,0);
                 log.info("录音上传成功，cclid:{}",cclid);
+                return OK;
             }else{
                 qczjService.updateVedioStatusByCclid(cclid,1);
+                return new Result(1,"上传异常");
             }
-            return OK;
+
         }
     }
 
