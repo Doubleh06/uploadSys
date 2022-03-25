@@ -12,14 +12,14 @@ Qczj.initOptions = function () {
     var options = {
         url : "/upload/qczj/grid",
         autowidth:true,
-        colNames: ['手机号','城市ID','城市名称','省份名称','品牌ID','品牌名称','上传状态','信息','创建时间'],
+        colNames: ['手机号','城市ID','城市名称','省份名称','品牌名称','项目号','上传状态','信息','创建时间'],
         colModel: [
             {name: 'phone', index: 'phone', width: 40},
             {name: 'cityCode', index: 'cityCode', width: 30},
             {name: 'cityName', index: 'cityName', width: 40},
             {name: 'province', index: 'province', width: 40},
-            {name: 'brandId', index: 'brandId', width: 60},
             {name: 'brandName', index: 'brandName', width: 60},
+            {name: 'uid', index: 'uid', width: 60},
             {name: 'status', index: 'status', width: 60,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     var msg = "";
                     if (cellvar == 0){
@@ -74,6 +74,7 @@ Qczj.search = function () {
     searchParam.startDate = $("#startDate").val();
     searchParam.endDate = $("#endDate").val();
     searchParam.status = $("#status").val();
+    searchParam.appid = $("#appid").val();
     Qczj.table.reload(searchParam);
 };
 
@@ -85,8 +86,10 @@ Qczj.resetSearch = function () {
     $("#startDate").val("");
     $("#endDate").val("");
     $(".option_1").attr("selected",true);
+    $(".option_2").attr("selected",true);
     Qczj.search();
     $(".option_1").attr("selected",false);
+    $(".option_2").attr("selected",false);
 };
 
 /**

@@ -21,7 +21,7 @@
 
         <div class="row wrapper border-bottom white-bg page-heading">
             <div class="col-lg-10">
-                <h2>汽车之家数据列表</h2>
+                <h2>汽车之家上传录音列表</h2>
                 <ol class="breadcrumb">
                     <li>
                         <a href="/main">Home</a>
@@ -54,6 +54,12 @@
                                         <option value="11">邀约成功</option>
                                         <option value="15">上拍成功</option>
                                         <option value="20">交易成功</option>
+                                    </select>
+                                    <label>项目号</label>
+                                    <select class="form-control" id="uid">
+                                        <option class="option_2" value="" >全部</option>
+                                        <option value="936">936</option>
+                                        <option value="977">977</option>
                                     </select>
                                     <div class="form-group" id="data_5">
                                         <label class="font-normal">选择日期：</label>
@@ -90,9 +96,9 @@
             </div>
             <div class="modal-body">
                 <form  enctype="multipart/form-data" id="uploadVedioForm" class="form-horizontal">
-                    <input type="text" class="form-control" id="accessToken" >
-                    <input type="text" class="form-control" id="cclid" >
-                    <input type="text" class="form-control" id="appid" >
+                    <input type="hidden" class="form-control" id="accessToken" >
+                    <input type="hidden" class="form-control" id="cclid" >
+                    <input type="hidden" class="form-control" id="appid" >
                     <label>文件上传：</label>
                     <div class="fileinput fileinput-new" data-provides="fileinput">
                         <span class="btn btn-default btn-file"><span class="fileinput-new">选择文件</span><span class="fileinput-exists">更改文件</span><input id="uploadVedioInput" type="file" name="file"></span>

@@ -73,8 +73,11 @@ public class QczjService extends AbstractService<Qczj> {
         if (null != param.getStatus()) {
             sql.append(" and status = ").append(param.getStatus());
         }
+        if (StringUtils.isNotEmpty(param.getAppid())) {
+            sql.append(" and uid = '").append(param.getAppid()).append("'");
+        }
         sql.append(" ORDER BY create_time  desc ");
-        return new PageInfo<>(qczjDao.getStudentsList(sql.toString()));
+        return new PageInfo<>(qczjDao.getLeadsList(sql.toString()));
     }
 
 
@@ -90,8 +93,11 @@ public class QczjService extends AbstractService<Qczj> {
         if (null != param.getStatus()) {
             sql.append(" and status = ").append(param.getStatus());
         }
+        if (StringUtils.isNotEmpty(param.getAppid())) {
+            sql.append(" and uid = '").append(param.getAppid()).append("'");
+        }
         sql.append(" ORDER BY create_time  desc ");
-        return qczjDao.getStudentsList(sql.toString());
+        return qczjDao.getLeadsList(sql.toString());
     }
 
     public PageInfo<Map> selectByJqGridParam(ArrangeClassJqGridParam param){
@@ -107,21 +113,19 @@ public class QczjService extends AbstractService<Qczj> {
     public void getUnfinishedInstance(){
         List<Qczj> qczjs = qczjDao.getUnfinishedInstance();
         qczjs.forEach(qczj -> {
-            getStatus(qczj.getCclid());
+            getStatus(qczj.getCclid(),qczj.getUid());
         });
     }
 
-    public void getStatus(String cclid) {
+    public void getStatus(String cclid,String appid) {
         //获取token_access
         String accessToken = getAccessToken();
-
-
 
         String statusHost = env.getProperty("qczj.getStatus.access_host");
         String statusPath = env.getProperty("qczj.getStatus.access_path");
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("appid", "936"));
+        params.add(new BasicNameValuePair("appid", appid));
         params.add(new BasicNameValuePair("cclid", cclid));
         params.add(new BasicNameValuePair("access_token", accessToken));
         params.add(new BasicNameValuePair("querykey", env.getProperty("qczj.getStatus.queryKey")));
@@ -177,7 +181,9 @@ public class QczjService extends AbstractService<Qczj> {
        return accessToken;
     }
 
-
+    public void updateVedioStatusByCclid(String cclid,Integer vedioStatus){
+        qczjDao.updateVedioStatusByCclid(vedioStatus,cclid);
+    }
 
 
     

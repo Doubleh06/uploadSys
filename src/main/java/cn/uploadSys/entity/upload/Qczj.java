@@ -31,4 +31,5 @@ public class Qczj extends BaseEntity {
     private String cclid;
     private Date createTime;
     private Date modifyTime;
+    private Integer vedioStatus;
 }

@@ -14,7 +14,7 @@ import java.util.Map;
 @Component
 public interface QczjDao extends BaseDao<Qczj> {
     @Select("select * from qczj ${sql}")
-    List<Qczj> getStudentsList(@Param("sql") String sql);
+    List<Qczj> getLeadsList(@Param("sql") String sql);
 
     @Select("select c.id cid,c.*,s.id sid,s.`name` sname,s.phone,s.parents_name,cs.id csid from classes c " +
             "LEFT JOIN classes_students cs on c.id = cs.cid " +
@@ -31,6 +31,10 @@ public interface QczjDao extends BaseDao<Qczj> {
     @Update("update qczj set status = #{status},modify_time = NOW(),message = #{message}" +
             " where cclid = #{cclid}")
     void updateByCclid(@Param("status") Integer status,@Param("cclid")String cclid,@Param("message")String message);
+
+    @Update("update qczj set vedio_status = #{vedioStatus},modify_time = NOW()" +
+            " where cclid = #{cclid}")
+    void updateVedioStatusByCclid(@Param("vedioStatus") Integer vedioStatus,@Param("cclid")String cclid);
 
     @Select("SELECT * FROM qczj q where TIMESTAMPDIFF(DAY,q.create_time,NOW())<=45 and q.status not in (1,20)")
     List<Qczj> getUnfinishedInstance();

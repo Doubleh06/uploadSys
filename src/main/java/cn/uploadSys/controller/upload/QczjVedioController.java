@@ -89,12 +89,19 @@ public class QczjVedioController extends BaseController {
                 .asString();
 
         String result = upload.getBody().toString();
+
         if (StringUtils.isNotEmpty(result) && result.contains("error_description")) {
+            qczjService.updateVedioStatusByCclid(cclid,1);
             return new Result(1,"上传异常");
         }else{
             JSONObject jsonObject = JSONObject.parseObject(result);
             String returnCode = jsonObject.getString("returncode");
-            String message = jsonObject.getString("message");
+            if (StringUtils.isNotEmpty(returnCode) && returnCode.equals("0")) {
+                qczjService.updateVedioStatusByCclid(cclid,0);
+                log.info("录音上传成功，cclid:{}",cclid);
+            }else{
+                qczjService.updateVedioStatusByCclid(cclid,1);
+            }
             return OK;
         }
     }

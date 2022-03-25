@@ -12,14 +12,13 @@ Vedio.initOptions = function () {
     var options = {
         url : "/upload/qczj/vedio/grid",
         autowidth:true,
-        colNames: ['手机号','城市ID','城市名称','省份名称','品牌ID','品牌名称','上传状态','信息','创建时间','操作'],
+        colNames: ['手机号','城市名称','省份名称','品牌名称','项目号','上传状态','录音上传状态','信息','创建时间','操作'],
         colModel: [
             {name: 'phone', index: 'phone', width: 40},
-            {name: 'cityCode', index: 'cityCode', width: 30},
             {name: 'cityName', index: 'cityName', width: 40},
             {name: 'province', index: 'province', width: 40},
-            {name: 'brandId', index: 'brandId', width: 60},
             {name: 'brandName', index: 'brandName', width: 60},
+            {name: 'uid', index: 'uid', width: 60},
             {name: 'status', index: 'status', width: 60,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     var msg = "";
                     if (cellvar == 0){
@@ -42,6 +41,18 @@ Vedio.initOptions = function () {
                     }
                     return msg;
                 }},
+            {name: 'vedioStatus', index: 'vedioStatus', width: 60,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
+                    var msg = "";
+                    if (cellvar == 0){
+                        msg = "上传成功";
+                    }else if (cellvar == null){
+                        msg = "未上传";
+                    }else{
+                        msg = "上传失败";
+                    }
+
+                    return msg;
+                }},
             {name: 'message', index: 'message',align: "center", width: 60},
             {name: 'createTime', index: 'createTime', width: 80,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     if (cellvar == "" || cellvar == undefined) {
@@ -53,8 +64,12 @@ Vedio.initOptions = function () {
             {name: 'operations', index: 'operations', width: 100, sortable: false, formatter: function (cellValue, options, rowObject) {
                 var cclid = "'"+rowObject["cclid"]+"'";
                 var uid = "'"+rowObject["uid"]+"'";
+                var vedioStatus = rowObject["vedioStatus"];
                 var str = "";
+                if(vedioStatus != 0){
                     str += '<input type="button" class=" btn btn-sm btn-info"  value="录音上传" onclick="Vedio.uploadVedio('+cclid+','+uid+')"/>&nbsp;';
+                }
+
                     // str += '<input type="button" class=" btn btn-sm btn-info"  value="提  交" onclick="Vedio.submitVedio('+cclid+','+appid+')"/>&nbsp;';
                 return str;
             }
@@ -73,6 +88,7 @@ Vedio.search = function () {
     searchParam.startDate = $("#startDate").val();
     searchParam.endDate = $("#endDate").val();
     searchParam.status = $("#status").val();
+    searchParam.appid = $("#uid").val();
     Vedio.table.reload(searchParam);
 };
 
@@ -84,8 +100,10 @@ Vedio.resetSearch = function () {
     $("#startDate").val("");
     $("#endDate").val("");
     $(".option_1").attr("selected",true);
+    $(".option_2").attr("selected",true);
     Vedio.search();
     $(".option_1").attr("selected",false);
+    $(".option_2").attr("selected",false);
 };
 
 /**
@@ -121,8 +139,7 @@ uploadVedioForm.addEventListener('submit', function(event){
     formData.append("cclid", uploadVedioForm["cclid"].value);
     formData.append("appid", uploadVedioForm["appid"].value);
     $.ajax({
-        // url: 'https://openapi.autohome.com.cn/che168/apiclueopen/carestimate/record.ashx?access_token='+accessToken,
-         url: '/upload/qczj/vedio/upload',
+        url: '/upload/qczj/vedio/upload',
         type: 'POST',
         data: formData,
         dataType: "json",
@@ -135,10 +152,12 @@ uploadVedioForm.addEventListener('submit', function(event){
             if (r.code === 0) {
                 $("#uploadModal").modal("hide");
                 success("上传状态","录音上传成功")
+                uploadVedioForm.reset();
                 Vedio.search();
             } else {
                 $("#uploadModal").modal("hide");
-                error("上传状态","录音上传失败");
+                error("上传状态","录音上传失败")
+                uploadVedioForm.reset();
             }
         }
     });
