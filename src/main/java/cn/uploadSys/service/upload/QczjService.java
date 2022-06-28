@@ -112,6 +112,7 @@ public class QczjService extends AbstractService<Qczj> {
 
     public void getUnfinishedInstance(){
         List<Qczj> qczjs = qczjDao.getUnfinishedInstance();
+        log.info("查询状态例子总数为:{}",qczjs.size());
         qczjs.forEach(qczj -> {
             getStatus(qczj.getCclid(),qczj.getUid());
         });
@@ -131,7 +132,7 @@ public class QczjService extends AbstractService<Qczj> {
         params.add(new BasicNameValuePair("querykey", env.getProperty("qczj.getStatus.queryKey")));
 
         String result = AjaxUtil.doGet("https",statusHost,statusPath,params);
-        log.info(result.toString());
+        log.info(result.toString()+"-cclid:{}",cclid);
         if (StringUtils.isNotEmpty(result) && result.contains("returncode")) {
             JSONObject jsonObject = JSONObject.parseObject(result);
             String returnCode = jsonObject.getString("returncode");
