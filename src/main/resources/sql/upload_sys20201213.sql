@@ -5,7 +5,7 @@ INSERT INTO `upload_sys`.`menu` (`id`, `name`, `url`, `code`, `sequence`, `icon`
 
 DROP TABLE IF EXISTS `rrc`;
 CREATE TABLE `rrc` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` varchar(50) COLLATE utf8_bin NOT NULL,
   `name` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT '姓名',
   `mobile` int DEFAULT NULL COMMENT '电话',
   `city` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT '城市',
@@ -19,7 +19,7 @@ CREATE TABLE `rrc` (
   `is_accidented` char(1) COLLATE utf8_bin DEFAULT NULL COMMENT '是否事故车',
   `renrenche_info_id` varchar(10) COLLATE utf8_bin DEFAULT NULL COMMENT '返回id',
   `create_time` datetime DEFAULT NULL,
-  `is_repeat` int DEFAULT NULL COMMENT '是否重复 0：true 1：false',
+  `is_repeat` int DEFAULT NULL COMMENT '是否重复 0：重复1：不重复',
   `status` int DEFAULT NULL COMMENT '0:上传中 1：上传成功 2：上传失败',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_bin;

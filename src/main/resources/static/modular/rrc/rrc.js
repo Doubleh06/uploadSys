@@ -54,7 +54,7 @@ Common.initOptions = function () {
                 }},
             {name: 'status', index: 'status', width: 60,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     var msg = "";
-                    if (cellvar == 0){
+                    if (cellvar == 2){
                         msg = "上传失败";
                     }
                     if (cellvar == 1){
@@ -64,13 +64,13 @@ Common.initOptions = function () {
                     return msg;
                 }},
             {name: 'renrencheInfoId', index: 'renrencheInfoId',align: "center", width: 60},
-            {name: 'isRepeat', index: 'isRepeat',align: "center", width: 20, editable: false,formatter: function (cellvar, options, rowObject) {
+            {name: 'isRepeat', index: 'isRepeat',align: "center", width: 40, editable: false,formatter: function (cellvar, options, rowObject) {
                     var msg = "";
                     if (cellvar == 0){
-                        msg = "否";
+                        msg = "重复";
                     }
                     if (cellvar == 1){
-                        msg = "是";
+                        msg = "不重复";
                     }
 
                     return msg;

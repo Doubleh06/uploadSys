@@ -13,7 +13,8 @@ import java.util.Date;
  * @return 
  **/
 @Data
-public class Rrc extends BaseEntity {
+public class Rrc {
+    private String id;
     private String name;
     private long mobile;
     private String city;

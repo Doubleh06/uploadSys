@@ -1,6 +1,7 @@
 package cn.uploadSys.service.renrenche;
 
 
+import cn.hutool.core.lang.UUID;
 import cn.uploadSys.core.AbstractService;
 import cn.uploadSys.core.BaseDao;
 import cn.uploadSys.core.jqGrid.JqGridParam;
@@ -30,7 +31,7 @@ import java.util.Map;
 
 @Service
 @Slf4j
-public class RrcCommonService extends AbstractService<Rrc> {
+public class RrcCommonService  {
 
 
     @Autowired
@@ -39,24 +40,6 @@ public class RrcCommonService extends AbstractService<Rrc> {
     private Environment env;
     @Autowired
     private RedisTemplate<String, Object> template;
-
-
-
-    @Override
-    protected BaseDao<Rrc> getDao() {
-        return rrcCommonDao;
-    }
-
-    @Override
-    protected List<Rrc> selectByJqGridParam(JqGridParam jqGridParam) {
-        StudentsJqGridParam param = (StudentsJqGridParam) jqGridParam;
-        StringBuilder sql = new StringBuilder();
-        sql.append("1=1 ");
-        if (StringUtils.isNotEmpty(param.getSidx())) {
-            sql.append("order by ").append(param.getSidx()).append(" ").append(param.getSord()).append("");
-        }
-        return rrcCommonDao.selectBySql("qczj",sql.toString());
-    }
 
 
     public PageInfo<Rrc> selectByJqGridParam(AllJqGridParam param ) throws ParseException {
@@ -97,9 +80,9 @@ public class RrcCommonService extends AbstractService<Rrc> {
     }
 
 
-//    public int insert(Rrc Rrc){
-//        return rrcCommonDao.insert(Rrc);
-//    }
+    public int insert(Rrc Rrc){
+        return rrcCommonDao.insert(Rrc);
+    }
 
     public void interfaceC1(Rrc rrc){
             try {
@@ -133,9 +116,11 @@ public class RrcCommonService extends AbstractService<Rrc> {
 
                 Date date = new Date();
                 long timestamp = date.getTime()/1000;
+                String id = UUID.randomUUID().toString();
+                rrc.setId(id);
                 rrc.setStatus(0);
                 rrc.setCreateTime(date);
-                int id = insert(rrc);
+
 
 
                 String url = env.getProperty("rrc.c1.host");
@@ -154,30 +139,28 @@ public class RrcCommonService extends AbstractService<Rrc> {
                         .asString();
 
                 String result = upload.getBody().toString();
-                System.out.println("result="+result);
+//                result={"data":{"is_repeat":false,"renrenche_infoid":280006511579795456},"msg":"数据插入成功","status":200}
+                log.info("电话号码:{},result={}",rrc.getMobile(),result);
 
-//                if (StringUtils.isNotEmpty(result) && result.contains("error_description")) {
-//                    JSONObject jsonObject = JSONObject.parseObject(result);
-//                    String errorDescription = jsonObject.getString("error_description");
-//                    qczj.setStatus(1);
-//                    qczj.setMessage(errorDescription);
-//                }else{
-//                    JSONObject jsonObject = JSONObject.parseObject(result);
-//                    String returnCode = jsonObject.getString("returncode");
-//                    String message = jsonObject.getString("message");
-//                    if (StringUtils.isNotEmpty(returnCode) && returnCode.equals("0")) {
-//                        String cclid = jsonObject.getString("cclid");
-//                        qczj.setStatus(0);
-//                        qczj.setCclid(cclid);
-//                    }else{
-//                        qczj.setStatus(1);
-//                        qczj.setMessage(message);
-//                    }
-//                }
-//                qczj.setCreateTime(new Date());
-//                qczjCommonService.insert(qczj);
+                JSONObject jsonResult = JSONObject.parseObject(result);
+                Integer status = jsonResult.getInteger("status");
+                if (null != status && status == 200) {
+                    String rrcId = jsonResult.getString("renrenche_infoid");
+                    Boolean isRepeat = jsonResult.getJSONObject("data").getBoolean("is_repeat");
+                    rrc.setStatus(1);
+                    rrc.setRenrencheInfoId(rrcId);
+                    if (isRepeat) {
+                        rrc.setIsRepeat(0);
+                    }else {
+                        rrc.setIsRepeat(1);
+                    }
+                }else {
+                    rrc.setStatus(2);
+                }
+                insert(rrc);
+
             } catch (Exception e) {
-                log.error("人人车C1接口调用异常,{}",e.getMessage());
+                log.error("人人车C1接口调用异常,{}",e.getStackTrace());
             }
     }
 

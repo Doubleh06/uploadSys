@@ -1,5 +1,6 @@
 package cn.uploadSys.controller.renrenche;
 
+import cn.hutool.core.lang.UUID;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.uploadSys.controller.BaseController;
@@ -91,7 +92,7 @@ public class RrcController extends BaseController {
         Rrc rrc = new Rrc();
         rrc.setName("奥特曼");
         rrc.setMobile(13698522214L);
-        rrc.setCity("M78");
+        rrc.setCity("北京");
         rrc.setBrand("布加迪");
         rrc.setSeries("土狗");
         rrc.setModel("1");
