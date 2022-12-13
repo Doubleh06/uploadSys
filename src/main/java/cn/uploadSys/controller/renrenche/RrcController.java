@@ -1,8 +1,10 @@
 package cn.uploadSys.controller.renrenche;
 
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
+import cn.hutool.poi.excel.ExcelWriter;
 import cn.uploadSys.controller.BaseController;
 import cn.uploadSys.core.JSONResult;
 import cn.uploadSys.core.Result;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
@@ -91,12 +94,12 @@ public class RrcController extends BaseController {
     public Result testInterface() {
         Rrc rrc = new Rrc();
         rrc.setName("奥特曼");
-        rrc.setMobile(13698522214L);
+        rrc.setMobile("13698522214");
         rrc.setCity("北京");
         rrc.setBrand("布加迪");
         rrc.setSeries("土狗");
         rrc.setModel("1");
-        rrc.setKilometer(123);
+        rrc.setKilometer("123.2");
         rrc.setLicensedDateYear(2033);
         rrc.setIsOperation('0');
         rrc.setSeatNumber(2);
@@ -108,28 +111,28 @@ public class RrcController extends BaseController {
 
     @RequestMapping("export")
     @ResponseBody
-    public Result exportFile(AllJqGridParam param, HttpServletResponse response) throws IOException, ParseException {
-//        List<Qczj> rows = qczjCommonService.selectByJqGridParamNoPage(param);
-//
-//        // 通过工具类创建writer，默认创建xls格式
-//        ExcelWriter writer = ExcelUtil.getWriter();
-//        // 一次性写出内容，使用默认样式，强制输出标题
-//        writer.write(rows, true);
-//        //out为OutputStream，需要写出到的目标流
-//
-//        //response为HttpServletResponse对象
-//        response.setContentType("application/vnd.ms-excel;charset=utf-8");
-//        //test.xls是弹出下载对话框的文件名，不能为中文，中文请自行编码
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-//        response.setHeader("Content-Disposition","attachment;filename="+sdf.format(new Date())+".xls");
-//        ServletOutputStream out=response.getOutputStream();
-//
-//        writer.flush(out, true);
-//        // 关闭writer，释放内存
-//        writer.close();
-//        //此处记得关闭输出Servlet流
-//        IoUtil.close(out);
-        return OK;
+    public void exportFile(AllJqGridParam param, HttpServletResponse response) throws IOException, ParseException {
+        List<Rrc> rows = rrcCommonService.selectByJqGridParamNoPage(param);
+
+        // 通过工具类创建writer，默认创建xls格式
+        ExcelWriter writer = ExcelUtil.getWriter();
+        // 一次性写出内容，使用默认样式，强制输出标题
+        writer.write(rows, true);
+        //out为OutputStream，需要写出到的目标流
+
+        //response为HttpServletResponse对象
+        response.setContentType("application/vnd.ms-excel;charset=utf-8");
+        //test.xls是弹出下载对话框的文件名，不能为中文，中文请自行编码
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        response.setHeader("Content-Disposition","attachment;filename="+sdf.format(new Date())+".xls");
+        ServletOutputStream out=response.getOutputStream();
+
+        writer.flush(out, true);
+        // 关闭writer，释放内存
+        writer.close();
+        //此处记得关闭输出Servlet流
+        IoUtil.close(out);
+//        return OK;
     }
 
 }

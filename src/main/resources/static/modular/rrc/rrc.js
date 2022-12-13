@@ -12,7 +12,8 @@ Common.initOptions = function () {
     var options = {
         url : "/upload/rrc/common/grid",
         autowidth:true,
-        colNames: ['姓名','手机号','城市名称','品牌','车系','车型','公里数','上牌时间','是否营运','座位数','事故车','上传时间','上传状态','线索id','是否重复'],
+        colNames: ['姓名','手机号','城市名称','品牌','车系','车型','公里数','上牌时间','上传时间','上传状态','线索id','是否重复'],
+        // colNames: ['姓名','手机号','城市名称','品牌','车系','车型','公里数','上牌时间','是否营运','座位数','事故车','上传时间','上传状态','线索id','是否重复'],
         colModel: [
             {name: 'name', index: 'name', width: 40},
             {name: 'mobile', index: 'mobile', width: 60},
@@ -22,29 +23,29 @@ Common.initOptions = function () {
             {name: 'model', index: 'model', width: 60},
             {name: 'kilometer', index: 'kilometer', width: 40},
             {name: 'licensedDateYear', index: 'licensedDateYear', width: 40},
-            {name: 'isOperation', index: 'isOperation', width: 60, editable: false,formatter: function (cellvar, options, rowObject) {
-                    var msg = "";
-                    if (cellvar == 0){
-                        msg = "否";
-                    }
-                    if (cellvar == 1){
-                        msg = "是";
-                    }
-
-                    return msg;
-                }},
-            {name: 'seatNumber', index: 'seatNumber', width: 20},
-            {name: 'isAccidented', index: 'isAccidented', width: 20, editable: false,formatter: function (cellvar, options, rowObject) {
-                    var msg = "";
-                    if (cellvar == 0){
-                        msg = "否";
-                    }
-                    if (cellvar == 1){
-                        msg = "是";
-                    }
-
-                    return msg;
-                }},
+            // {name: 'isOperation', index: 'isOperation', width: 60, editable: false,formatter: function (cellvar, options, rowObject) {
+            //         var msg = "";
+            //         if (cellvar == 0){
+            //             msg = "否";
+            //         }
+            //         if (cellvar == 1){
+            //             msg = "是";
+            //         }
+            //
+            //         return msg;
+            //     }},
+            // {name: 'seatNumber', index: 'seatNumber', width: 20},
+            // {name: 'isAccidented', index: 'isAccidented', width: 20, editable: false,formatter: function (cellvar, options, rowObject) {
+            //         var msg = "";
+            //         if (cellvar == 0){
+            //             msg = "否";
+            //         }
+            //         if (cellvar == 1){
+            //             msg = "是";
+            //         }
+            //
+            //         return msg;
+            //     }},
             {name: 'createTime', index: 'createTime', width: 80,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     if (cellvar == "" || cellvar == undefined) {
                         return "";
@@ -120,102 +121,42 @@ Common.download = function () {
     window.location.href = "/upload/rrc/common/export?phone="+$("#phone").val()+"&startDate="+$("#startDate").val()+"&endDate="+$("#endDate").val()+"&status="+$("#status").val();
 };
 
-// Common.uploadVedio = function (cclid,appid) {
-//     $.ajax({
-//         url: "/upload/rrc/getAccessToken",
-//         type: 'GET',
-//         dataType: "json",
-//         success: function (r) {
-//             if (r.code === 0) {
-//                 accessToken = r.obj;
-//                 $("#accessToken").val(accessToken);
-//                 $("#cclid").val(cclid);
-//                 $("#appid").val(appid);
-//                 $("#uploadModal").modal();
-//             }
-//         }
-//     })
-// }
-// var uploadVedioForm = document.querySelector("#uploadVedioForm");
-// var uploadVedioInput = document.querySelector("#uploadVedioInput");
-// uploadVedioForm.addEventListener('submit', function(event){
-//     var l = $(vedioSubmit).ladda();
-//     l.ladda( 'start' );
-//     var formData = new FormData();
-//     formData.append("file", uploadVedioInput.files[0]);
-//     formData.append("cclid", uploadVedioForm["cclid"].value);
-//     formData.append("appid", uploadVedioForm["appid"].value);
-//     $.ajax({
-//         url: '/upload/rrc/upload',
-//         type: 'POST',
-//         data: formData,
-//         dataType: "json",
-//         async: true,
-//         cache: false,
-//         contentType: false,
-//         processData: false,
-//         success: function (r) {
-//             l.ladda('stop');
-//             if (r.code === 0) {
-//                 $("#uploadModal").modal("hide");
-//                 success("上传状态","录音上传成功")
-//                 uploadVedioForm.reset();
-//                 Common.search();
-//             } else {
-//                 $("#uploadModal").modal("hide");
-//                 error("上传状态","录音上传失败")
-//                 uploadVedioForm.reset();
-//             }
-//         }
-//     });
-//     event.preventDefault();
-// }, true);
 
 
+var uploadForm = document.querySelector("#uploadForm");
+var uploadInput = document.querySelector("#uploadInput");
+uploadForm.addEventListener('submit', function(event){
+    var l = $(btn).ladda();
+    l.ladda('start');
+    var files = uploadInput.files;
+    if(files.length === 0) {
+        // singleFileUploadError.innerHTML = "Please select a file";
+        // singleFileUploadError.style.display = "block";
+    }
+    uploadSubmit(files[0],l);
+    event.preventDefault();
+}, true);
 
+function uploadSubmit(file,l) {
+    var formData = new FormData();
+    formData.append("file", file);
 
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/upload/rrc/common/import");
 
+    xhr.onload = function() {
+        var response = JSON.parse(xhr.responseText);
+        if(response.code == 0) {
+            l.ladda('stop');
+            successthen("导入成功",null,"/upload/rrc/common/list");
+        } else {
+            l.ladda('stop');
+            successthen("导入失败",null,"/upload/rrc/common/list");
+        }
+    }
 
-
-
-// var uploadVedioForm = document.querySelector("#uploadVedioForm");
-// var uploadVedioInput = document.querySelector("#uploadVedioInput");
-// uploadVedioForm.addEventListener('submit', function(event){
-//     var l = $(vedioSubmit).ladda();
-//     l.ladda('start');
-//     var files = uploadVedioInput.files;
-//     if(files.length === 0) {
-//         // singleFileUploadError.innerHTML = "Please select a file";
-//         // singleFileUploadError.style.display = "block";
-//     }
-//     uploadSubmit(files[0],l,);
-//     event.preventDefault();
-// }, true);
-//
-// function uploadSubmit(file,l,cclid,appid,accessToken) {
-//     var formData = new FormData();
-//     formData.append("file", file);
-//     formData.append("cclid", cclid);
-//     formData.append("appid", appid);
-//     formData.append("accessToken", accessToken);
-//     console.log(formData);
-//
-//     var xhr = new XMLHttpRequest();
-//     xhr.open("POST", "/upload/rrc/Common/test");
-//
-//     xhr.onload = function() {
-//         var response = JSON.parse(xhr.responseText);
-//         if(response.code == 0) {
-//             l.ladda('stop');
-//             successthen("导入成功",null,"/upload/rrc/list");
-//         } else {
-//             l.ladda('stop');
-//             successthen("导入失败",null,"/upload/rrc/list");
-//         }
-//     }
-//
-//     xhr.send(formData);
-// }
+    xhr.send(formData);
+}
 
 
 

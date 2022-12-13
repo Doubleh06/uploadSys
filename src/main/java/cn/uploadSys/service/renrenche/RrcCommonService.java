@@ -47,7 +47,7 @@ public class RrcCommonService  {
         StringBuilder sql = new StringBuilder();
         sql.append(" where 1 = 1 ");
         if(StringUtils.isNotEmpty(param.getPhone())) {
-            sql.append(" and  phone like  '%").append(param.getPhone()).append("%'");
+            sql.append(" and  mobile like  '%").append(param.getPhone()).append("%'");
         }
         if (StringUtils.isNotEmpty(param.getStartDate()) && StringUtils.isNotEmpty(param.getEndDate())) {
             sql.append(" and create_time > '").append(param.getStartDate()).append(" 00:00:00' and create_time < '").append(param.getEndDate()).append(" 23:59:59'");
@@ -64,7 +64,7 @@ public class RrcCommonService  {
         StringBuilder sql = new StringBuilder();
         sql.append(" where 1 = 1 ");
         if(StringUtils.isNotEmpty(param.getPhone())) {
-            sql.append(" and  phone like  '%").append(param.getPhone()).append("%'");
+            sql.append(" and  mobile like  '%").append(param.getPhone()).append("%'");
         }
         if (StringUtils.isNotEmpty(param.getStartDate()) && StringUtils.isNotEmpty(param.getEndDate())) {
             sql.append(" and create_time > '").append(param.getStartDate()).append(" 00:00:00' and create_time < '").append(param.getEndDate()).append(" 23:59:59'");
@@ -88,26 +88,14 @@ public class RrcCommonService  {
             try {
                 Map<String, Object> body = new HashMap<>();
 
-//                String name = rrc.getName();
-//                int mobile = rrc.getMobile();
-//                String city = rrc.getCity();
-//                String brand = rrc.getBrand();
-//                String series = rrc.getSeries();
-//                String model = rrc.getModel();
-//                float kilometer = rrc.getKilometer();
-//                int licensed_date_year = rrc.getLicensedDateYear();
-//                char is_operation = rrc.getIsOperation();
-//                int seat_number = rrc.getSeatNumber();
-//                char is_accidented = rrc.getIsAccidented();
-
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("name",rrc.getName());
-                jsonObject.put("mobile",rrc.getMobile());
+                jsonObject.put("mobile",Long.parseLong(rrc.getMobile()));
                 jsonObject.put("city",rrc.getCity());
                 jsonObject.put("brand",rrc.getBrand());
                 jsonObject.put("series",rrc.getSeries());
                 jsonObject.put("model",rrc.getMobile());
-                jsonObject.put("kilometer",rrc.getKilometer());
+                jsonObject.put("kilometer",Float.parseFloat(rrc.getKilometer()));
                 jsonObject.put("licensed_date_year",rrc.getLicensedDateYear());
                 jsonObject.put("is_operation",rrc.getIsOperation());
                 jsonObject.put("seat_number",rrc.getSeatNumber());
@@ -145,9 +133,9 @@ public class RrcCommonService  {
                 JSONObject jsonResult = JSONObject.parseObject(result);
                 Integer status = jsonResult.getInteger("status");
                 if (null != status && status == 200) {
-                    String rrcId = jsonResult.getString("renrenche_infoid");
+                    String rrcId = jsonResult.getJSONObject("data").getString("renrenche_infoid");
                     Boolean isRepeat = jsonResult.getJSONObject("data").getBoolean("is_repeat");
-                    rrc.setStatus(1);
+                    rrc.setStatus(0);
                     rrc.setRenrencheInfoId(rrcId);
                     if (isRepeat) {
                         rrc.setIsRepeat(0);
@@ -155,7 +143,7 @@ public class RrcCommonService  {
                         rrc.setIsRepeat(1);
                     }
                 }else {
-                    rrc.setStatus(2);
+                    rrc.setStatus(1);
                 }
                 insert(rrc);
 

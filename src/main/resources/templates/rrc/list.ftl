@@ -21,7 +21,7 @@
 
         <div class="row wrapper border-bottom white-bg page-heading">
             <div class="col-lg-10">
-                <h2>汽车之家通用数据列表</h2>
+                <h2>人人车通用数据列表</h2>
                 <ol class="breadcrumb">
                     <li>
                         <a href="/main">Home</a>
@@ -60,9 +60,9 @@
                                                 <input type="text" class="input-sm form-control" id="endDate" name="end" />
                                             </div>
                                         </div>
-                                        <button class="btn btn-success"  id="search" type="button" onclick="Qczj.search()">搜索</button>&nbsp
-                                        <button class="btn btn-success" type="button" onclick="Qczj.resetSearch()">重置</button>&nbsp
-                                        <button class="btn btn-primary" type="button" onclick="Qczj.download()">下载</button>
+                                        <button class="btn btn-success"  id="search" type="button" onclick="Common.search()">搜索</button>&nbsp
+                                        <button class="btn btn-success" type="button" onclick="Common.resetSearch()">重置</button>&nbsp
+                                        <button class="btn btn-primary" type="button" onclick="Common.download()">下载</button>
                                     </div>
                                     <p>&nbsp;</p>
                                     <div class="form-group col-lg-12">

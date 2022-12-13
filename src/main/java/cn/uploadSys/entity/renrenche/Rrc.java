@@ -16,12 +16,12 @@ import java.util.Date;
 public class Rrc {
     private String id;
     private String name;
-    private long mobile;
+    private String mobile;
     private String city;
     private String brand;
     private String series;
     private String model;
-    private float kilometer;
+    private String kilometer;
     private Integer licensedDateYear;
     private char isOperation;
     private Integer seatNumber;

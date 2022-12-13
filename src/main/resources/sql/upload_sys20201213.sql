@@ -17,9 +17,9 @@ CREATE TABLE `rrc` (
   `is_operation` char(1) COLLATE utf8_bin DEFAULT NULL COMMENT '是否营运',
   `seat_number` int DEFAULT NULL COMMENT '几座',
   `is_accidented` char(1) COLLATE utf8_bin DEFAULT NULL COMMENT '是否事故车',
-  `renrenche_info_id` varchar(10) COLLATE utf8_bin DEFAULT NULL COMMENT '返回id',
+  `renrenche_info_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '返回id',
   `create_time` datetime DEFAULT NULL,
   `is_repeat` int DEFAULT NULL COMMENT '是否重复 0：重复1：不重复',
-  `status` int DEFAULT NULL COMMENT '0:上传中 1：上传成功 2：上传失败',
+  `status` int DEFAULT NULL COMMENT '0：上传成功 1：上传失败',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_bin;
