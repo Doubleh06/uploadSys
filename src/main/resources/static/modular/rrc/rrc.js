@@ -55,10 +55,10 @@ Common.initOptions = function () {
                 }},
             {name: 'status', index: 'status', width: 60,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     var msg = "";
-                    if (cellvar == 2){
+                    if (cellvar == 1){
                         msg = "上传失败";
                     }
-                    if (cellvar == 1){
+                    if (cellvar == 0){
                         msg = "入库成功";
                     }
 
