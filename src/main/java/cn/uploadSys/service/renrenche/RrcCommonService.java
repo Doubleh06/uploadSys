@@ -85,6 +85,7 @@ public class RrcCommonService  {
     }
 
     public void interfaceC1(Rrc rrc){
+        //C1通用接口
             try {
                 Map<String, Object> body = new HashMap<>();
 
@@ -97,19 +98,15 @@ public class RrcCommonService  {
                 jsonObject.put("model",rrc.getMobile());
                 jsonObject.put("kilometer",Float.parseFloat(rrc.getKilometer()));
                 jsonObject.put("licensed_date_year",rrc.getLicensedDateYear());
-                jsonObject.put("is_operation",rrc.getIsOperation());
-                jsonObject.put("seat_number",rrc.getSeatNumber());
-                jsonObject.put("is_accidented",rrc.getIsAccidented());
-
+                jsonObject.put("is_operation",0);
+                jsonObject.put("seat_number",0);
+                jsonObject.put("is_accidented",0);
 
                 Date date = new Date();
                 long timestamp = date.getTime()/1000;
                 String id = UUID.randomUUID().toString();
                 rrc.setId(id);
-                rrc.setStatus(0);
                 rrc.setCreateTime(date);
-
-
 
                 String url = env.getProperty("rrc.c1.host");
                 String token = env.getProperty("rrc.c1.token");

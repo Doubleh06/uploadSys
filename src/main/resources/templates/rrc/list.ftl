@@ -49,8 +49,8 @@
                                         <label>状态</label>
                                         <select class="form-control" id="status">
                                             <option class="option_1" value="" >全部</option>
-                                            <option value="0">成功</option>
-                                            <option value="1">失败</option>
+                                            <option value="0">入库成功</option>
+                                            <option value="1">入库失败</option>
                                         </select>
                                         <div class="form-group" id="data_5">
                                             <label class="font-normal">选择日期：</label>
