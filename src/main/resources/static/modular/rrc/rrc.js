@@ -23,29 +23,6 @@ Common.initOptions = function () {
             {name: 'model', index: 'model', width: 60},
             {name: 'kilometer', index: 'kilometer', width: 40},
             {name: 'licensedDateYear', index: 'licensedDateYear', width: 40},
-            // {name: 'isOperation', index: 'isOperation', width: 60, editable: false,formatter: function (cellvar, options, rowObject) {
-            //         var msg = "";
-            //         if (cellvar == 0){
-            //             msg = "否";
-            //         }
-            //         if (cellvar == 1){
-            //             msg = "是";
-            //         }
-            //
-            //         return msg;
-            //     }},
-            // {name: 'seatNumber', index: 'seatNumber', width: 20},
-            // {name: 'isAccidented', index: 'isAccidented', width: 20, editable: false,formatter: function (cellvar, options, rowObject) {
-            //         var msg = "";
-            //         if (cellvar == 0){
-            //             msg = "否";
-            //         }
-            //         if (cellvar == 1){
-            //             msg = "是";
-            //         }
-            //
-            //         return msg;
-            //     }},
             {name: 'createTime', index: 'createTime', width: 80,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     if (cellvar == "" || cellvar == undefined) {
                         return "";
@@ -76,12 +53,6 @@ Common.initOptions = function () {
 
                     return msg;
                 }}
-            //     ,
-            // {name: 'operations', index: 'operations', width: 100, sortable: false, formatter: function (cellValue, options, rowObject) {
-            //         var str = "";
-            //         return str;
-            //     }
-            // }
         ]
     };
     return options;
