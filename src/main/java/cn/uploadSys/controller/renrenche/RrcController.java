@@ -90,25 +90,6 @@ public class RrcController extends BaseController {
 
     }
 
-    @PostMapping("testInterface")
-    @ResponseBody
-    public Result testInterface() {
-        Rrc rrc = new Rrc();
-        rrc.setName("奥特曼");
-        rrc.setMobile("13698522214");
-        rrc.setCity("北京");
-        rrc.setBrand("布加迪");
-        rrc.setSeries("土狗");
-        rrc.setModel("1");
-        rrc.setKilometer("123.2");
-        rrc.setLicensedDateYear(2033);
-        rrc.setIsOperation('0');
-        rrc.setSeatNumber(2);
-        rrc.setIsAccidented('0');
-        rrcCommonService.interfaceC1(rrc);
-        return OK;
-
-    }
 
     @RequestMapping("export")
     @ResponseBody
