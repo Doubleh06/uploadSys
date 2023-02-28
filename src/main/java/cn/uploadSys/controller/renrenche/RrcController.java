@@ -32,6 +32,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -133,6 +134,19 @@ public class RrcController extends BaseController {
         //此处记得关闭输出Servlet流
         IoUtil.close(out);
 //        return OK;
+    }
+
+    @RequestMapping("setUrlAndToken")
+    @ResponseBody
+    public void setUrlAndToken(String url,String token){
+        rrcCommonService.setUrlAndToken(url,token);
+    }
+
+
+    @RequestMapping("getUrlAndToken")
+    @ResponseBody
+    public Map<String,String> getUrlAndToken(){
+        return rrcCommonService.getUrlAndToken();
     }
 
 }

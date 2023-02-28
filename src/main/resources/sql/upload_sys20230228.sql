@@ -1,0 +1,1 @@
+INSERT INTO `menu` VALUES (117, '之家-高质数据上传', '/upload/qczj/hq/list', 'hq', 2, NULL, NULL, 'zj', 1, 1, 1);

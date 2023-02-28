@@ -4,6 +4,7 @@ package cn.uploadSys.service.renrenche;
 import cn.hutool.core.lang.UUID;
 import cn.uploadSys.core.AbstractService;
 import cn.uploadSys.core.BaseDao;
+import cn.uploadSys.core.BusinessException;
 import cn.uploadSys.core.jqGrid.JqGridParam;
 import cn.uploadSys.dao.RrcCommonDao;
 import cn.uploadSys.dto.AllJqGridParam;
@@ -85,7 +86,12 @@ public class RrcCommonService  {
     }
 
     public void interfaceC1(Rrc rrc){
-        //C1通用接口
+        Object redisUrl = template.opsForValue().get("rrc:url");
+        Object redisToken = template.opsForValue().get("rrc:token");
+        if (null !=redisUrl && null!= redisToken){
+            String url = template.opsForValue().get("rrc:url").toString();
+            String token = template.opsForValue().get("rrc:token").toString();
+            //C1通用接口
             try {
                 Map<String, Object> body = new HashMap<>();
 
@@ -107,9 +113,6 @@ public class RrcCommonService  {
                 String id = UUID.randomUUID().toString();
                 rrc.setId(id);
                 rrc.setCreateTime(date);
-
-                String url = env.getProperty("rrc.c1.host");
-                String token = env.getProperty("rrc.c1.token");
 
                 body.put("token",token);
                 body.put("time",timestamp);
@@ -147,7 +150,24 @@ public class RrcCommonService  {
             } catch (Exception e) {
                 log.error("人人车C1接口调用异常,{}",e.getStackTrace());
             }
+        }else{
+            throw new BusinessException("人人车url和token获取异常");
+        }
+
     }
 
+
+    public void setUrlAndToken(String url,String token){
+        template.opsForValue().set("rrc:url",url);
+        template.opsForValue().set("rrc:token",token);
+    }
+    public Map<String,String> getUrlAndToken(){
+        String url = template.opsForValue().get("rrc:url").toString();
+        String token = template.opsForValue().get("rrc:token").toString();
+        Map<String,String> map = new HashMap<>();
+        map.put("url",url);
+        map.put("token",token);
+        return map;
+    }
 
 }
