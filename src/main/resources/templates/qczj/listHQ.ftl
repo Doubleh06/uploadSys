@@ -45,7 +45,7 @@
                                 <div class="form-inline">
                                     <div class="form-group col-lg-12">
                                         <label>手机号：</label>
-                                        <input type="text" class="form-control" id="phone" >
+                                        <input type="text" class="form-control" id="mobile" >
                                         <label>状态</label>
                                         <select class="form-control" id="status">
                                             <option class="option_1" value="" >全部</option>
@@ -59,8 +59,8 @@
                                         <label>项目号</label>
                                         <select class="form-control" id="appid">
                                             <option class="option_2" value="" >全部</option>
-                                            <option value="936">936</option>
-                                            <option value="977">977</option>
+                                            <option value="1312">1312</option>
+                                            <option value="1313">1313</option>
                                         </select>
                                         <div class="form-group" id="data_5">
                                             <label class="font-normal">选择日期：</label>
@@ -70,24 +70,26 @@
                                                 <input type="text" class="input-sm form-control" id="endDate" name="end" />
                                             </div>
                                         </div>
-                                        <button class="btn btn-success"  id="search" type="button" onclick="Qczj.search()">搜索</button>&nbsp
-                                        <button class="btn btn-success" type="button" onclick="Qczj.resetSearch()">重置</button>&nbsp
-                                        <button class="btn btn-primary" type="button" onclick="QczjHQ.downloadCity()">下载城市模版</button>
-                                        <button class="btn btn-primary" type="button" onclick="QczjHQ.downloadCar()">下载车辆信息版</button>
+                                        <button class="btn btn-success"  id="search" type="button" onclick="QczjHQ.search()">搜索</button>&nbsp
+                                        <button class="btn btn-success" type="button" onclick="QczjHQ.resetSearch()">重置</button>&nbsp
                                     </div>
                                     <p>&nbsp;</p>
                                     <div class="form-group col-lg-12">
-
-                                            <form  enctype="multipart/form-data" id="uploadForm">
-                                                <label>文件上传：</label>
-                                                <div class="fileinput fileinput-new" data-provides="fileinput">
-                                                    <span class="btn btn-default btn-file"><span class="fileinput-new">选择文件</span><span class="fileinput-exists">更改文件</span><input id="uploadInput" type="file" name="file"></span>
-                                                    <span class="fileinput-filename" id="fileinput-filename"></span>
-                                                    <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">&times;</a>
-                                                </div>
-                                                <button id="btn" class="btn btn-primary ladda-button" type="submit" >提交</button>
-                                            </form>
-                                        </div>
+                                        <form  enctype="multipart/form-data" id="uploadForm">
+                                            <label>文件上传：</label>
+                                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                <span class="btn btn-default btn-file"><span class="fileinput-new">选择文件</span><span class="fileinput-exists">更改文件</span><input id="uploadInput" type="file" name="file"></span>
+                                                <span class="fileinput-filename" id="fileinput-filename"></span>
+                                                <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">&times;</a>
+                                            </div>
+                                            <button id="btn" class="btn btn-primary ladda-button" type="submit" >提交</button>
+                                        </form>
+                                    </div>
+                                    <p>&nbsp;</p>
+                                    <div class="form-group col-lg-12">
+                                        <button class="btn btn-primary" type="button" onclick="QczjHQ.downloadCity()">下载城市模版</button>
+                                        <button class="btn btn-primary" type="button" onclick="QczjHQ.downloadCar()">下载车辆信息版</button>
+                                    </div>
                                 </div>
                             </div>
                             <br>

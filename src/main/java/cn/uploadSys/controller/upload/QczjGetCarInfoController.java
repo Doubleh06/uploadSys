@@ -47,8 +47,8 @@ public class QczjGetCarInfoController extends BaseController {
 
     @RequestMapping(value = "/exportCarInfo")
     @ResponseBody
-    public void exportCarInfo(HttpServletResponse response) throws Exception {
-        qczjGetCarInfoService.exportCarInfo(response);
+    public void exportCarInfo(HttpServletResponse response,String appId) throws Exception {
+        qczjGetCarInfoService.exportCarInfo(response,appId);
     }
 }
 

@@ -5,10 +5,11 @@ import cn.uploadSys.core.AbstractService;
 import cn.uploadSys.core.BaseDao;
 import cn.uploadSys.core.jqGrid.JqGridParam;
 import cn.uploadSys.dao.QczjDao;
+import cn.uploadSys.dao.QczjHQDao;
 import cn.uploadSys.dto.AllJqGridParam;
 import cn.uploadSys.dto.ArrangeClassJqGridParam;
 import cn.uploadSys.dto.StudentsJqGridParam;
-import cn.uploadSys.entity.upload.Qczj;
+import cn.uploadSys.entity.upload.QczjHQ;
 import cn.uploadSys.util.AjaxUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
@@ -24,18 +25,17 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
+
 
 @Service
 @Slf4j
-public class QczjHQService extends AbstractService<Qczj> {
+public class QczjHQService extends AbstractService<QczjHQ> {
 
 
     @Autowired
-    private QczjDao qczjDao;
+    private QczjHQDao qczjHQDao;
     @Autowired
     private Environment env;
     @Autowired
@@ -44,23 +44,23 @@ public class QczjHQService extends AbstractService<Qczj> {
 
 
     @Override
-    protected BaseDao<Qczj> getDao() {
-        return qczjDao;
+    protected BaseDao<QczjHQ> getDao() {
+        return qczjHQDao;
     }
 
     @Override
-    protected List<Qczj> selectByJqGridParam(JqGridParam jqGridParam) {
+    protected List<QczjHQ> selectByJqGridParam(JqGridParam jqGridParam) {
         StudentsJqGridParam param = (StudentsJqGridParam) jqGridParam;
         StringBuilder sql = new StringBuilder();
         sql.append("1=1 ");
         if (StringUtils.isNotEmpty(param.getSidx())) {
             sql.append("order by ").append(param.getSidx()).append(" ").append(param.getSord()).append("");
         }
-        return qczjDao.selectBySql("qczj",sql.toString());
+        return qczjHQDao.selectBySql("qczj",sql.toString());
     }
 
 
-    public PageInfo<Qczj> selectByJqGridParam(AllJqGridParam param ) throws ParseException {
+    public PageInfo<QczjHQ> selectByJqGridParam(AllJqGridParam param ) throws ParseException {
         PageHelper.startPage(param.getPage(), param.getRows());
         StringBuilder sql = new StringBuilder();
         sql.append(" where 1 = 1 ");
@@ -77,11 +77,11 @@ public class QczjHQService extends AbstractService<Qczj> {
             sql.append(" and uid = '").append(param.getAppid()).append("'");
         }
         sql.append(" ORDER BY create_time  desc ");
-        return new PageInfo<>(qczjDao.getLeadsList(sql.toString()));
+        return new PageInfo<>(qczjHQDao.getLeadsList(sql.toString()));
     }
 
 
-    public List<Qczj> selectByJqGridParamNoPage(AllJqGridParam param ) throws ParseException {
+    public List<QczjHQ> selectByJqGridParamNoPage(AllJqGridParam param ) throws ParseException {
         StringBuilder sql = new StringBuilder();
         sql.append(" where 1 = 1 ");
         if(StringUtils.isNotEmpty(param.getPhone())) {
@@ -97,30 +97,30 @@ public class QczjHQService extends AbstractService<Qczj> {
             sql.append(" and uid = '").append(param.getAppid()).append("'");
         }
         sql.append(" ORDER BY create_time  desc ");
-        return qczjDao.getLeadsList(sql.toString());
+        return qczjHQDao.getLeadsList(sql.toString());
     }
 
     public PageInfo<Map> selectByJqGridParam(ArrangeClassJqGridParam param){
         PageHelper.startPage(param.getPage(), param.getRows());
-        return new PageInfo<>(qczjDao.getStudentsByClassesId(param.getId()));
+        return new PageInfo<>(qczjHQDao.getStudentsByClassesId(param.getId()));
     }
 
-    public int insert(Qczj qczj){
-        return qczjDao.insert(qczj);
+    public int insert(QczjHQ qczjHQ){
+        return qczjHQDao.insert(qczjHQ);
     }
 
 
     public void getUnfinishedInstance(){
-        List<Qczj> qczjs = qczjDao.getUnfinishedInstance();
+        List<QczjHQ> qczjs = qczjHQDao.getUnfinishedInstance();
         log.info("查询状态例子总数为:{}",qczjs.size());
         qczjs.forEach(qczj -> {
-            getStatus(qczj.getCclid(),qczj.getUid());
+//            getStatus(qczj.getCclid(),qczj.getUid());
         });
     }
 
     public void getStatus(String cclid,String appid) {
         //获取token_access
-        String accessToken = getAccessToken();
+//        String accessToken = getAccessToken();
 
         String statusHost = env.getProperty("qczj.getStatus.access_host");
         String statusPath = env.getProperty("qczj.getStatus.access_path");
@@ -128,7 +128,7 @@ public class QczjHQService extends AbstractService<Qczj> {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("appid", appid));
         params.add(new BasicNameValuePair("cclid", cclid));
-        params.add(new BasicNameValuePair("access_token", accessToken));
+//        params.add(new BasicNameValuePair("access_token", accessToken));
         params.add(new BasicNameValuePair("querykey", env.getProperty("qczj.getStatus.queryKey")));
 
         String result = AjaxUtil.doGet("https",statusHost,statusPath,params);
@@ -138,53 +138,16 @@ public class QczjHQService extends AbstractService<Qczj> {
             String returnCode = jsonObject.getString("returncode");
             String status = jsonObject.getString("status");
             if (StringUtils.isNotEmpty(returnCode) && returnCode.equals("0")&&StringUtils.isNotEmpty(status)) {
-                qczjDao.updateByCclid(Integer.parseInt(status),cclid,null);
+                qczjHQDao.updateByCclid(Integer.parseInt(status),cclid,null);
             }
             if (StringUtils.isNotEmpty(returnCode) && returnCode.equals("110")) {
                 String message = jsonObject.getString("message");
-                qczjDao.updateByCclid(Integer.parseInt("1"),cclid,message);
+                qczjHQDao.updateByCclid(Integer.parseInt("1"),cclid,message);
             }
 
         }
     }
 
-    public String getAccessToken() {
-        //获取token_access
-        String accessToken = "";
-        Object obj = template.opsForValue().get("getStatusAccessToken");
-        if (null !=  obj&& StringUtils.isNotBlank(obj.toString())) {
-            accessToken = obj.toString();
-        }else{
-            String access_host = env.getProperty("qczj.access_host");
-            String access_path = env.getProperty("qczj.access_path");
-
-            HashMap<String,Object> accessHeader = new HashMap();
-            accessHeader.put("Content-Type","application/json;charset=utf-8");
-
-            JSONObject accessBody = new JSONObject();
-            accessBody.put("client_id",env.getProperty("qczj.getStatus.client_id"));
-            accessBody.put("client_secret",env.getProperty("qczj.getStatus.client_secret"));
-            accessBody.put("response_type","token");
-
-            String accessResult = AjaxUtil.doPost("https",access_host,access_path,accessBody.toString(),accessHeader);
-            JSONObject json = JSONObject.parseObject(accessResult);
-            accessToken = json.getJSONObject("data").getString("access_token");
-            long expiresIn = json.getJSONObject("data").getLong("expires_in");//失效时间
-            try {
-                template.opsForValue().set("getStatusAccessToken", accessToken,expiresIn, TimeUnit.SECONDS);
-                log.info("存入redis成功，key：{}，value：{}", "getStatusAccessToken", accessToken);
-            } catch (Exception e) {
-                log.error("存入redis失败，key：{}，value：{}", "getStatusAccessToken", accessToken);
-                e.printStackTrace();
-            }
-        }
-
-       return accessToken;
-    }
-
-    public void updateVedioStatusByCclid(String cclid,Integer vedioStatus){
-        qczjDao.updateVedioStatusByCclid(vedioStatus,cclid);
-    }
 
 
     

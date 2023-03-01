@@ -10,6 +10,8 @@ import cn.uploadSys.core.Result;
 import cn.uploadSys.core.jqGrid.JqGridResult;
 import cn.uploadSys.dto.AllJqGridParam;
 import cn.uploadSys.entity.upload.Qczj;
+import cn.uploadSys.entity.upload.QczjHQ;
+import cn.uploadSys.service.upload.QczjHQService;
 import cn.uploadSys.service.upload.QczjService;
 import cn.uploadSys.util.AjaxUtil;
 import com.alibaba.fastjson.JSONObject;
@@ -46,7 +48,7 @@ import java.util.Map;
 public class QczjHQController extends BaseController {
 
    @Autowired
-   private QczjService qczjService;
+   private QczjHQService qczjHQService;
    @Autowired
    private Environment env;
 
@@ -62,8 +64,8 @@ public class QczjHQController extends BaseController {
     @RequestMapping(value = "/grid")
     @ResponseBody
     public Result classesGrid(AllJqGridParam param) throws ParseException {
-        PageInfo<Qczj> pageInfo = qczjService.selectByJqGridParam(param);
-        JqGridResult<Qczj> result = new JqGridResult<>();
+        PageInfo<QczjHQ> pageInfo = qczjHQService.selectByJqGridParam(param);
+        JqGridResult<QczjHQ> result = new JqGridResult<>();
         //当前页
         result.setPage(pageInfo.getPageNum());
         //数据总数
@@ -108,80 +110,58 @@ public class QczjHQController extends BaseController {
         String import_url = env.getProperty("qczj.url")+accessToken;
 
         //轮训每条数据，进行对接
-        List<Qczj> qczjs = reader.read(1,2,Qczj.class);
+        List<QczjHQ> qczjs = reader.read(1,2,QczjHQ.class);
         qczjs.forEach(qczj -> {
             try {
-                Map<String, Object> body = new HashMap<>();
-
-                String phone = qczj.getPhone();
-                String uid = qczj.getUid();
-                String cityName = qczj.getCityName();
-                if (StringUtils.isNotEmpty(phone) && StringUtils.isNotEmpty(uid) && StringUtils.isNotEmpty(cityName)) {
-                    body.put("access_token",accessToken);
-                    body.put("mobile",phone);
-                    body.put("appid",uid);
-                    body.put("cityname", URLEncoder.encode(cityName,"UTF-8"));
-                }else{
-                    qczj.setStatus(1);
-                    qczj.setCreateTime(new Date());
-                    qczj.setMessage("缺少必要参数");
-                    qczjService.insert(qczj);
-                    return ;
-                }
-
-                String cid = qczj.getCityCode();
-                if (StringUtils.isNotEmpty(cid)) {
-                    body.put("cid",qczj.getCityCode());
-                }
-                String brandName = qczj.getBrandName();
-                if (StringUtils.isNotEmpty(brandName)) {
-                    body.put("brandname", URLEncoder.encode(brandName,"UTF-8"));
-                }
-                String specName = qczj.getCarSeriesName();
-                if (StringUtils.isNotEmpty(specName)) {
-                    body.put("specname", URLEncoder.encode(specName,"UTF-8"));
-                }
-                String seriesName = qczj.getCarName();
-                if (StringUtils.isNotEmpty(seriesName)) {
-                    body.put("seriesname", URLEncoder.encode(seriesName,"UTF-8"));
-                }
-                String mileage = qczj.getKm();
-                if (StringUtils.isNotEmpty(mileage)) {
-                    body.put("mileage", qczj.getKm());
-                }
-                String firstregtime = qczj.getFirstregtime();
-                if (StringUtils.isNotEmpty(firstregtime)) {
-                    body.put("firstregtime", URLEncoder.encode(firstregtime,"UTF-8"));
-                }
-
-                HttpResponse<String> upload = Unirest.post(import_url)
-                        .header("Content-Type", "application/x-www-form-urlencoded")
-                        .header("accept", "application/json")
-                        .fields(body)
-                        .asString();
-
-                String result = upload.getBody().toString();
-
-                if (StringUtils.isNotEmpty(result) && result.contains("error_description")) {
-                    JSONObject jsonObject = JSONObject.parseObject(result);
-                    String errorDescription = jsonObject.getString("error_description");
-                    qczj.setStatus(1);
-                    qczj.setMessage(errorDescription);
-                }else{
-                    JSONObject jsonObject = JSONObject.parseObject(result);
-                    String returnCode = jsonObject.getString("returncode");
-                    String message = jsonObject.getString("message");
-                    if (StringUtils.isNotEmpty(returnCode) && returnCode.equals("0")) {
-                        String cclid = jsonObject.getString("cclid");
-                        qczj.setStatus(0);
-                        qczj.setCclid(cclid);
-                    }else{
-                        qczj.setStatus(1);
-                        qczj.setMessage(message);
-                    }
-                }
-                qczj.setCreateTime(new Date());
-                qczjService.insert(qczj);
+//                Map<String, Object> body = new HashMap<>();
+//
+//                String phone = qczj.getPhone();
+//                String uid = qczj.getUid();
+//                String cityName = qczj.getCityName();
+//                if (StringUtils.isNotEmpty(phone) && StringUtils.isNotEmpty(uid) && StringUtils.isNotEmpty(cityName)) {
+//                    body.put("access_token",accessToken);
+//                    body.put("mobile",phone);
+//                    body.put("appid",uid);
+//                    body.put("cityname", URLEncoder.encode(cityName,"UTF-8"));
+//                }else{
+//                    qczj.setStatus(1);
+//                    qczj.setCreateTime(new Date());
+//                    qczjHQService.insert(qczj);
+//                    return ;
+//                }
+//
+//
+//                String firstregtime = qczj.getFirstregtime();
+//                if (StringUtils.isNotEmpty(firstregtime)) {
+//                    body.put("firstregtime", URLEncoder.encode(firstregtime,"UTF-8"));
+//                }
+//
+//                HttpResponse<String> upload = Unirest.post(import_url)
+//                        .header("Content-Type", "application/x-www-form-urlencoded")
+//                        .header("accept", "application/json")
+//                        .fields(body)
+//                        .asString();
+//
+//                String result = upload.getBody().toString();
+//
+//                if (StringUtils.isNotEmpty(result) && result.contains("error_description")) {
+//                    JSONObject jsonObject = JSONObject.parseObject(result);
+//                    String errorDescription = jsonObject.getString("error_description");
+//                    qczj.setStatus(1);
+//                }else{
+//                    JSONObject jsonObject = JSONObject.parseObject(result);
+//                    String returnCode = jsonObject.getString("returncode");
+//                    String message = jsonObject.getString("message");
+//                    if (StringUtils.isNotEmpty(returnCode) && returnCode.equals("0")) {
+//                        String cclid = jsonObject.getString("cclid");
+//                        qczj.setStatus(0);
+//                        qczj.setCclid(cclid);
+//                    }else{
+//                        qczj.setStatus(1);
+//                    }
+//                }
+//                qczj.setCreateTime(new Date());
+//                qczjHQService.insert(qczj);
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
@@ -190,10 +170,12 @@ public class QczjHQController extends BaseController {
         return OK;
 
     }
+
+
     @RequestMapping("export")
     @ResponseBody
     public Result exportFile(AllJqGridParam param, HttpServletResponse response) throws IOException, ParseException {
-        List<Qczj> rows = qczjService.selectByJqGridParamNoPage(param);
+        List<QczjHQ> rows = qczjHQService.selectByJqGridParamNoPage(param);
 
         // 通过工具类创建writer，默认创建xls格式
         ExcelWriter writer = ExcelUtil.getWriter();
@@ -221,7 +203,7 @@ public class QczjHQController extends BaseController {
     @RequestMapping("getStatus")
     @ResponseBody
     public Result getStatus(){
-        qczjService.getUnfinishedInstance();
+        qczjHQService.getUnfinishedInstance();
         return OK;
     }
 

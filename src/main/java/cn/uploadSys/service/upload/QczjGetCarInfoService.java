@@ -3,6 +3,7 @@ package cn.uploadSys.service.upload;
 
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
+import cn.uploadSys.core.BusinessException;
 import cn.uploadSys.entity.VO.QczjCarInfoVO;
 import cn.uploadSys.util.AdaptiveWidthUtils;
 import com.alibaba.fastjson.JSON;
@@ -28,6 +29,9 @@ import java.util.List;
 @Service
 @Slf4j
 public class QczjGetCarInfoService{
+
+    private static final String stQueryKey = "mxoVEqZ6Two=";
+    private static final String ndQueryKey = "6zglgujmr+8=";
 
     @Autowired
     private Environment env;
@@ -110,9 +114,15 @@ public class QczjGetCarInfoService{
         return allProducts;
     }
 
-    public void exportCarInfo(HttpServletResponse response) throws Exception {
-       String appId = "1312";
-       String queryKey = "mxoVEqZ6Two=";
+    public void exportCarInfo(HttpServletResponse response,String appId) throws Exception {
+        String queryKey = "";
+        log.info("appId:{}",appId);
+        switch (appId){
+            case "1312" : queryKey = stQueryKey;break;
+            case "1313" : queryKey = ndQueryKey;break;
+            default: throw new BusinessException("appId 或 queryKey异常");
+        }
+
 
         String column1Name1 = "车品牌代码";
         String column1Name2 = "车品牌名称";

@@ -82,17 +82,11 @@ public class QczjQueryAreaService{
         ExcelWriter writer= ExcelUtil.getWriter(true);
 
         // 设置表头的宽度
-//        writer.setColumnWidth(0, 20);
         writer.addHeaderAlias("pid",column1Name1);
-//        writer.setColumnWidth(1, 15);
         writer.addHeaderAlias("pname",column1Name2);
-//        writer.setColumnWidth(0, 20);
         writer.addHeaderAlias("cid",column1Name3);
-//        writer.setColumnWidth(1, 15);
         writer.addHeaderAlias("cname",column1Name4);
-//        writer.setColumnWidth(0, 20);
         writer.addHeaderAlias("countyid",column1Name5);
-//        writer.setColumnWidth(1, 15);
         writer.addHeaderAlias("countyname",column1Name6);
 
         // 默认的，未添加alias的属性也会写出，如果想只写出加了别名的字段，可以调用此方法排除之

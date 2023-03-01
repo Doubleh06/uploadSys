@@ -12,14 +12,14 @@ QczjHQ.initOptions = function () {
     var options = {
         url : "/upload/qczj/hq/grid",
         autowidth:true,
-        colNames: ['手机号','城市ID','城市名称','省份名称','品牌名称','项目号','上传状态','信息','创建时间'],
+        colNames: ['手机号','城市ID','车辆品牌id','车系id','车型id','项目号','上传状态','信息','创建时间',"操作"],
         colModel: [
-            {name: 'phone', index: 'phone', width: 40},
-            {name: 'cityCode', index: 'cityCode', width: 30},
-            {name: 'cityName', index: 'cityName', width: 40},
-            {name: 'province', index: 'province', width: 40},
-            {name: 'brandName', index: 'brandName', width: 60},
-            {name: 'uid', index: 'uid', width: 60},
+            {name: 'mobile', index: 'mobile', width: 40},
+            {name: 'countyid', index: 'countyid', width: 30},
+            {name: 'brandid', index: 'brandid', width: 40},
+            {name: 'seriesid', index: 'seriesid', width: 40},
+            {name: 'specid', index: 'specid', width: 40},
+            {name: 'appid', index: 'appid', width: 30},
             {name: 'status', index: 'status', width: 60,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     var msg = "";
                     if (cellvar == 0){
@@ -49,17 +49,17 @@ QczjHQ.initOptions = function () {
                     }
                     var da = new Date(cellvar);
                     return dateFtt("yyyy-MM-dd hh:mm:ss", da);
-                }}
-        //     {name: 'operations', index: 'operations', width: 200, sortable: false, formatter: function (cellValue, options, rowObject) {
-        //         var id = "'"+rowObject["id"]+"'";
-        //         var str = "";
-        //         str += '<input type="button" class=" btn btn-sm btn-info"  value="编  辑" onclick="Qczj.modify(' + id + ')"/>&nbsp;';
-        //         str += '<input type="button" class=" btn btn-sm btn-warning"  value="删  除" onclick="Qczj.delete(' + id + ')"/>&nbsp;';
-        //         str += '<input type="button" class=" btn btn-sm btn-primary"  value="安排学员" onclick="Qczj.arrangeStudents(' + id + ')"/>&nbsp;';
-        //
-        //         return str;
-        //     }
-        //     }
+                }},
+            {name: 'operations', index: 'operations', width: 50, sortable: false, formatter: function (cellValue, options, rowObject) {
+                var id = "'"+rowObject["id"]+"'";
+                var str = "";
+                str += '<input type="button" class=" btn btn-sm btn-info"  value="申  诉" onclick="QczjHQ.appeal(' + id + ')"/>&nbsp;';
+                // str += '<input type="button" class=" btn btn-sm btn-warning"  value="删  除" onclick="Qczj.delete(' + id + ')"/>&nbsp;';
+                // str += '<input type="button" class=" btn btn-sm btn-primary"  value="安排学员" onclick="Qczj.arrangeStudents(' + id + ')"/>&nbsp;';
+
+                return str;
+            }
+            }
         ]
     };
     return options;
@@ -70,7 +70,7 @@ QczjHQ.initOptions = function () {
  */
 QczjHQ.search = function () {
     var searchParam = {};
-    searchParam.phone = $("#phone").val();
+    searchParam.mobile = $("#mobile").val();
     searchParam.startDate = $("#startDate").val();
     searchParam.endDate = $("#endDate").val();
     searchParam.status = $("#status").val();
@@ -105,7 +105,12 @@ QczjHQ.downloadCity = function () {
 QczjHQ.downloadCar = function () {
     window.location.href = "/upload/qczj/exportCarInfo";
 };
+/**
+ * 申诉
+ */
+QczjHQ.appeal = function (id) {
 
+};
 
 var uploadForm = document.querySelector("#uploadForm");
 var uploadInput = document.querySelector("#uploadInput");
