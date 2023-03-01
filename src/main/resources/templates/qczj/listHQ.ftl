@@ -72,7 +72,8 @@
                                         </div>
                                         <button class="btn btn-success"  id="search" type="button" onclick="Qczj.search()">搜索</button>&nbsp
                                         <button class="btn btn-success" type="button" onclick="Qczj.resetSearch()">重置</button>&nbsp
-                                        <button class="btn btn-primary" type="button" onclick="QczjHQ.download()">下载</button>
+                                        <button class="btn btn-primary" type="button" onclick="QczjHQ.downloadCity()">下载城市模版</button>
+                                        <button class="btn btn-primary" type="button" onclick="QczjHQ.downloadCar()">下载车辆信息版</button>
                                     </div>
                                     <p>&nbsp;</p>
                                     <div class="form-group col-lg-12">

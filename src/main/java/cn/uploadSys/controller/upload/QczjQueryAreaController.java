@@ -27,14 +27,6 @@ public class QczjQueryAreaController extends BaseController {
     private QczjQueryAreaService qczjQueryAreaService;
 
 
-
-
-    @RequestMapping(value = "/queryArea")
-    @ResponseBody
-    public Object queryArea(){
-        return qczjQueryAreaService.queryArea();
-    }
-
     @GetMapping("/exportArea")
     public void exportTemplate(HttpServletResponse response) throws Exception {
         qczjQueryAreaService.exportArea(response);

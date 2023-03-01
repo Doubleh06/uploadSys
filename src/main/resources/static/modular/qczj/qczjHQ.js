@@ -93,10 +93,17 @@ QczjHQ.resetSearch = function () {
 };
 
 /**
- * 重置搜索
+ * 下载城市模版
  */
-QczjHQ.download = function () {
+QczjHQ.downloadCity = function () {
     window.location.href = "/upload/qczj/exportArea";
+};
+
+/**
+ * 下载车模版
+ */
+QczjHQ.downloadCar = function () {
+    window.location.href = "/upload/qczj/exportCarInfo";
 };
 
 

@@ -89,8 +89,8 @@ public class RrcCommonService  {
         Object redisUrl = template.opsForValue().get("rrc:url");
         Object redisToken = template.opsForValue().get("rrc:token");
         if (null !=redisUrl && null!= redisToken){
-            String url = template.opsForValue().get("rrc:url").toString();
-            String token = template.opsForValue().get("rrc:token").toString();
+            String url = redisUrl.toString();
+            String token = redisToken.toString();
             //C1通用接口
             try {
                 Map<String, Object> body = new HashMap<>();
@@ -119,6 +119,8 @@ public class RrcCommonService  {
                 String sign = DigestUtils.md5Hex(jsonObject.toJSONString()+token+timestamp);
                 body.put("sign", sign);
                 body.put("data",jsonObject);
+
+                System.out.println("body报文:"+body.toString());
 
                 HttpResponse<String> upload = Unirest.post(url)
                         .header("Content-Type", "application/x-www-form-urlencoded")
