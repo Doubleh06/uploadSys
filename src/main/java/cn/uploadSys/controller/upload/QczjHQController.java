@@ -18,6 +18,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,92 +82,7 @@ public class QczjHQController extends BaseController {
     @PostMapping("import")
     @ResponseBody
     public Result importFile(@RequestParam("file") MultipartFile file) throws IOException {
-        //fileName 文件名
-        String fileName = file.getOriginalFilename();
-        boolean xlsx = fileName.endsWith(".xlsx");
-        if (!xlsx) {
-            log.error("请上传以.xlsx结尾的文件");
-        }
-        //得到文件流
-        InputStream inputStream = file.getInputStream();
-        ExcelReader reader = ExcelUtil.getReader(inputStream);
-
-
-        //获取token_access
-        String access_host = env.getProperty("qczj.access_host");
-        String access_path = env.getProperty("qczj.access_path");
-
-        JSONObject accessBody = new JSONObject();
-        accessBody.put("client_id",env.getProperty("qczj.client_id"));
-        accessBody.put("client_secret",env.getProperty("qczj.client_secret"));
-        accessBody.put("response_type","token");
-        HashMap<String,Object> accessHeader = new HashMap();
-        accessHeader.put("Content-Type","application/json;charset=utf-8");
-
-        String accessResult = AjaxUtil.doPost("https",access_host,access_path,accessBody.toString(),accessHeader);
-        JSONObject json = JSONObject.parseObject(accessResult);
-        String accessToken = json.getJSONObject("data").getString("access_token");
-
-        String import_url = env.getProperty("qczj.url")+accessToken;
-
-        //轮训每条数据，进行对接
-        List<QczjHQ> qczjs = reader.read(1,2,QczjHQ.class);
-        qczjs.forEach(qczj -> {
-            try {
-//                Map<String, Object> body = new HashMap<>();
-//
-//                String phone = qczj.getPhone();
-//                String uid = qczj.getUid();
-//                String cityName = qczj.getCityName();
-//                if (StringUtils.isNotEmpty(phone) && StringUtils.isNotEmpty(uid) && StringUtils.isNotEmpty(cityName)) {
-//                    body.put("access_token",accessToken);
-//                    body.put("mobile",phone);
-//                    body.put("appid",uid);
-//                    body.put("cityname", URLEncoder.encode(cityName,"UTF-8"));
-//                }else{
-//                    qczj.setStatus(1);
-//                    qczj.setCreateTime(new Date());
-//                    qczjHQService.insert(qczj);
-//                    return ;
-//                }
-//
-//
-//                String firstregtime = qczj.getFirstregtime();
-//                if (StringUtils.isNotEmpty(firstregtime)) {
-//                    body.put("firstregtime", URLEncoder.encode(firstregtime,"UTF-8"));
-//                }
-//
-//                HttpResponse<String> upload = Unirest.post(import_url)
-//                        .header("Content-Type", "application/x-www-form-urlencoded")
-//                        .header("accept", "application/json")
-//                        .fields(body)
-//                        .asString();
-//
-//                String result = upload.getBody().toString();
-//
-//                if (StringUtils.isNotEmpty(result) && result.contains("error_description")) {
-//                    JSONObject jsonObject = JSONObject.parseObject(result);
-//                    String errorDescription = jsonObject.getString("error_description");
-//                    qczj.setStatus(1);
-//                }else{
-//                    JSONObject jsonObject = JSONObject.parseObject(result);
-//                    String returnCode = jsonObject.getString("returncode");
-//                    String message = jsonObject.getString("message");
-//                    if (StringUtils.isNotEmpty(returnCode) && returnCode.equals("0")) {
-//                        String cclid = jsonObject.getString("cclid");
-//                        qczj.setStatus(0);
-//                        qczj.setCclid(cclid);
-//                    }else{
-//                        qczj.setStatus(1);
-//                    }
-//                }
-//                qczj.setCreateTime(new Date());
-//                qczjHQService.insert(qczj);
-            } catch (Exception e) {
-                log.error(e.getMessage());
-            }
-        });
-
+        qczjHQService.importFile(file);
         return OK;
 
     }
@@ -200,12 +116,24 @@ public class QczjHQController extends BaseController {
         return OK;
     }
 
-    @RequestMapping("getStatus")
+    @RequestMapping("getStatusV3")
     @ResponseBody
     public Result getStatus(){
         qczjHQService.getUnfinishedInstance();
         return OK;
     }
 
+    @RequestMapping("test")
+    @ResponseBody
+    public Result getStatusV3(String cclid,String appId) throws UnirestException {
+        qczjHQService.getStatusV3(cclid,appId);
+        return OK;
+    }
 
+    @RequestMapping("appeal")
+    @ResponseBody
+    public Result appeal(String cclid,String appId) throws UnirestException {
+        qczjHQService.getStatusV3(cclid,appId);
+        return OK;
+    }
 }

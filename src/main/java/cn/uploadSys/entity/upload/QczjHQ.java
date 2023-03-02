@@ -3,6 +3,7 @@ package cn.uploadSys.entity.upload;
 import cn.uploadSys.entity.BaseEntity;
 import lombok.Data;
 
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -13,8 +14,10 @@ import java.util.Date;
  * @date 2021/11/29 下午12:45
  */
 @Data
+@Table(name = "qczj_hq")
 public class QczjHQ extends BaseEntity {
     private String mobile;
+    private Integer cid;
     private Integer countyid;
     private String brandid;
     private String seriesid;

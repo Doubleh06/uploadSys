@@ -2,7 +2,7 @@ INSERT INTO `menu` VALUES (117, '之家-高质数据上传', '/upload/qczj/hq/li
 
 DROP TABLE IF EXISTS `qczj_hq`;
 CREATE TABLE `qczj_hq` (
-  `id` varchar(50) COLLATE utf8_bin NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `mobile` varchar(11) COLLATE utf8_bin DEFAULT NULL,
   `countyid` int DEFAULT NULL,
   `brandid` varchar(50) COLLATE utf8_bin DEFAULT NULL,
@@ -13,5 +13,9 @@ CREATE TABLE `qczj_hq` (
   `mileage` decimal(6,2) DEFAULT NULL,
   `appid` varchar(10) COLLATE utf8_bin DEFAULT NULL,
   `cclid` varchar(10) COLLATE utf8_bin DEFAULT NULL,
+  `status` int DEFAULT NULL COMMENT '//0:成功 1：失败\n',
+  `create_time` datetime DEFAULT NULL,
+  `modify_time` datetime DEFAULT NULL,
+  `cid` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_bin;

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +37,6 @@ public class QczjGetCarInfoService{
     @Autowired
     private Environment env;
     @Autowired
-    private RedisTemplate<String, Object> template;
-    @Autowired
     private QczjGetAccessTokenService qczjGetAccessTokenService;
 
 
@@ -48,15 +47,15 @@ public class QczjGetCarInfoService{
             String clientSecret = env.getProperty("qczj.getCarBrand.client_secret");
             String url = env.getProperty("qczj.getCarBrand.url");
             String accessToken = qczjGetAccessTokenService.getAccessToken(clientId,clientSecret,"getCarBrandsAccessToken");
-
-            HttpResponse<JsonNode> json = Unirest.get(String.format(url, accessToken, appId, queryKey)).asJson();
+            String importUrl = String.format(url, accessToken, appId, URLEncoder.encode(queryKey,"UTF-8"));
+            HttpResponse<JsonNode> json = Unirest.get(importUrl).asJson();
             JSONArray arrays = json.getBody().getObject().getJSONObject("result").getJSONArray("brandlist");
             List<QczjCarInfoVO> brandsVOS = new ArrayList<>();
             arrays.forEach((array)->{
                  brandsVOS.addAll(JSON.parseArray(JSON.parseObject(array.toString()).getJSONArray("list").toString(), QczjCarInfoVO.class));
             });
             return brandsVOS;
-        } catch (UnirestException e) {
+        } catch (Exception e) {
             log.info("获取车品牌异常");
         }
         return null;
@@ -70,11 +69,11 @@ public class QczjGetCarInfoService{
             String url = env.getProperty("qczj.getCarSeries.url");
             String accessToken = qczjGetAccessTokenService.getAccessToken(clientId,clientSecret,"getCarSeriesAccessToken");
 
-            String getUrl = String.format(url, accessToken, appId, queryKey, brandId);
+            String getUrl = String.format(url, accessToken, appId, URLEncoder.encode(queryKey,"UTF-8"), brandId);
             HttpResponse<JsonNode> json = Unirest.get(getUrl).asJson();
             return JSON.parseArray(json.getBody().getObject().getJSONObject("result").getJSONArray("serieslist").toString(), QczjCarInfoVO.class);
 
-        } catch (UnirestException e) {
+        } catch (Exception e) {
             log.info("获取车系牌异常");
         }
         return null;
@@ -97,10 +96,10 @@ public class QczjGetCarInfoService{
             String url = env.getProperty("qczj.getCarProduct.url");
             String accessToken = qczjGetAccessTokenService.getAccessToken(clientId,clientSecret,"getCarProductsAccessToken");
 
-            String getUrl = String.format(url, accessToken, appId, queryKey, seriesId);
+            String getUrl = String.format(url, accessToken, appId, URLEncoder.encode(queryKey,"UTF-8"), seriesId);
             HttpResponse<JsonNode> json = Unirest.get(getUrl).asJson();
             return JSON.parseArray(json.getBody().getObject().getJSONObject("result").getJSONArray("productlist").toString(), QczjCarInfoVO.class);
-        } catch (UnirestException e) {
+        } catch (Exception e) {
             log.info("获取车型牌异常");
         }
         return null;

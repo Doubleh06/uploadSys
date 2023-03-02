@@ -12,7 +12,7 @@ QczjHQ.initOptions = function () {
     var options = {
         url : "/upload/qczj/hq/grid",
         autowidth:true,
-        colNames: ['手机号','城市ID','车辆品牌id','车系id','车型id','项目号','上传状态','信息','创建时间',"操作"],
+        colNames: ['手机号','城市ID','车辆品牌id','车系id','车型id','项目号','上传状态','信息','创建时间'],
         colModel: [
             {name: 'mobile', index: 'mobile', width: 40},
             {name: 'countyid', index: 'countyid', width: 30},
@@ -49,17 +49,18 @@ QczjHQ.initOptions = function () {
                     }
                     var da = new Date(cellvar);
                     return dateFtt("yyyy-MM-dd hh:mm:ss", da);
-                }},
-            {name: 'operations', index: 'operations', width: 50, sortable: false, formatter: function (cellValue, options, rowObject) {
-                var id = "'"+rowObject["id"]+"'";
-                var str = "";
-                str += '<input type="button" class=" btn btn-sm btn-info"  value="申  诉" onclick="QczjHQ.appeal(' + id + ')"/>&nbsp;';
-                // str += '<input type="button" class=" btn btn-sm btn-warning"  value="删  除" onclick="Qczj.delete(' + id + ')"/>&nbsp;';
-                // str += '<input type="button" class=" btn btn-sm btn-primary"  value="安排学员" onclick="Qczj.arrangeStudents(' + id + ')"/>&nbsp;';
-
-                return str;
-            }
-            }
+                }}
+            //     ,
+            // {name: 'operations', index: 'operations', width: 50, sortable: false, formatter: function (cellValue, options, rowObject) {
+            //     var id = "'"+rowObject["id"]+"'";
+            //     var str = "";
+            //     str += '<input type="button" class=" btn btn-sm btn-info"  value="申  诉" onclick="QczjHQ.appeal(' + id + ')"/>&nbsp;';
+            //     // str += '<input type="button" class=" btn btn-sm btn-warning"  value="删  除" onclick="Qczj.delete(' + id + ')"/>&nbsp;';
+            //     // str += '<input type="button" class=" btn btn-sm btn-primary"  value="安排学员" onclick="Qczj.arrangeStudents(' + id + ')"/>&nbsp;';
+            //
+            //     return str;
+            // }
+            // }
         ]
     };
     return options;
@@ -70,7 +71,7 @@ QczjHQ.initOptions = function () {
  */
 QczjHQ.search = function () {
     var searchParam = {};
-    searchParam.mobile = $("#mobile").val();
+    searchParam.phone = $("#mobile").val();
     searchParam.startDate = $("#startDate").val();
     searchParam.endDate = $("#endDate").val();
     searchParam.status = $("#status").val();
@@ -82,7 +83,7 @@ QczjHQ.search = function () {
  * 重置搜索
  */
 QczjHQ.resetSearch = function () {
-    $("#phone").val("");
+    $("#mobile").val("");
     $("#startDate").val("");
     $("#endDate").val("");
     $(".option_1").attr("selected",true);
@@ -103,7 +104,13 @@ QczjHQ.downloadCity = function () {
  * 下载车模版
  */
 QczjHQ.downloadCar = function () {
-    window.location.href = "/upload/qczj/exportCarInfo";
+    var appid = $("#appid").val();
+    if (!appid){
+        error("项目号不能为空");
+    }else {
+        window.location.href = "/upload/qczj/exportCarInfo?appId="+appid;
+    }
+
 };
 /**
  * 申诉
