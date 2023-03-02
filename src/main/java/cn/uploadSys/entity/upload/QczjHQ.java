@@ -2,6 +2,7 @@ package cn.uploadSys.entity.upload;
 
 import cn.uploadSys.entity.BaseEntity;
 import lombok.Data;
+import org.apache.commons.math3.genetics.Fitness;
 
 import javax.persistence.Table;
 import java.math.BigDecimal;
@@ -30,4 +31,7 @@ public class QczjHQ extends BaseEntity {
     private String cclid;
     private Date createTime;
     private Date modifyTime;
+    private Integer distributeStatus;
+    private Integer appealStatus;
+    private String message;
 }

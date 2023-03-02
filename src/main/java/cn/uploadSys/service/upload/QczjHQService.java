@@ -123,37 +123,34 @@ public class QczjHQService extends AbstractService<QczjHQ> {
 
 
     public void getUnfinishedInstance(){
-        List<QczjHQ> qczjs = qczjHQDao.getUnfinishedInstance();
-        log.info("查询状态例子总数为:{}",qczjs.size());
-        qczjs.forEach(qczj -> {
-//            getStatus(qczj.getCclid(),qczj.getUid());
+        List<QczjHQ> qczjHQS = qczjHQDao.getUnfinishedInstance();
+        log.info("查询状态例子总数为:{}",qczjHQS.size());
+        qczjHQS.forEach(qczjHQ -> {
+            getStatusV3(qczjHQ.getCclid(),qczjHQ.getAppid());
         });
     }
-    public void getStatusV3(String cclid,String appId) throws UnirestException {
-        //获取token_access
-        String clientId = env.getProperty("qczj.getStatusV3.client_id");
-        String clientSecret = env.getProperty("qczj.getStatusV3.client_secret");
-        String accessToken = qczjGetAccessTokenService.getAccessToken(clientId,clientSecret,"getStatusV3AccessToken");
-        String url = env.getProperty("qczj.getStatusV3.url");
+    public void getStatusV3(String cclid,String appId) {
+        try {
+            //获取token_access
+            String clientId = env.getProperty("qczj.getStatusV3.client_id");
+            String clientSecret = env.getProperty("qczj.getStatusV3.client_secret");
+            String accessToken = qczjGetAccessTokenService.getAccessToken(clientId,clientSecret,"getStatusV3AccessToken");
+            String url = env.getProperty("qczj.getStatusV3.url");
 
-        HttpResponse<JsonNode> json = Unirest.get(String.format(url, accessToken, cclid, appId)).asJson();
-        //{"result":{"distributeStatus":1,"appealStatus":0},"returncode":0,"message":""}
-        System.out.println(json.getBody().getObject());
-
-//        log.info(result.toString()+"-cclid:{}",cclid);
-//        if (StringUtils.isNotEmpty(result) && result.contains("returncode")) {
-//            JSONObject jsonObject = JSONObject.parseObject(result);
-//            String returnCode = jsonObject.getString("returncode");
-//            String status = jsonObject.getString("status");
-//            if (StringUtils.isNotEmpty(returnCode) && returnCode.equals("0")&&StringUtils.isNotEmpty(status)) {
-//                qczjDao.updateByCclid(Integer.parseInt(status),cclid,null);
-//            }
-//            if (StringUtils.isNotEmpty(returnCode) && returnCode.equals("110")) {
-//                String message = jsonObject.getString("message");
-//                qczjDao.updateByCclid(Integer.parseInt("1"),cclid,message);
-//            }
-//
-//        }
+            HttpResponse<JsonNode> json = Unirest.get(String.format(url, accessToken, cclid, appId)).asJson();
+            //{"result":{"distributeStatus":1,"appealStatus":0},"returncode":0,"message":""}
+            org.json.JSONObject result = json.getBody().getObject().getJSONObject("result");
+            if (null != result) {
+                int distributeStatus = result.getInt("distributeStatus");
+                int appealStatus = result.getInt("appealStatus");
+                qczjHQDao.updateByCclid(distributeStatus,cclid,appealStatus);
+            }else {
+                String message = json.getBody().getObject().getString("message");
+                log.info("线索cclid:{},异常:{}",cclid,message);
+            }
+        } catch (Exception e) {
+            log.error("高质线索获取状态异常，异常线索cclid:{},异常内容:{}",cclid,e.getStackTrace());
+        }
     }
 
 

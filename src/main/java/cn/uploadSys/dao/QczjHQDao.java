@@ -27,14 +27,14 @@ public interface QczjHQDao extends BaseDao<QczjHQ> {
             "from classes c RIGHT JOIN classes_students cs on c.id = cs.cid LEFT JOIN students s on cs.sid = s.id ${sql}")
     List<Map> getSignUpList(@Param("sql") String sql);
 
-    @Update("update qczj_hq set status = #{status},modify_time = NOW(),message = #{message}" +
+    @Update("update qczj_hq set distribute_status = #{distributeStatus},modify_time = NOW(),appeal_status = #{appealStatus}" +
             " where cclid = #{cclid}")
-    void updateByCclid(@Param("status") Integer status, @Param("cclid") String cclid, @Param("message") String message);
+    void updateByCclid(@Param("distributeStatus") Integer distributeStatus, @Param("cclid") String cclid, @Param("appealStatus") Integer appealStatus);
 
     @Update("update qczj_hq set vedio_status = #{vedioStatus},modify_time = NOW()" +
             " where cclid = #{cclid}")
     void updateVedioStatusByCclid(@Param("vedioStatus") Integer vedioStatus, @Param("cclid") String cclid);
 
-    @Select("SELECT * FROM qczj_hq q where TIMESTAMPDIFF(DAY,q.create_time,NOW())<=45 and q.status not in (1,20)")
+    @Select("SELECT * FROM qczj_hq q where TIMESTAMPDIFF(DAY,q.create_time,NOW())<=10 and q.appeal_status=0")
     List<QczjHQ> getUnfinishedInstance();
 }

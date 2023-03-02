@@ -12,7 +12,7 @@ QczjHQ.initOptions = function () {
     var options = {
         url : "/upload/qczj/hq/grid",
         autowidth:true,
-        colNames: ['手机号','城市ID','车辆品牌id','车系id','车型id','项目号','上传状态','信息','创建时间'],
+        colNames: ['手机号','城市ID','车辆品牌id','车系id','车型id','项目号','上传状态','分发状态','申诉状态','创建时间'],
         colModel: [
             {name: 'mobile', index: 'mobile', width: 40},
             {name: 'countyid', index: 'countyid', width: 30},
@@ -28,21 +28,41 @@ QczjHQ.initOptions = function () {
                     if (cellvar == 1){
                         msg = "上传失败";
                     }
-                    if (cellvar == 10){
-                        msg = "入库成功";
-                    }
-                    if (cellvar == 11){
-                        msg = "邀约成功";
-                    }
-                    if (cellvar == 15){
-                        msg = "上拍成功";
-                    }
-                    if (cellvar == 20){
-                        msg = "交易成功";
-                    }
+                    // if (cellvar == 10){
+                    //     msg = "入库成功";
+                    // }
+                    // if (cellvar == 11){
+                    //     msg = "邀约成功";
+                    // }
+                    // if (cellvar == 15){
+                    //     msg = "上拍成功";
+                    // }
+                    // if (cellvar == 20){
+                    //     msg = "交易成功";
+                    // }
                     return msg;
                 }},
-            {name: 'message', index: 'message',align: "center", width: 60},
+            {name: 'distributeStatus', index: 'distributeStatus', width: 60,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
+                        var msg = "";
+                    if (cellvar == 0){
+                        msg = "未分发";
+                    }
+                    if (cellvar == 1){
+                        msg = "已分发";
+                    }
+                    return msg;
+            }},
+            {name: 'appealStatus', index: 'appealStatus', width: 60,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
+                    var msg = "";
+
+                    if (cellvar == 0){
+                        msg = "申诉成功";
+                    }
+                    if (cellvar == 1){
+                        msg = "未申诉或申诉失败";
+                    }
+                    return msg;
+            }},
             {name: 'createTime', index: 'createTime', width: 80,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     if (cellvar == "" || cellvar == undefined) {
                         return "";

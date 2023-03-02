@@ -51,10 +51,10 @@
                                             <option class="option_1" value="" >全部</option>
                                             <option value="0">成功</option>
                                             <option value="1">失败</option>
-                                            <option value="10">入库成功</option>
-                                            <option value="11">邀约成功</option>
-                                            <option value="15">上拍成功</option>
-                                            <option value="20">交易成功</option>
+<#--                                            <option value="10">入库成功</option>-->
+<#--                                            <option value="11">邀约成功</option>-->
+<#--                                            <option value="15">上拍成功</option>-->
+<#--                                            <option value="20">交易成功</option>-->
                                         </select>
                                         <label>项目号</label>
                                         <select class="form-control" id="appid">
@@ -87,8 +87,8 @@
                                     </div>
                                     <p>&nbsp;</p>
                                     <div class="form-group col-lg-12">
-                                        <button class="btn btn-primary" type="button" onclick="QczjHQ.downloadCity()">下载城市模版</button>
-                                        <button class="btn btn-primary" type="button" onclick="QczjHQ.downloadCar()">下载车辆信息版</button>
+                                        <button class="btn btn-warning" type="button" onclick="QczjHQ.downloadCity()">下载城市模版</button>
+                                        <button class="btn btn-warning" type="button" onclick="QczjHQ.downloadCar()">下载车辆信息版</button>
                                     </div>
                                 </div>
                             </div>
