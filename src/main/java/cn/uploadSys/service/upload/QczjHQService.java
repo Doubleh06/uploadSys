@@ -146,7 +146,7 @@ public class QczjHQService extends AbstractService<QczjHQ> {
                 qczjHQDao.updateByCclid(distributeStatus,cclid,appealStatus);
             }else {
                 String message = json.getBody().getObject().getString("message");
-                log.info("线索cclid:{},异常:{}",cclid,message);
+                log.error("线索cclid:{},异常:{}",cclid,message);
             }
         } catch (Exception e) {
             log.error("高质线索获取状态异常，异常线索cclid:{},异常内容:{}",cclid,e.getStackTrace());
