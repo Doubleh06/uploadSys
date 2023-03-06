@@ -4,6 +4,7 @@ package cn.uploadSys.service.upload;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
 import cn.uploadSys.core.BusinessException;
+import cn.uploadSys.entity.VO.QczjCarInfo2VO;
 import cn.uploadSys.entity.VO.QczjCarInfoVO;
 import cn.uploadSys.util.AdaptiveWidthUtils;
 import com.alibaba.fastjson.JSON;
@@ -54,6 +55,7 @@ public class QczjGetCarInfoService{
             arrays.forEach((array)->{
                  brandsVOS.addAll(JSON.parseArray(JSON.parseObject(array.toString()).getJSONArray("list").toString(), QczjCarInfoVO.class));
             });
+
             return brandsVOS;
         } catch (Exception e) {
             log.info("获取车品牌异常");
@@ -142,42 +144,44 @@ public class QczjGetCarInfoService{
         ExcelWriter writer= ExcelUtil.getWriter(true);
 
         // 设置表头的宽度
-        writer.addHeaderAlias("brandsid",column1Name1);
-        writer.addHeaderAlias("brandsname",column1Name2);
-        writer.addHeaderAlias("seriesid",column1Name3);
-        writer.addHeaderAlias("seriesname",column1Name4);
-        writer.addHeaderAlias("productsid",column1Name5);
-        writer.addHeaderAlias("productsname",column1Name6);
+        writer.addHeaderAlias("brandId",column1Name1);
+        writer.addHeaderAlias("brandName",column1Name2);
+        writer.addHeaderAlias("seriesId",column1Name3);
+        writer.addHeaderAlias("seriesName",column1Name4);
+        writer.addHeaderAlias("productId",column1Name5);
+        writer.addHeaderAlias("productName",column1Name6);
 
         // 默认的，未添加alias的属性也会写出，如果想只写出加了别名的字段，可以调用此方法排除之
         writer.setOnlyAlias(true);
 
-        writer.writeHeadRow(headList);
+//        writer.writeHeadRow(headList);
 
-        List<QczjCarInfoVO> brands = getCarBrands(appId,queryKey);
-        System.out.println("brands集合数量："+brands.size());
-        for(int i=0;i<brands.size();i++){
-            Integer brandId = brands.get(i).getId();
-            writer.writeCellValue(0,i+1,brandId);
-            writer.writeCellValue(1,i+1,brands.get(i).getName());
-        }
-
-        //根据品牌查车型
-        List<QczjCarInfoVO> series = getAllCarSeries(appId,queryKey,brands);
-        System.out.println("series集合数量："+series.size());
-        for(int i=0;i<series.size();i++){
-            Integer seriesId = series.get(i).getId();
-            writer.writeCellValue(2,i+1,seriesId);
-            writer.writeCellValue(3,i+1,series.get(i).getName());
-        }
-
-        List<QczjCarInfoVO> products = getAllCarProducts(appId, queryKey, series);
-        System.out.println("products集合数量："+products.size());
-        for(int i=0;i<products.size();i++){
-            Integer productId = products.get(i).getId();
-            writer.writeCellValue(4,i+1,productId);
-            writer.writeCellValue(5,i+1,products.get(i).getName());
-        }
+//        List<QczjCarInfoVO> brands = getCarBrands(appId,queryKey);
+//        System.out.println("brands集合数量："+brands.size());
+//        for(int i=0;i<brands.size();i++){
+//            Integer brandId = brands.get(i).getId();
+//            writer.writeCellValue(0,i+1,brandId);
+//            writer.writeCellValue(1,i+1,brands.get(i).getName());
+//        }
+//
+//        //根据品牌查车型
+//        List<QczjCarInfoVO> series = getAllCarSeries(appId,queryKey,brands);
+//        System.out.println("series集合数量："+series.size());
+//        for(int i=0;i<series.size();i++){
+//            Integer seriesId = series.get(i).getId();
+//            writer.writeCellValue(2,i+1,seriesId);
+//            writer.writeCellValue(3,i+1,series.get(i).getName());
+//        }
+//
+//        List<QczjCarInfoVO> products = getAllCarProducts(appId, queryKey, series);
+//        System.out.println("products集合数量："+products.size());
+//        for(int i=0;i<products.size();i++){
+//            Integer productId = products.get(i).getId();
+//            writer.writeCellValue(4,i+1,productId);
+//            writer.writeCellValue(5,i+1,products.get(i).getName());
+//        }
+        List<QczjCarInfo2VO> rows = getCarInfoRows(appId, queryKey);
+        writer.write(rows,true);
 
 
         AdaptiveWidthUtils.setSizeColumn(writer.getSheet(), 5);
@@ -192,6 +196,22 @@ public class QczjGetCarInfoService{
         writer.flush(outputStream,true);
         outputStream.close();
         writer.close();
+    }
+    public List<QczjCarInfo2VO> getCarInfoRows(String appId,String queryKey){
+        List<QczjCarInfo2VO> lists = new ArrayList<>();
+        List<QczjCarInfoVO> brands = getCarBrands(appId,queryKey);
+        brands.forEach(brand->{
+            List<QczjCarInfoVO> serieses = getCarSeries(appId,queryKey,brand.getId());
+            serieses.forEach(series->{
+                List<QczjCarInfoVO> products = getCarProducts(appId, queryKey, series.getId().toString());
+                products.forEach(product->{
+                    QczjCarInfo2VO vo = new QczjCarInfo2VO(brand.getId(),brand.getName(),series.getId(),series.getName(),product.getId(),product.getName());
+//                    System.out.println(vo.toString());
+                    lists.add(vo);
+                });
+            });
+        });
+        return lists;
     }
 
 }

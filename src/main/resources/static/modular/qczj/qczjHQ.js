@@ -55,10 +55,10 @@ QczjHQ.initOptions = function () {
             {name: 'appealStatus', index: 'appealStatus', width: 60,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     var msg = "";
 
-                    if (cellvar == 0){
+                    if (cellvar == 1){
                         msg = "申诉成功";
                     }
-                    if (cellvar == 1){
+                    if (cellvar == 0){
                         msg = "未申诉或申诉失败";
                     }
                     return msg;

@@ -9,7 +9,8 @@ import lombok.Data;
  * @date 2023/2/28 下午3:47
  */
 @Data
-public class QczjCountriesVO extends QczjQueryAreaVO{
+public class QczjCountriesVO{
     private Integer countyid;
     private String countyname;
+    private Integer cid;
 }

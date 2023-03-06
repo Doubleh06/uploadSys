@@ -12,4 +12,12 @@ import lombok.Data;
 public class QczjCarInfoVO {
     private Integer id;
     private String name;
+
+    public QczjCarInfoVO() {
+    }
+
+    public QczjCarInfoVO(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

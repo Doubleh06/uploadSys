@@ -1,9 +1,11 @@
 package cn.uploadSys.service.upload;
 
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
 
+import cn.uploadSys.core.BusinessException;
 import cn.uploadSys.entity.VO.QczjCitiesVO;
 import cn.uploadSys.entity.VO.QczjCountriesVO;
 import cn.uploadSys.entity.VO.QczjProvincesVO;
@@ -59,6 +61,16 @@ public class QczjQueryAreaService{
             cities = result.getJSONArray("city");
             counties = result.getJSONArray("county");
 
+            if (null == provinces) {
+                throw new BusinessException("省为空");
+            }
+            if (null == cities) {
+                throw new BusinessException("市为空");
+            }
+            if (null == counties) {
+                throw new BusinessException("区为空");
+            }
+
         } catch (UnirestException e) {
             log.info("获取城市区域异常");
         }
@@ -92,22 +104,27 @@ public class QczjQueryAreaService{
         // 默认的，未添加alias的属性也会写出，如果想只写出加了别名的字段，可以调用此方法排除之
         writer.setOnlyAlias(true);
 
-        writer.writeHeadRow(headList);
-        for (int i=0;i<provinces.length();i++) {
-            com.alibaba.fastjson.JSONObject object = JSON.parseObject(provinces.get(i).toString());
-            writer.writeCellValue(0,i+1,object.getInteger("pid"));
-            writer.writeCellValue(1,i+1,object.getString("pname"));
-        }
-        for (int i=0;i<cities.length();i++) {
-            com.alibaba.fastjson.JSONObject object = JSON.parseObject(cities.get(i).toString());
-            writer.writeCellValue(2,i+1,object.getInteger("cid"));
-            writer.writeCellValue(3,i+1,object.getString("cname"));
-        }
-        for (int i=0;i<counties.length();i++) {
-            com.alibaba.fastjson.JSONObject object = JSON.parseObject(counties.get(i).toString());
-            writer.writeCellValue(4,i+1,object.getInteger("countyid"));
-            writer.writeCellValue(5,i+1,object.getString("countyname"));
-        }
+//        writer.writeHeadRow(headList);
+//        for (int i=0;i<provinces.length();i++) {
+//            com.alibaba.fastjson.JSONObject object = JSON.parseObject(provinces.get(i).toString());
+//            writer.writeCellValue(0,i+1,object.getInteger("pid"));
+//            writer.writeCellValue(1,i+1,object.getString("pname"));
+//        }
+//        for (int i=0;i<cities.length();i++) {
+//            com.alibaba.fastjson.JSONObject object = JSON.parseObject(cities.get(i).toString());
+//            writer.writeCellValue(2,i+1,object.getInteger("cid"));
+//            writer.writeCellValue(3,i+1,object.getString("cname"));
+//        }
+//        for (int i=0;i<counties.length();i++) {
+//            com.alibaba.fastjson.JSONObject object = JSON.parseObject(counties.get(i).toString());
+//            writer.writeCellValue(4,i+1,object.getInteger("countyid"));
+//            writer.writeCellValue(5,i+1,object.getString("countyname"));
+//        }
+        List<QczjQueryAreaVO> rows = getAresRows(com.alibaba.fastjson.JSONArray.parseArray(provinces.toString(),QczjProvincesVO.class),
+                com.alibaba.fastjson.JSONArray.parseArray(cities.toString(),QczjCitiesVO.class),
+                com.alibaba.fastjson.JSONArray.parseArray(counties.toString(),QczjCountriesVO.class));
+
+        writer.write(rows,true);
 
         AdaptiveWidthUtils.setSizeColumn(writer.getSheet(), 5);
         //设置content—type
@@ -121,5 +138,40 @@ public class QczjQueryAreaService{
         writer.flush(outputStream,true);
         outputStream.close();
         writer.close();
+    }
+
+    public List<QczjQueryAreaVO> getAresRows(List<QczjProvincesVO> provinces,List<QczjCitiesVO> cities,List<QczjCountriesVO> countries){
+        List<QczjQueryAreaVO> areas = new ArrayList<>();
+        provinces.forEach(province -> {
+            List<QczjCitiesVO> citiesByPid = getCitiesByPid(province.getPid(), cities);
+            citiesByPid.forEach(city->{
+                List<QczjCountriesVO> countriesByCid = getCountriesByCid(city.getCid(), countries);
+                countriesByCid.forEach(country->{
+                    QczjQueryAreaVO vo = new QczjQueryAreaVO(province.getPid(),province.getPname(),city.getCid(),city.getCname(),country.getCountyid(),country.getCountyname());
+                    areas.add(vo);
+                });
+            });
+        });
+        return areas;
+    }
+
+    public List<QczjCitiesVO> getCitiesByPid(Integer pid ,List<QczjCitiesVO> cities){
+        List<QczjCitiesVO> citiesVOS = new ArrayList<>();
+        cities.forEach(city->{
+            if (pid.equals(city.getPid())) {
+                citiesVOS.add(city);
+            }
+        });
+        return citiesVOS;
+    }
+
+    public List<QczjCountriesVO> getCountriesByCid(Integer cid ,List<QczjCountriesVO> countries){
+        List<QczjCountriesVO> countriesVOS = new ArrayList<>();
+        countries.forEach(country->{
+            if (cid.equals(country.getCid())) {
+                countriesVOS.add(country);
+            }
+        });
+        return countriesVOS;
     }
 }
