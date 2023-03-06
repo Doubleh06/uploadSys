@@ -140,6 +140,7 @@ public class QczjHQService extends AbstractService<QczjHQ> {
             HttpResponse<JsonNode> json = Unirest.get(String.format(url, accessToken, cclid, appId)).asJson();
             //{"result":{"distributeStatus":1,"appealStatus":0},"returncode":0,"message":""}
             org.json.JSONObject result = json.getBody().getObject().getJSONObject("result");
+            log.info("getStatusV3:cclid:{},result:{}",cclid,result.toString());
             if (null != result) {
                 int distributeStatus = result.getInt("distributeStatus");
                 int appealStatus = result.getInt("appealStatus");
