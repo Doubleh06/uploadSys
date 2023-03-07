@@ -12,9 +12,11 @@ QczjHQ.initOptions = function () {
     var options = {
         url : "/upload/qczj/hq/grid",
         autowidth:true,
-        colNames: ['手机号','城市ID','车辆品牌id','车系id','车型id','项目号','上传状态','分发状态','申诉状态','创建时间'],
+        colNames: ['手机号','省份ID','城市ID','区县ID','车辆品牌id','车系id','车型id','项目号','上传状态','分发状态','申诉状态','创建时间'],
         colModel: [
             {name: 'mobile', index: 'mobile', width: 40},
+            {name: 'pid', index: 'pid', width: 30},
+            {name: 'cid', index: 'cid', width: 30},
             {name: 'countyid', index: 'countyid', width: 30},
             {name: 'brandid', index: 'brandid', width: 40},
             {name: 'seriesid', index: 'seriesid', width: 40},

@@ -19,5 +19,6 @@ CREATE TABLE `qczj_hq` (
   `cid` int DEFAULT NULL,
   `distribute_status` int DEFAULT NULL,
   `appeal_status` int DEFAULT NULL,
+  `pid` int DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_bin;
