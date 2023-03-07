@@ -29,7 +29,7 @@ public class QczjQueryAreaController extends BaseController {
 
 
     @GetMapping("/exportArea")
-    public void exportTemplate(HttpServletResponse response) throws Exception {
+    public void exportArea(HttpServletResponse response) throws Exception {
         qczjQueryAreaService.exportArea(response);
 
     }
