@@ -129,6 +129,7 @@ QczjHQ.downloadCar = function () {
         error("项目号不能为空");
     }else {
         window.location.href = "/upload/qczj/exportCarInfo?appId="+appid;
+        warning("注意","10分钟内请勿重复点击，请勿切换至其他页面");
     }
 
 };

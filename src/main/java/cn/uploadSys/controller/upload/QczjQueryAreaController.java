@@ -7,6 +7,7 @@ import cn.uploadSys.controller.BaseController;
 
 import cn.uploadSys.entity.VO.QczjQueryAreaVO;
 import cn.uploadSys.service.upload.QczjQueryAreaService;
+import cn.uploadSys.util.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,6 +31,7 @@ public class QczjQueryAreaController extends BaseController {
     @GetMapping("/exportArea")
     public void exportTemplate(HttpServletResponse response) throws Exception {
         qczjQueryAreaService.exportArea(response);
+
     }
 
 }

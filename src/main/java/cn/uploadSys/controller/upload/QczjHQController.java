@@ -14,6 +14,7 @@ import cn.uploadSys.entity.upload.QczjHQ;
 import cn.uploadSys.service.upload.QczjHQService;
 import cn.uploadSys.service.upload.QczjService;
 import cn.uploadSys.util.AjaxUtil;
+import cn.uploadSys.util.RedisUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.mashape.unirest.http.HttpResponse;
@@ -23,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,6 +54,8 @@ public class QczjHQController extends BaseController {
    private QczjHQService qczjHQService;
    @Autowired
    private Environment env;
+   @Autowired
+   private RedisTemplate<String,Object> template;
 
 
 
@@ -120,13 +124,6 @@ public class QczjHQController extends BaseController {
     @ResponseBody
     public Result getStatus(){
         qczjHQService.getUnfinishedInstance();
-        return OK;
-    }
-
-    @RequestMapping("test")
-    @ResponseBody
-    public Result getStatusV3(String cclid,String appId) throws UnirestException {
-        qczjHQService.getStatusV3(cclid,appId);
         return OK;
     }
 

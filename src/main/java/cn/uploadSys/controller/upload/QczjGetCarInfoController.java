@@ -4,6 +4,7 @@ import cn.uploadSys.controller.BaseController;
 import cn.uploadSys.core.BusinessException;
 import cn.uploadSys.entity.VO.QczjCarInfoVO;
 import cn.uploadSys.service.upload.QczjGetCarInfoService;
+import cn.uploadSys.util.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;

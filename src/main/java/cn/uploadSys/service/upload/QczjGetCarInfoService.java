@@ -206,7 +206,7 @@ public class QczjGetCarInfoService{
                 List<QczjCarInfoVO> products = getCarProducts(appId, queryKey, series.getId().toString());
                 products.forEach(product->{
                     QczjCarInfo2VO vo = new QczjCarInfo2VO(brand.getId(),brand.getName(),series.getId(),series.getName(),product.getId(),product.getName());
-//                    System.out.println(vo.toString());
+                    System.out.println(vo.toString());
                     lists.add(vo);
                 });
             });
