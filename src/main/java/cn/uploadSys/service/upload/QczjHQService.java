@@ -234,6 +234,7 @@ public class QczjHQService extends AbstractService<QczjHQ> {
                     }
                 }
                 qczjHQ.setCreateTime(new Date());
+                qczjHQ.setAppealStatus(0);
                 insert(qczjHQ);
             } catch (Exception e) {
                 log.error(e.getMessage());

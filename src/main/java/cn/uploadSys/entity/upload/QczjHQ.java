@@ -18,7 +18,6 @@ import java.util.Date;
 @Table(name = "qczj_hq")
 public class QczjHQ extends BaseEntity {
     private String mobile;
-    private Integer pid;
     private Integer cid;
     private Integer countyid;
     private String brandid;
@@ -34,5 +33,4 @@ public class QczjHQ extends BaseEntity {
     private Date modifyTime;
     private Integer distributeStatus;
     private Integer appealStatus;
-    private String message;
 }
