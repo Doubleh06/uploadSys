@@ -12,15 +12,16 @@ QczjHQ.initOptions = function () {
     var options = {
         url : "/upload/qczj/hq/grid",
         autowidth:true,
-        colNames: ['手机号','省份ID','城市ID','区县ID','车辆品牌id','车系id','车型id','项目号','上传状态','分发状态','申诉状态','创建时间'],
+        colNames: ['手机号','城市ID','区县ID','车辆品牌id','车系id','车型id','首次上牌时间','行驶里程','项目号','上传状态','分发状态','申诉状态','创建时间'],
         colModel: [
             {name: 'mobile', index: 'mobile', width: 40},
-            {name: 'pid', index: 'pid', width: 30},
             {name: 'cid', index: 'cid', width: 30},
             {name: 'countyid', index: 'countyid', width: 30},
             {name: 'brandid', index: 'brandid', width: 40},
             {name: 'seriesid', index: 'seriesid', width: 40},
             {name: 'specid', index: 'specid', width: 40},
+            {name: 'firstregtime', index: 'firstregtime', width: 50},
+            {name: 'mileage', index: 'mileage', width: 30},
             {name: 'appid', index: 'appid', width: 30},
             {name: 'status', index: 'status', width: 60,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     var msg = "";
