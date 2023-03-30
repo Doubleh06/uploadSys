@@ -16,12 +16,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.List;
 
 @Slf4j
 @Controller
 @RequestMapping(value = "/upload/qczj")
 public class QczjGetCarInfoController extends BaseController {
+
+    private static final String stQueryKey = "mxoVEqZ6Two=";
+    private static final String ndQueryKey = "6zglgujmr+8=";
 
    @Autowired
    private QczjGetCarInfoService qczjGetCarInfoService;
@@ -31,21 +35,38 @@ public class QczjGetCarInfoController extends BaseController {
 
     @RequestMapping(value = "/carBrands")
     @ResponseBody
-    public List<QczjCarInfoVO> carBrands(String appId, String queryKey) throws UnsupportedEncodingException {
-       return qczjGetCarInfoService.getCarBrands(appId, "6zglgujmr+8=");
+    public List<QczjCarInfoVO> carBrands(String appId) throws UnsupportedEncodingException {
+        String queryKey = "";
+        switch (appId){
+            case "1312" : queryKey = URLEncoder.encode(stQueryKey,"utf-8");break;
+            case "1313" : queryKey = URLEncoder.encode(ndQueryKey,"utf-8");break;
+            default: throw new BusinessException("appId 或 queryKey异常");
+        }
+       return qczjGetCarInfoService.getCarBrands(appId, queryKey);
     }
 
 
     @RequestMapping(value = "/carSeries")
     @ResponseBody
-    public List<QczjCarInfoVO> carSeries(String appId, String queryKey, Integer brandId){
-        return qczjGetCarInfoService.getCarSeries(appId,queryKey,brandId);
+    public List<QczjCarInfoVO> carSeries(String appId, String queryKey, Integer brandId) throws UnsupportedEncodingException {
+        switch (appId){
+            case "1312" : queryKey = URLEncoder.encode(stQueryKey,"utf-8");break;
+            case "1313" : queryKey = URLEncoder.encode(ndQueryKey,"utf-8");break;
+            default: throw new BusinessException("appId 或 queryKey异常");
+        }
+        return qczjGetCarInfoService.getCarSeries(appId, queryKey,brandId);
     }
 
 
     @RequestMapping(value = "/carProducts")
     @ResponseBody
-    public List<QczjCarInfoVO> carProducts(String appId,String queryKey,String seriesId){
+    public List<QczjCarInfoVO> carProducts(String appId,String seriesId) throws UnsupportedEncodingException {
+        String queryKey = "";
+        switch (appId){
+            case "1312" : queryKey = URLEncoder.encode(stQueryKey,"utf-8");break;
+            case "1313" : queryKey = URLEncoder.encode(ndQueryKey,"utf-8");break;
+            default: throw new BusinessException("appId 或 queryKey异常");
+        }
         return qczjGetCarInfoService.getCarProducts(appId,queryKey,seriesId);
     }
 

@@ -85,6 +85,12 @@ public class QczjHQService extends AbstractService<QczjHQ> {
         if (null != param.getStatus()) {
             sql.append(" and status = ").append(param.getStatus());
         }
+        if (null != param.getDistributeStatus()) {
+            sql.append(" and distribute_status = ").append(param.getDistributeStatus());
+        }
+        if (null != param.getAppealStatus()) {
+            sql.append(" and appeal_status = ").append(param.getAppealStatus());
+        }
         if (StringUtils.isNotEmpty(param.getAppid())) {
             sql.append(" and appid = '").append(param.getAppid()).append("'");
         }
@@ -105,8 +111,14 @@ public class QczjHQService extends AbstractService<QczjHQ> {
         if (null != param.getStatus()) {
             sql.append(" and status = ").append(param.getStatus());
         }
+        if (null != param.getDistributeStatus()) {
+            sql.append(" and distribute_status = ").append(param.getDistributeStatus());
+        }
+        if (null != param.getAppealStatus()) {
+            sql.append(" and appeal_status = ").append(param.getAppealStatus());
+        }
         if (StringUtils.isNotEmpty(param.getAppid())) {
-            sql.append(" and uid = '").append(param.getAppid()).append("'");
+            sql.append(" and appid = '").append(param.getAppid()).append("'");
         }
         sql.append(" ORDER BY create_time  desc ");
         return qczjHQDao.getLeadsList(sql.toString());
@@ -235,6 +247,7 @@ public class QczjHQService extends AbstractService<QczjHQ> {
                 }
                 qczjHQ.setCreateTime(new Date());
                 qczjHQ.setAppealStatus(0);
+                qczjHQ.setDistributeStatus(0);
                 insert(qczjHQ);
             } catch (Exception e) {
                 log.error(e.getMessage());

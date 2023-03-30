@@ -51,11 +51,22 @@
                                             <option class="option_1" value="" >全部</option>
                                             <option value="0">成功</option>
                                             <option value="1">失败</option>
-<#--                                            <option value="10">入库成功</option>-->
-<#--                                            <option value="11">邀约成功</option>-->
-<#--                                            <option value="15">上拍成功</option>-->
-<#--                                            <option value="20">交易成功</option>-->
                                         </select>
+
+                                        <label>分发状态</label>
+                                        <select class="form-control" id="distributeStatus">
+                                            <option class="option_3" value="" >全部</option>
+                                            <option value="0">未分发</option>
+                                            <option value="1">已分发</option>
+                                        </select>
+
+                                        <label>申诉状态</label>
+                                        <select class="form-control" id="appealStatus">
+                                            <option class="option_4" value="" >全部</option>
+                                            <option value="0">未申诉或申诉失败</option>
+                                            <option value="1">申诉成功</option>
+                                        </select>
+
                                         <label>项目号</label>
                                         <select class="form-control" id="appid">
                                             <option class="option_2" value="" >全部</option>
@@ -72,6 +83,7 @@
                                         </div>
                                         <button class="btn btn-success"  id="search" type="button" onclick="QczjHQ.search()">搜索</button>&nbsp
                                         <button class="btn btn-success" type="button" onclick="QczjHQ.resetSearch()">重置</button>&nbsp
+                                        <button class="btn btn-primary" type="button" onclick="QczjHQ.download()">下载</button>
                                     </div>
                                     <p>&nbsp;</p>
                                     <div class="form-group col-lg-12">

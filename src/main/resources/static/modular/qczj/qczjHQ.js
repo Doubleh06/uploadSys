@@ -98,6 +98,8 @@ QczjHQ.search = function () {
     searchParam.startDate = $("#startDate").val();
     searchParam.endDate = $("#endDate").val();
     searchParam.status = $("#status").val();
+    searchParam.appealStatus = $("#appealStatus").val();
+    searchParam.distributeStatus = $("#distributeStatus").val();
     searchParam.appid = $("#appid").val();
     QczjHQ.table.reload(searchParam);
 };
@@ -111,9 +113,13 @@ QczjHQ.resetSearch = function () {
     $("#endDate").val("");
     $(".option_1").attr("selected",true);
     $(".option_2").attr("selected",true);
+    $(".option_3").attr("selected",true);
+    $(".option_4").attr("selected",true);
     QczjHQ.search();
     $(".option_1").attr("selected",false);
     $(".option_2").attr("selected",false);
+    $(".option_3").attr("selected",false);
+    $(".option_4").attr("selected",false);
 };
 
 /**
@@ -136,6 +142,10 @@ QczjHQ.downloadCar = function () {
     }
 
 };
+QczjHQ.download = function () {
+    window.location.href = "/upload/qczj/hq/export?phone="+$("#mobile").val()+"&startDate="+$("#startDate").val()+"&endDate="+$("#endDate").val()+"&status="+$("#status").val()+"&appealStatus="+$("#appealStatus").val()+"&distributeStatus="+$("#distributeStatus").val();
+};
+
 /**
  * 申诉
  */
