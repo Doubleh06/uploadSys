@@ -25,6 +25,6 @@ public interface TtpcDao extends BaseDao<SignUp> {
             " where cclid = #{cclid}")
     void updateVedioStatusByCclid(@Param("vedioStatus") Integer vedioStatus, @Param("cclid") String cclid);
 
-    @Select("SELECT * FROM sign_up q where TIMESTAMPDIFF(DAY,q.create_time,NOW())<=45 and q.status not in (1,20)")
+    @Select("SELECT * FROM sign_up  where TIMESTAMPDIFF(DAY,create_time,NOW())<=60 ")
     List<SignUp> getUnfinishedInstance();
 }

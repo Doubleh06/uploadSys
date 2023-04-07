@@ -26,5 +26,7 @@ public class SignUp extends BaseEntity {
     private Integer status;
     private Date createTime;
     private Date modifyTime;
+    private String message;
+    private Integer responseId;
 
 }

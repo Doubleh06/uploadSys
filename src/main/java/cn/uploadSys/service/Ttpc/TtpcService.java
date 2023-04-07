@@ -1,6 +1,8 @@
 package cn.uploadSys.service.Ttpc;
 
 
+import cn.hutool.poi.excel.ExcelReader;
+import cn.hutool.poi.excel.ExcelUtil;
 import cn.uploadSys.core.AbstractService;
 import cn.uploadSys.core.BaseDao;
 import cn.uploadSys.core.jqGrid.JqGridParam;
@@ -12,29 +14,46 @@ import cn.uploadSys.dto.StudentsJqGridParam;
 import cn.uploadSys.dto.TtpcJqGridParam;
 import cn.uploadSys.entity.ttpc.SignUp;
 import cn.uploadSys.entity.upload.Qczj;
+import cn.uploadSys.entity.upload.QczjHQ;
 import cn.uploadSys.util.AjaxUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import sun.security.provider.MD5;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
 public class TtpcService extends AbstractService<SignUp> {
+
+    @Value("${ttpc.ttpSignUp.url}")
+    private String ttpSignUpurl;
+    @Value("${ttpc.appkey}")
+    private String appkey;
+    @Value("${ttpc.signkey}")
+    private String signkey;
 
 
     @Autowired
@@ -43,6 +62,7 @@ public class TtpcService extends AbstractService<SignUp> {
     private Environment env;
     @Autowired
     private RedisTemplate<String, Object> template;
+
 
 
 
@@ -90,75 +110,62 @@ public class TtpcService extends AbstractService<SignUp> {
 
 
     public void getUnfinishedInstance(){
-        List<SignUp> qczjs = ttpcDao.getUnfinishedInstance();
-        log.info("查询状态例子总数为:{}",qczjs.size());
-        qczjs.forEach(qczj -> {
+        List<SignUp> signUps = ttpcDao.getUnfinishedInstance();
+        log.info("查询状态例子总数为:{}",signUps.size());
+        signUps.forEach(qczj -> {
 
         });
     }
 
-    public void getStatus(String cclid,String appid) {
-        //获取token_access
-        String accessToken = getAccessToken();
 
-        String statusHost = env.getProperty("qczj.getStatus.access_host");
-        String statusPath = env.getProperty("qczj.getStatus.access_path");
-
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("appid", appid));
-        params.add(new BasicNameValuePair("cclid", cclid));
-        params.add(new BasicNameValuePair("access_token", accessToken));
-        params.add(new BasicNameValuePair("querykey", env.getProperty("qczj.getStatus.queryKey")));
-
-        String result = AjaxUtil.doGet("https",statusHost,statusPath,params);
-        log.info(result.toString()+"-cclid:{}",cclid);
-        if (StringUtils.isNotEmpty(result) && result.contains("returncode")) {
-            JSONObject jsonObject = JSONObject.parseObject(result);
-            String returnCode = jsonObject.getString("returncode");
-            String status = jsonObject.getString("status");
-            if (StringUtils.isNotEmpty(returnCode) && returnCode.equals("0")&&StringUtils.isNotEmpty(status)) {
-                ttpcDao.updateByCclid(Integer.parseInt(status),cclid,null);
-            }
-            if (StringUtils.isNotEmpty(returnCode) && returnCode.equals("110")) {
-                String message = jsonObject.getString("message");
-                ttpcDao.updateByCclid(Integer.parseInt("1"),cclid,message);
-            }
-
+    public void importFile(MultipartFile file) throws Exception{
+        //fileName 文件名
+        String fileName = file.getOriginalFilename();
+        boolean xlsx = fileName.endsWith(".xlsx");
+        if (!xlsx) {
+            log.error("请上传以.xlsx结尾的文件");
         }
+        //得到文件流
+        InputStream inputStream = file.getInputStream();
+        ExcelReader reader = ExcelUtil.getReader(inputStream);
+
+
+        //轮训每条数据，进行对接
+        List<SignUp> records = reader.read(1,2,SignUp.class);
+        ajaxToThirdPart(records);
+
     }
 
-    public String getAccessToken() {
-        //获取token_access
-        String accessToken = "";
-        Object obj = template.opsForValue().get("getStatusAccessToken");
-        if (null !=  obj&& StringUtils.isNotBlank(obj.toString())) {
-            accessToken = obj.toString();
-        }else{
-            String access_host = env.getProperty("qczj.access_host");
-            String access_path = env.getProperty("qczj.access_path");
+    public String packageUrl(SignUp record ) throws UnsupportedEncodingException {
+        String mobile = URLEncoder.encode(record.getMobile(),"UTF-8");
+        String sign = DigestUtils.md5Hex(mobile+signkey);
+        String name = URLEncoder.encode(record.getName(),"UTF-8");
+        String city = URLEncoder.encode(record.getCity(),"UTF-8");
+        String brand = URLEncoder.encode(record.getBrand(),"UTF-8");
+        String source = URLEncoder.encode(record.getSource(),"UTF-8");
 
-            HashMap<String,Object> accessHeader = new HashMap();
-            accessHeader.put("Content-Type","application/json;charset=utf-8");
+        return String.format(ttpSignUpurl,name,mobile,city,brand,appkey,sign,source);
+    }
 
-            JSONObject accessBody = new JSONObject();
-            accessBody.put("client_id",env.getProperty("qczj.getStatus.client_id"));
-            accessBody.put("client_secret",env.getProperty("qczj.getStatus.client_secret"));
-            accessBody.put("response_type","token");
+    public void ajaxToThirdPart(List<SignUp> records) throws Exception {
+        for (SignUp record : records) {
+            String finalUrl = packageUrl(record);
+            log.info("finalUrl:{}",finalUrl);
 
-            String accessResult = AjaxUtil.doPost("https",access_host,access_path,accessBody.toString(),accessHeader);
-            JSONObject json = JSONObject.parseObject(accessResult);
-            accessToken = json.getJSONObject("data").getString("access_token");
-            long expiresIn = json.getJSONObject("data").getLong("expires_in");//失效时间
-            try {
-                template.opsForValue().set("getStatusAccessToken", accessToken,expiresIn, TimeUnit.SECONDS);
-                log.info("存入redis成功，key：{}，value：{}", "getStatusAccessToken", accessToken);
-            } catch (Exception e) {
-                log.error("存入redis失败，key：{}，value：{}", "getStatusAccessToken", accessToken);
-                e.printStackTrace();
+            HttpResponse<JsonNode> json = Unirest.get(finalUrl).asJson();
+            boolean error = json.getBody().getObject().getBoolean("error");
+            if (error) {
+                String message = json.getBody().getObject().getString("message");
+                record.setStatus(1);
+                record.setMessage(message);
+            }else{
+                int responseId = json.getBody().getObject().getJSONObject("result").getInt("id");
+                record.setStatus(0);
+                record.setResponseId(responseId);
             }
+            record.setCreateTime(new Date());
+            insert(record);
         }
-
-       return accessToken;
     }
 
 

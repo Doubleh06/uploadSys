@@ -14,8 +14,10 @@ CREATE TABLE `sign_up` (
   `utm_source` varchar(50) COLLATE utf8_bin DEFAULT NULL,
   `license` varchar(1) COLLATE utf8_bin DEFAULT NULL,
   `remark` text COLLATE utf8_bin,
-  `status` int DEFAULT NULL,
+  `status` int DEFAULT NULL COMMENT '0:success 1:fail',
   `create_time` datetime DEFAULT NULL,
   `modify_time` datetime DEFAULT NULL,
+  `message` varchar(100) COLLATE utf8_bin DEFAULT NULL,
+  `response_id` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_bin;

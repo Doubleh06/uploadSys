@@ -12,32 +12,20 @@ Ttpc.initOptions = function () {
     var options = {
         url : "/upload/ttpc/grid",
         autowidth:true,
-        colNames: ['报名人姓名','手机号','车辆所在城市','车辆品牌','来源','上传状态','信息','创建时间'],
+        colNames: ['报名人姓名','手机号','车辆所在城市','车辆品牌','来源','状态','信息','创建时间'],
         colModel: [
             {name: 'name', index: 'name', width: 40},
             {name: 'mobile', index: 'mobile', width: 40},
             {name: 'city', index: 'city', width: 30},
             {name: 'brand', index: 'brand', width: 40},
             {name: 'source', index: 'source', width: 60},
-            {name: 'status', index: 'status', width: 60,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
+            {name: 'status', index: 'status', width: 30,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     var msg = "";
                     if (cellvar == 0){
-                        msg = "已接收";
+                        msg = "上传成功";
                     }
                     if (cellvar == 1){
                         msg = "上传失败";
-                    }
-                    if (cellvar == 10){
-                        msg = "入库成功";
-                    }
-                    if (cellvar == 11){
-                        msg = "邀约成功";
-                    }
-                    if (cellvar == 15){
-                        msg = "上拍成功";
-                    }
-                    if (cellvar == 20){
-                        msg = "交易成功";
                     }
                     return msg;
                 }},

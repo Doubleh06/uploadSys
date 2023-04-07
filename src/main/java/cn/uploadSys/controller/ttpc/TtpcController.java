@@ -8,6 +8,7 @@ import cn.uploadSys.controller.BaseController;
 import cn.uploadSys.core.JSONResult;
 import cn.uploadSys.core.Result;
 import cn.uploadSys.core.jqGrid.JqGridResult;
+import cn.uploadSys.dao.TtpcDao;
 import cn.uploadSys.dto.AllJqGridParam;
 import cn.uploadSys.dto.TtpcJqGridParam;
 import cn.uploadSys.entity.ttpc.SignUp;
@@ -25,10 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
@@ -38,10 +36,7 @@ import java.io.InputStream;
 import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Controller
@@ -50,6 +45,8 @@ public class TtpcController extends BaseController {
 
    @Autowired
    private TtpcService ttpcService;
+   @Autowired
+   private TtpcDao ttpcDao;
    @Autowired
    private Environment env;
 
@@ -78,118 +75,31 @@ public class TtpcController extends BaseController {
         return new JSONResult(result);
     }
 
+    @GetMapping("packageUrl")
+    @ResponseBody
+    public Result packageUrl(SignUp signUp) throws Exception {
+        return new JSONResult(ttpcService.packageUrl(signUp));
+    }
+    @GetMapping("ajaxToThirdPart")
+    @ResponseBody
+    public void packageUrl() throws Exception {
+        List<SignUp> signUps = new ArrayList<>();
+        SignUp signUp = new SignUp();
+        signUp.setName("东方乱败");
+        signUp.setMobile("13685223561");
+        signUp.setBrand("劳斯莱斯");
+        signUp.setCity("上海");
+        signUp.setSource("123");
+        signUps.add(signUp);
+        ttpcService.ajaxToThirdPart(signUps);
+    }
+
+
 
     @PostMapping("import")
     @ResponseBody
-    public Result importFile(@RequestParam("file") MultipartFile file) throws IOException {
-        //fileName 文件名
-//        String fileName = file.getOriginalFilename();
-//        boolean xlsx = fileName.endsWith(".xlsx");
-//        if (!xlsx) {
-//            log.error("请上传以.xlsx结尾的文件");
-//        }
-//        //得到文件流
-//        InputStream inputStream = file.getInputStream();
-//        ExcelReader reader = ExcelUtil.getReader(inputStream);
-//
-//
-//        //获取token_access
-//        String access_host = env.getProperty("qczj.access_host");
-//        String access_path = env.getProperty("qczj.access_path");
-//
-//        JSONObject accessBody = new JSONObject();
-//        accessBody.put("client_id",env.getProperty("qczj.client_id"));
-//        accessBody.put("client_secret",env.getProperty("qczj.client_secret"));
-//        accessBody.put("response_type","token");
-//        HashMap<String,Object> accessHeader = new HashMap();
-//        accessHeader.put("Content-Type","application/json;charset=utf-8");
-//
-//        String accessResult = AjaxUtil.doPost("https",access_host,access_path,accessBody.toString(),accessHeader);
-//        JSONObject json = JSONObject.parseObject(accessResult);
-//        String accessToken = json.getJSONObject("data").getString("access_token");
-//
-//        String import_url = env.getProperty("qczj.url")+accessToken;
-//
-//        //轮训每条数据，进行对接
-//        List<Qczj> qczjs = reader.read(1,2,Qczj.class);
-//        qczjs.forEach(qczj -> {
-//            try {
-//                Map<String, Object> body = new HashMap<>();
-//
-//                String phone = qczj.getPhone();
-//                String uid = qczj.getUid();
-//                String cityName = qczj.getCityName();
-//                if (StringUtils.isNotEmpty(phone) && StringUtils.isNotEmpty(uid) && StringUtils.isNotEmpty(cityName)) {
-//                    body.put("access_token",accessToken);
-//                    body.put("mobile",phone);
-//                    body.put("appid",uid);
-//                    body.put("cityname", URLEncoder.encode(cityName,"UTF-8"));
-//                }else{
-//                    qczj.setStatus(1);
-//                    qczj.setCreateTime(new Date());
-//                    qczj.setMessage("缺少必要参数");
-//                    ttpcService.insert(qczj);
-//                    return ;
-//                }
-//
-//                String cid = qczj.getCityCode();
-//                if (StringUtils.isNotEmpty(cid)) {
-//                    body.put("cid",qczj.getCityCode());
-//                }
-//                String brandName = qczj.getBrandName();
-//                if (StringUtils.isNotEmpty(brandName)) {
-//                    body.put("brandname", URLEncoder.encode(brandName,"UTF-8"));
-//                }
-//                String specName = qczj.getCarSeriesName();
-//                if (StringUtils.isNotEmpty(specName)) {
-//                    body.put("specname", URLEncoder.encode(specName,"UTF-8"));
-//                }
-//                String seriesName = qczj.getCarName();
-//                if (StringUtils.isNotEmpty(seriesName)) {
-//                    body.put("seriesname", URLEncoder.encode(seriesName,"UTF-8"));
-//                }
-//                String mileage = qczj.getKm();
-//                if (StringUtils.isNotEmpty(mileage)) {
-//                    body.put("mileage", qczj.getKm());
-//                }
-//                String firstregtime = qczj.getFirstregtime();
-//                if (StringUtils.isNotEmpty(firstregtime)) {
-//                    body.put("firstregtime", URLEncoder.encode(firstregtime,"UTF-8"));
-//                }
-//
-//                HttpResponse<String> upload = Unirest.post(import_url)
-//                        .header("Content-Type", "application/x-www-form-urlencoded")
-//                        .header("accept", "application/json")
-//                        .fields(body)
-//                        .asString();
-//
-//                String result = upload.getBody().toString();
-//
-//                if (StringUtils.isNotEmpty(result) && result.contains("error_description")) {
-//                    JSONObject jsonObject = JSONObject.parseObject(result);
-//                    String errorDescription = jsonObject.getString("error_description");
-//                    qczj.setStatus(1);
-//                    qczj.setMessage(errorDescription);
-//                }else{
-//                    JSONObject jsonObject = JSONObject.parseObject(result);
-//                    String returnCode = jsonObject.getString("returncode");
-//                    String message = jsonObject.getString("message");
-//                    if (StringUtils.isNotEmpty(returnCode) && returnCode.equals("0")) {
-//                        String cclid = jsonObject.getString("cclid");
-//                        qczj.setStatus(0);
-//                        qczj.setCclid(cclid);
-//                    }else{
-//                        qczj.setStatus(1);
-//                        qczj.setMessage(message);
-//                    }
-//                }
-//                qczj.setCreateTime(new Date());
-//                qczjService.insert(qczj);
-//            } catch (Exception e) {
-//                log.error(e.getMessage());
-//            }
-//        });
-
+    public Result importFile(@RequestParam("file") MultipartFile file) throws Exception {
+        ttpcService.importFile(file);
         return OK;
 
     }
