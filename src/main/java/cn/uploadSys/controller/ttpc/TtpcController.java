@@ -89,7 +89,6 @@ public class TtpcController extends BaseController {
         signUp.setMobile("13685223561");
         signUp.setBrand("劳斯莱斯");
         signUp.setCity("上海");
-        signUp.setSource("123");
         signUps.add(signUp);
         ttpcService.ajaxToThirdPart(signUps);
     }

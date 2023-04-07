@@ -54,16 +54,14 @@ public class TtpcService extends AbstractService<SignUp> {
     private String appkey;
     @Value("${ttpc.signkey}")
     private String signkey;
+    @Value("${ttpc.source}")
+    private String source;
+    @Value("${ttpc.queryTtpSignUp.url}")
+    private String queryTtpSignUp;
 
 
     @Autowired
     private TtpcDao ttpcDao;
-    @Autowired
-    private Environment env;
-    @Autowired
-    private RedisTemplate<String, Object> template;
-
-
 
 
     @Override
@@ -112,10 +110,64 @@ public class TtpcService extends AbstractService<SignUp> {
     public void getUnfinishedInstance(){
         List<SignUp> signUps = ttpcDao.getUnfinishedInstance();
         log.info("查询状态例子总数为:{}",signUps.size());
-        signUps.forEach(qczj -> {
-
+        signUps.forEach(signUp -> {
+            getStatus(signUp);
         });
     }
+
+    public void getStatus(SignUp signUp) {
+        String finalUrl = String.format(queryTtpSignUp,signUp.getResponseId(),source);
+        HttpResponse<JsonNode> json = null;
+        try {
+            json = Unirest.get(finalUrl).asJson();
+        } catch (UnirestException e) {
+            log.error("天天拍车状态查询通讯异常，异常id:{}",signUp.getResponseId());
+        }
+        boolean error = json.getBody().getObject().getBoolean("error");
+        if (error) {
+            String message = json.getBody().getObject().getString("message");
+            signUp.setMessage(message);
+        }else{
+            String invite = json.getBody().getObject().getJSONObject("result").getString("invite");
+            String detection = json.getBody().getObject().getJSONObject("result").getString("detection");
+            String auction = json.getBody().getObject().getJSONObject("result").getString("auction");
+            String deal = json.getBody().getObject().getJSONObject("result").getString("deal");
+            if (StringUtils.isNotBlank(invite)) {
+                if("成功".equals(invite)){
+                    signUp.setInvite(0);
+                }else{
+                    signUp.setInvite(1);
+                }
+            }
+
+            if (StringUtils.isNotBlank(detection)) {
+                if("成功".equals(detection)){
+                    signUp.setDetection(0);
+                }else{
+                    signUp.setDetection(1);
+                }
+            }
+
+            if (StringUtils.isNotBlank(auction)) {
+                if("成功".equals(auction)){
+                    signUp.setAuction(0);
+                }else{
+                    signUp.setAuction(1);
+                }
+            }
+
+            if (StringUtils.isNotBlank(deal)) {
+                if("成功".equals(deal)){
+                    signUp.setDeal(0);
+                }else{
+                    signUp.setDeal(1);
+                }
+            }
+        }
+        signUp.setModifyTime(new Date());
+        ttpcDao.updateByPrimaryKeySelective(signUp);
+    }
+
 
 
     public void importFile(MultipartFile file) throws Exception{
@@ -142,7 +194,6 @@ public class TtpcService extends AbstractService<SignUp> {
         String name = URLEncoder.encode(record.getName(),"UTF-8");
         String city = URLEncoder.encode(record.getCity(),"UTF-8");
         String brand = URLEncoder.encode(record.getBrand(),"UTF-8");
-        String source = URLEncoder.encode(record.getSource(),"UTF-8");
 
         return String.format(ttpSignUpurl,name,mobile,city,brand,appkey,sign,source);
     }

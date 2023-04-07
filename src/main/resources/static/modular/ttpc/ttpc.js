@@ -30,12 +30,12 @@ Ttpc.initOptions = function () {
                     return msg;
                 }},
             {name: 'message', index: 'message',align: "center", width: 60},
-            {name: 'createTime', index: 'createTime', width: 80,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
+            {name: 'createTime', index: 'createTime', width: 60,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     if (cellvar == "" || cellvar == undefined) {
                         return "";
                     }
                     var da = new Date(cellvar);
-                    return dateFtt("yyyy-MM-dd hh:mm:ss", da);
+                    return dateFtt("yyyy-MM-dd", da);
                 }}
         //     {name: 'operations', index: 'operations', width: 200, sortable: false, formatter: function (cellValue, options, rowObject) {
         //         var id = "'"+rowObject["id"]+"'";
