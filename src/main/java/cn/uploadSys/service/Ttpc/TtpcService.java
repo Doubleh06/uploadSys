@@ -109,7 +109,7 @@ public class TtpcService extends AbstractService<SignUp> {
 
     public void getUnfinishedInstance(){
         List<SignUp> signUps = ttpcDao.getUnfinishedInstance();
-        log.info("查询状态例子总数为:{}",signUps.size());
+        log.info("天天拍车查询状态例子总数为:{}",signUps.size());
         signUps.forEach(signUp -> {
             getStatus(signUp);
         });
