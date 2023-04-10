@@ -51,16 +51,6 @@
                                             <option class="option_1" value="" >全部</option>
                                             <option value="0">成功</option>
                                             <option value="1">失败</option>
-                                            <option value="10">入库成功</option>
-                                            <option value="11">邀约成功</option>
-                                            <option value="15">上拍成功</option>
-                                            <option value="20">交易成功</option>
-                                        </select>
-                                        <label>项目号</label>
-                                        <select class="form-control" id="appid">
-                                            <option class="option_2" value="" >全部</option>
-                                            <option value="936">936</option>
-                                            <option value="977">977</option>
                                         </select>
                                         <div class="form-group" id="data_5">
                                             <label class="font-normal">选择日期：</label>

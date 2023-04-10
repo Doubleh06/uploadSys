@@ -12,7 +12,7 @@ Ttpc.initOptions = function () {
     var options = {
         url : "/upload/ttpc/grid",
         autowidth:true,
-        colNames: ['报名人姓名','手机号','车辆所在城市','车辆品牌','来源','状态','信息','创建时间'],
+        colNames: ['报名人姓名','手机号','车辆所在城市','车辆品牌','来源','状态','信息','邀约','检测','竞拍','成交','创建时间'],
         colModel: [
             {name: 'name', index: 'name', width: 40},
             {name: 'mobile', index: 'mobile', width: 40},
@@ -30,6 +30,46 @@ Ttpc.initOptions = function () {
                     return msg;
                 }},
             {name: 'message', index: 'message',align: "center", width: 60},
+            {name: 'invite', index: 'invite', width: 30,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
+                    var msg = "";
+                    if (cellvar == 0){
+                        msg = "上传成功";
+                    }
+                    if (cellvar == 1){
+                        msg = "上传失败";
+                    }
+                    return msg;
+                }},
+            {name: 'detection', index: 'detection', width: 30,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
+                    var msg = "";
+                    if (cellvar == 0){
+                        msg = "上传成功";
+                    }
+                    if (cellvar == 1){
+                        msg = "上传失败";
+                    }
+                    return msg;
+                }},
+            {name: 'auction', index: 'auction', width: 30,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
+                    var msg = "";
+                    if (cellvar == 0){
+                        msg = "上传成功";
+                    }
+                    if (cellvar == 1){
+                        msg = "上传失败";
+                    }
+                    return msg;
+                }},
+            {name: 'deal', index: 'deal', width: 30,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
+                    var msg = "";
+                    if (cellvar == 0){
+                        msg = "上传成功";
+                    }
+                    if (cellvar == 1){
+                        msg = "上传失败";
+                    }
+                    return msg;
+                }},
             {name: 'createTime', index: 'createTime', width: 60,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     if (cellvar == "" || cellvar == undefined) {
                         return "";
@@ -57,7 +97,7 @@ Ttpc.initOptions = function () {
  */
 Ttpc.search = function () {
     var searchParam = {};
-    searchParam.phone = $("#phone").val();
+    searchParam.mobile = $("#phone").val();
     searchParam.startDate = $("#startDate").val();
     searchParam.endDate = $("#endDate").val();
     searchParam.status = $("#status").val();

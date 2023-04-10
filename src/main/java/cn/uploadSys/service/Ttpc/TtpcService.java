@@ -86,7 +86,7 @@ public class TtpcService extends AbstractService<SignUp> {
         StringBuilder sql = new StringBuilder();
         sql.append(" where 1 = 1 ");
         if(StringUtils.isNotEmpty(param.getMobile())) {
-            sql.append(" and  phone like  '%").append(param.getMobile()).append("%'");
+            sql.append(" and  mobile like  '%").append(param.getMobile()).append("%'");
         }
         if (StringUtils.isNotEmpty(param.getStartDate()) && StringUtils.isNotEmpty(param.getEndDate())) {
             sql.append(" and create_time > '").append(param.getStartDate()).append(" 00:00:00' and create_time < '").append(param.getEndDate()).append(" 23:59:59'");
@@ -99,6 +99,23 @@ public class TtpcService extends AbstractService<SignUp> {
         return new PageInfo<>(ttpcDao.getLeadsList(sql.toString()));
     }
 
+
+    public List<SignUp> exportQuery(TtpcJqGridParam param ) {
+        StringBuilder sql = new StringBuilder();
+        sql.append(" where 1 = 1 ");
+        if(StringUtils.isNotEmpty(param.getMobile())) {
+            sql.append(" and  mobile like  '%").append(param.getMobile()).append("%'");
+        }
+        if (StringUtils.isNotEmpty(param.getStartDate()) && StringUtils.isNotEmpty(param.getEndDate())) {
+            sql.append(" and create_time > '").append(param.getStartDate()).append(" 00:00:00' and create_time < '").append(param.getEndDate()).append(" 23:59:59'");
+        }
+        if (null != param.getStatus()) {
+            sql.append(" and status = ").append(param.getStatus());
+        }
+
+        sql.append(" ORDER BY create_time  desc ");
+        return ttpcDao.getLeadsList(sql.toString());
+    }
 
 
 
@@ -120,6 +137,7 @@ public class TtpcService extends AbstractService<SignUp> {
         HttpResponse<JsonNode> json = null;
         try {
             json = Unirest.get(finalUrl).asJson();
+            log.info("天天拍车状态查询报文:{}",json.getBody().toString());
         } catch (UnirestException e) {
             log.error("天天拍车状态查询通讯异常，异常id:{}",signUp.getResponseId());
         }

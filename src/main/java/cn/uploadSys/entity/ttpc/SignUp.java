@@ -18,7 +18,7 @@ public class SignUp extends BaseEntity {
     private String mobile;
     private String city;
     private String brand;
-    private String license;//1 或者 2（1代表08年之前 | 2代表 08后）
+//    private String license;//1 或者 2（1代表08年之前 | 2代表 08后）
     private Integer status;
     private Date createTime;
     private Date modifyTime;

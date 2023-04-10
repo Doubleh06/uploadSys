@@ -14,5 +14,9 @@ CREATE TABLE `sign_up` (
   `modify_time` datetime DEFAULT NULL,
   `message` varchar(100) COLLATE utf8_bin DEFAULT NULL,
   `response_id` int DEFAULT NULL,
+  `invite` int DEFAULT NULL COMMENT '0:success 1:fail',
+  `detection` int DEFAULT NULL COMMENT '0:success 1:fail',
+  `auction` int DEFAULT NULL COMMENT '0:success 1:fail',
+  `deal` int DEFAULT NULL COMMENT '0:success 1:fail',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_bin;
