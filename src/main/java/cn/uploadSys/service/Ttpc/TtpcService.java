@@ -207,11 +207,11 @@ public class TtpcService extends AbstractService<SignUp> {
     }
 
     public String packageUrl(SignUp record ) throws UnsupportedEncodingException {
-        String mobile = URLEncoder.encode(record.getMobile(),"UTF-8");
+        String mobile = URLEncoder.encode(URLEncoder.encode(record.getMobile(),"UTF-8"),"UTF-8");
         String sign = DigestUtils.md5Hex(mobile+signkey);
-        String name = URLEncoder.encode(record.getName(),"UTF-8");
-        String city = URLEncoder.encode(record.getCity(),"UTF-8");
-        String brand = URLEncoder.encode(record.getBrand(),"UTF-8");
+        String name = URLEncoder.encode(URLEncoder.encode(record.getName(),"UTF-8"),"UTF-8");
+        String city = URLEncoder.encode(URLEncoder.encode(record.getCity(),"UTF-8"),"UTF-8");
+        String brand = URLEncoder.encode(URLEncoder.encode(record.getBrand(),"UTF-8"),"UTF-8");
 
         return String.format(ttpSignUpurl,name,mobile,city,brand,appkey,sign,source);
     }
@@ -222,6 +222,7 @@ public class TtpcService extends AbstractService<SignUp> {
             log.info("finalUrl:{}",finalUrl);
 
             HttpResponse<JsonNode> json = Unirest.get(finalUrl).asJson();
+            log.info("response:{}",json.getBody().toString());
             boolean error = json.getBody().getObject().getBoolean("error");
             if (error) {
                 String message = json.getBody().getObject().getString("message");
@@ -236,8 +237,6 @@ public class TtpcService extends AbstractService<SignUp> {
             insert(record);
         }
     }
-
-
     
 
 }
