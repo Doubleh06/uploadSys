@@ -94,6 +94,18 @@ public class TtpcService extends AbstractService<SignUp> {
         if (null != param.getStatus()) {
             sql.append(" and status = ").append(param.getStatus());
         }
+        if (null != param.getInvite()) {
+            sql.append(" and invite = ").append(param.getInvite());
+        }
+        if (null != param.getDetection()) {
+            sql.append(" and detection = ").append(param.getDetection());
+        }
+        if (null != param.getAuction()) {
+            sql.append(" and auction = ").append(param.getAuction());
+        }
+        if (null != param.getDeal()) {
+            sql.append(" and deal = ").append(param.getDeal());
+        }
 
         sql.append(" ORDER BY create_time  desc ");
         return new PageInfo<>(ttpcDao.getLeadsList(sql.toString()));
@@ -111,6 +123,18 @@ public class TtpcService extends AbstractService<SignUp> {
         }
         if (null != param.getStatus()) {
             sql.append(" and status = ").append(param.getStatus());
+        }
+        if (null != param.getInvite()) {
+            sql.append(" and invite = ").append(param.getInvite());
+        }
+        if (null != param.getDetection()) {
+            sql.append(" and detection = ").append(param.getDetection());
+        }
+        if (null != param.getAuction()) {
+            sql.append(" and auction = ").append(param.getAuction());
+        }
+        if (null != param.getDeal()) {
+            sql.append(" and deal = ").append(param.getDeal());
         }
 
         sql.append(" ORDER BY create_time  desc ");

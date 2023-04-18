@@ -45,7 +45,7 @@
                                 <div class="form-inline">
                                     <div class="form-group col-lg-12">
                                         <label>手机号：</label>
-                                        <input type="text" class="form-control" id="phone" >
+                                        <input type="text" class="form-control" id=" " >
                                         <label>状态</label>
                                         <select class="form-control" id="status">
                                             <option class="option_1" value="" >全部</option>
@@ -60,6 +60,35 @@
                                                 <input type="text" class="input-sm form-control" id="endDate" name="end" />
                                             </div>
                                         </div>
+
+                                    </div>
+                                    <p>&nbsp;</p>
+                                    <div class="form-group col-lg-12">
+                                        <label>邀约</label>
+                                        <select class="form-control" id="invite">
+                                            <option class="option_2" value="" >全部</option>
+                                            <option value="0">成功</option>
+                                            <option value="1">失败</option>
+                                        </select>
+                                        <label>检测</label>
+                                        <select class="form-control" id="detection">
+                                            <option class="option_3" value="" >全部</option>
+                                            <option value="0">成功</option>
+                                            <option value="1">失败</option>
+                                        </select>
+                                        <label>竞拍</label>
+                                        <select class="form-control" id="auction">
+                                            <option class="option_4" value="" >全部</option>
+                                            <option value="0">成功</option>
+                                            <option value="1">失败</option>
+                                        </select>
+                                        <label>成交</label>
+                                        <select class="form-control" id="deal">
+                                            <option class="option_5" value="" >全部</option>
+                                            <option value="0">成功</option>
+                                            <option value="1">失败</option>
+                                        </select>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         <button class="btn btn-success"  id="search" type="button" onclick="Ttpc.search()">搜索</button>&nbsp
                                         <button class="btn btn-success" type="button" onclick="Ttpc.resetSearch()">重置</button>&nbsp
                                         <button class="btn btn-primary" type="button" onclick="Ttpc.download()">下载</button>

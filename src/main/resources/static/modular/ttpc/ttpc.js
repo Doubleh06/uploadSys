@@ -102,6 +102,10 @@ Ttpc.search = function () {
     searchParam.endDate = $("#endDate").val();
     searchParam.status = $("#status").val();
     searchParam.appid = $("#appid").val();
+    searchParam.invite = $("#invite").val();
+    searchParam.detection = $("#detection").val();
+    searchParam.auction = $("#auction").val();
+    searchParam.deal = $("#deal").val();
     Ttpc.table.reload(searchParam);
 };
 
@@ -114,9 +118,15 @@ Ttpc.resetSearch = function () {
     $("#endDate").val("");
     $(".option_1").attr("selected",true);
     $(".option_2").attr("selected",true);
+    $(".option_3").attr("selected",true);
+    $(".option_4").attr("selected",true);
+    $(".option_5").attr("selected",true);
     Ttpc.search();
     $(".option_1").attr("selected",false);
     $(".option_2").attr("selected",false);
+    $(".option_3").attr("selected",false);
+    $(".option_4").attr("selected",false);
+    $(".option_5").attr("selected",false);
 };
 
 /**

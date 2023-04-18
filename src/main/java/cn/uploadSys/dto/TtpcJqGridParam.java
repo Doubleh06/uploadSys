@@ -15,6 +15,10 @@ public class TtpcJqGridParam extends JqGridParam {
     private String startDate;
     private String endDate;
     private Integer status;
+    private Integer invite;
+    private Integer detection;
+    private Integer auction;
+    private Integer deal;
 
 
 }
