@@ -72,6 +72,7 @@
                                             <option class="option_2" value="" >全部</option>
                                             <option value="1312">1312</option>
                                             <option value="1313">1313</option>
+                                            <option value="1408">1408</option>
                                         </select>
                                         <div class="form-group" id="data_5">
                                             <label class="font-normal">选择日期：</label>

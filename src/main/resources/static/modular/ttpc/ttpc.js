@@ -33,40 +33,40 @@ Ttpc.initOptions = function () {
             {name: 'invite', index: 'invite', width: 30,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     var msg = "";
                     if (cellvar == 0){
-                        msg = "上传成功";
+                        msg = "成功";
                     }
                     if (cellvar == 1){
-                        msg = "上传失败";
+                        msg = "失败";
                     }
                     return msg;
                 }},
             {name: 'detection', index: 'detection', width: 30,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     var msg = "";
                     if (cellvar == 0){
-                        msg = "上传成功";
+                        msg = "成功";
                     }
                     if (cellvar == 1){
-                        msg = "上传失败";
+                        msg = "失败";
                     }
                     return msg;
                 }},
             {name: 'auction', index: 'auction', width: 30,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     var msg = "";
                     if (cellvar == 0){
-                        msg = "上传成功";
+                        msg = "成功";
                     }
                     if (cellvar == 1){
-                        msg = "上传失败";
+                        msg = "失败";
                     }
                     return msg;
                 }},
             {name: 'deal', index: 'deal', width: 30,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     var msg = "";
                     if (cellvar == 0){
-                        msg = "上传成功";
+                        msg = "成功";
                     }
                     if (cellvar == 1){
-                        msg = "上传失败";
+                        msg = "失败";
                     }
                     return msg;
                 }},
