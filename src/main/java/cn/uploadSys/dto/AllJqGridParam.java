@@ -18,5 +18,7 @@ public class AllJqGridParam extends JqGridParam {
     private String appid;
     private Integer appealStatus;
     private Integer distributeStatus;
+    private Integer filterateStatus;
+    private Integer checkStatus;
 
 }

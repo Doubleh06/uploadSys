@@ -67,6 +67,22 @@
                                             <option value="1">申诉成功</option>
                                         </select>
 
+                                        <label>过滤状态</label>
+                                        <select class="form-control" id="filterateStatus">
+                                            <option class="option_5" value="" >全部</option>
+                                            <option value="0">清洗中</option>
+                                            <option value="1">通过</option>
+                                            <option value="2">不通过</option>
+                                        </select>
+
+                                        <label>质检状态</label>
+                                        <select class="form-control" id="checkStatus">
+                                            <option class="option_6" value="" >全部</option>
+                                            <option value="0">未知</option>
+                                            <option value="1">成功</option>
+                                            <option value="2">失败</option>
+                                        </select>
+
                                         <label>项目号</label>
                                         <select class="form-control" id="appid">
                                             <option class="option_2" value="" >全部</option>
@@ -74,6 +90,7 @@
                                             <option value="1313">1313</option>
                                             <option value="1408">1408</option>
                                         </select>
+                                        <p>&nbsp;</p>
                                         <div class="form-group" id="data_5">
                                             <label class="font-normal">选择日期：</label>
                                             <div class="input-daterange input-group" id="datepicker">

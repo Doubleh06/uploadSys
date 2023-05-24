@@ -27,9 +27,9 @@ public interface QczjHQDao extends BaseDao<QczjHQ> {
             "from classes c RIGHT JOIN classes_students cs on c.id = cs.cid LEFT JOIN students s on cs.sid = s.id ${sql}")
     List<Map> getSignUpList(@Param("sql") String sql);
 
-    @Update("update qczj_hq set distribute_status = #{distributeStatus},modify_time = NOW(),appeal_status = #{appealStatus}" +
+    @Update("update qczj_hq set distribute_status = #{distributeStatus},modify_time = NOW(),appeal_status = #{appealStatus},filterate_status = #{filterateStatus},check_status = #{checkStatus}" +
             " where cclid = #{cclid}")
-    void updateByCclid(@Param("distributeStatus") Integer distributeStatus, @Param("cclid") String cclid, @Param("appealStatus") Integer appealStatus);
+    void updateByCclid(@Param("distributeStatus") Integer distributeStatus, @Param("cclid") String cclid, @Param("appealStatus") Integer appealStatus,@Param("filterateStatus")Integer filterateStatus,@Param("checkStatus")Integer checkStatus);
 
     @Update("update qczj_hq set vedio_status = #{vedioStatus},modify_time = NOW()" +
             " where cclid = #{cclid}")

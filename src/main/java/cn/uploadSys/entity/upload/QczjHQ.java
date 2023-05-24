@@ -33,4 +33,6 @@ public class QczjHQ extends BaseEntity {
     private Date modifyTime;
     private Integer distributeStatus;
     private Integer appealStatus;
+    private Integer filterateStatus;
+    private Integer checkStatus;
 }

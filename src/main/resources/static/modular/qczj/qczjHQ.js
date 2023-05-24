@@ -12,7 +12,7 @@ QczjHQ.initOptions = function () {
     var options = {
         url : "/upload/qczj/hq/grid",
         autowidth:true,
-        colNames: ['手机号','城市ID','区县ID','车辆品牌id','车系id','车型id','首次上牌时间','行驶里程','项目号','上传状态','分发状态','申诉状态','创建时间'],
+        colNames: ['手机号','城市ID','区县ID','车辆品牌id','车系id','车型id','首次上牌时间','行驶里程','项目号','上传状态','分发状态','申诉状态','过滤状态','质检状态','创建时间'],
         colModel: [
             {name: 'mobile', index: 'mobile', width: 40},
             {name: 'cid', index: 'cid', width: 30},
@@ -31,18 +31,6 @@ QczjHQ.initOptions = function () {
                     if (cellvar == 1){
                         msg = "上传失败";
                     }
-                    // if (cellvar == 10){
-                    //     msg = "入库成功";
-                    // }
-                    // if (cellvar == 11){
-                    //     msg = "邀约成功";
-                    // }
-                    // if (cellvar == 15){
-                    //     msg = "上拍成功";
-                    // }
-                    // if (cellvar == 20){
-                    //     msg = "交易成功";
-                    // }
                     return msg;
                 }},
             {name: 'distributeStatus', index: 'distributeStatus', width: 60,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
@@ -66,6 +54,34 @@ QczjHQ.initOptions = function () {
                     }
                     return msg;
             }},
+            {name: 'filterateStatus', index: 'filterateStatus', width: 60,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
+                    var msg = "";
+
+                    if (cellvar == 1){
+                        msg = "通过";
+                    }
+                    if (cellvar == 2){
+                        msg = "不通过";
+                    }
+                    if (cellvar == 0){
+                        msg = "清洗中";
+                    }
+                    return msg;
+                }},
+            {name: 'checkStatus', index: 'checkStatus', width: 60,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
+                    var msg = "";
+
+                    if (cellvar == 1){
+                        msg = "成功";
+                    }
+                    if (cellvar == 2){
+                        msg = "失败";
+                    }
+                    if (cellvar == 0){
+                        msg = "未知";
+                    }
+                    return msg;
+                }},
             {name: 'createTime', index: 'createTime', width: 80,align: "center", editable: false,formatter: function (cellvar, options, rowObject) {
                     if (cellvar == "" || cellvar == undefined) {
                         return "";
@@ -100,6 +116,8 @@ QczjHQ.search = function () {
     searchParam.status = $("#status").val();
     searchParam.appealStatus = $("#appealStatus").val();
     searchParam.distributeStatus = $("#distributeStatus").val();
+    searchParam.filterateStatus = $("#filterateStatus").val();
+    searchParam.checkStatus = $("#checkStatus").val();
     searchParam.appid = $("#appid").val();
     QczjHQ.table.reload(searchParam);
 };
@@ -115,11 +133,15 @@ QczjHQ.resetSearch = function () {
     $(".option_2").attr("selected",true);
     $(".option_3").attr("selected",true);
     $(".option_4").attr("selected",true);
+    $(".option_5").attr("selected",true);
+    $(".option_6").attr("selected",true);
     QczjHQ.search();
     $(".option_1").attr("selected",false);
     $(".option_2").attr("selected",false);
     $(".option_3").attr("selected",false);
     $(".option_4").attr("selected",false);
+    $(".option_5").attr("selected",false);
+    $(".option_6").attr("selected",false);
 };
 
 /**
@@ -143,7 +165,8 @@ QczjHQ.downloadCar = function () {
 
 };
 QczjHQ.download = function () {
-    window.location.href = "/upload/qczj/hq/export?phone="+$("#mobile").val()+"&startDate="+$("#startDate").val()+"&endDate="+$("#endDate").val()+"&status="+$("#status").val()+"&appealStatus="+$("#appealStatus").val()+"&distributeStatus="+$("#distributeStatus").val();
+    window.location.href = "/upload/qczj/hq/export?phone="+$("#mobile").val()+"&startDate="+$("#startDate").val()+"&endDate="+$("#endDate").val()+"&status="+$("#status").val()+"&appealStatus="+$("#appealStatus").val()
+        +"&distributeStatus="+$("#distributeStatus").val()+"&filterateStatus="+$("#filterateStatus").val()+"&checkStatus="+$("#checkStatus").val();
 };
 
 /**

@@ -91,6 +91,12 @@ public class QczjHQService extends AbstractService<QczjHQ> {
         if (null != param.getAppealStatus()) {
             sql.append(" and appeal_status = ").append(param.getAppealStatus());
         }
+        if (null != param.getFilterateStatus()) {
+            sql.append(" and filterate_status = ").append(param.getFilterateStatus());
+        }
+        if (null != param.getCheckStatus()) {
+            sql.append(" and check_status = ").append(param.getCheckStatus());
+        }
         if (StringUtils.isNotEmpty(param.getAppid())) {
             sql.append(" and appid = '").append(param.getAppid()).append("'");
         }
@@ -116,6 +122,12 @@ public class QczjHQService extends AbstractService<QczjHQ> {
         }
         if (null != param.getAppealStatus()) {
             sql.append(" and appeal_status = ").append(param.getAppealStatus());
+        }
+        if (null != param.getFilterateStatus()) {
+            sql.append(" and filterate_status = ").append(param.getFilterateStatus());
+        }
+        if (null != param.getCheckStatus()) {
+            sql.append(" and check_status = ").append(param.getCheckStatus());
         }
         if (StringUtils.isNotEmpty(param.getAppid())) {
             sql.append(" and appid = '").append(param.getAppid()).append("'");
@@ -156,7 +168,9 @@ public class QczjHQService extends AbstractService<QczjHQ> {
             if (null != result) {
                 int distributeStatus = result.getInt("distributeStatus");
                 int appealStatus = result.getInt("appealStatus");
-                qczjHQDao.updateByCclid(distributeStatus,cclid,appealStatus);
+                int filterateStatus = result.getInt("filterateStatus");
+                int checkStatus = result.getInt("checkStatus");
+                qczjHQDao.updateByCclid(distributeStatus,cclid,appealStatus,filterateStatus,checkStatus);
             }else {
                 String message = json.getBody().getObject().getString("message");
                 log.error("线索cclid:{},异常:{}",cclid,message);
@@ -248,6 +262,8 @@ public class QczjHQService extends AbstractService<QczjHQ> {
                 qczjHQ.setCreateTime(new Date());
                 qczjHQ.setAppealStatus(0);
                 qczjHQ.setDistributeStatus(0);
+                qczjHQ.setFilterateStatus(0);
+                qczjHQ.setCheckStatus(0);
                 insert(qczjHQ);
             } catch (Exception e) {
                 log.error(e.getMessage());
