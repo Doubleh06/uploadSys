@@ -1,8 +1,6 @@
 package cn.uploadSys.controller.upload;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.IoUtil;
-import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
 import cn.uploadSys.controller.BaseController;
@@ -10,22 +8,12 @@ import cn.uploadSys.core.JSONResult;
 import cn.uploadSys.core.Result;
 import cn.uploadSys.core.jqGrid.JqGridResult;
 import cn.uploadSys.dto.AllJqGridParam;
-import cn.uploadSys.entity.upload.Qczj;
 import cn.uploadSys.entity.upload.QczjHQ;
 import cn.uploadSys.service.upload.QczjHQService;
-import cn.uploadSys.service.upload.QczjService;
-import cn.uploadSys.util.AjaxUtil;
-import cn.uploadSys.util.RedisUtils;
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,14 +25,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Controller
@@ -53,10 +37,6 @@ public class QczjHQController extends BaseController {
 
    @Autowired
    private QczjHQService qczjHQService;
-   @Autowired
-   private Environment env;
-   @Autowired
-   private RedisTemplate<String,Object> template;
 
 
 

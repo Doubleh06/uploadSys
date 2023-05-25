@@ -49,8 +49,6 @@ public class QczjHQService extends AbstractService<QczjHQ> {
     @Autowired
     private Environment env;
     @Autowired
-    private RedisTemplate<String, Object> template;
-    @Autowired
     private QczjGetAccessTokenService qczjGetAccessTokenService;
 
 
